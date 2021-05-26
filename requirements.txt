@@ -1,0 +1,7 @@
+networkx~=2.4
+wntr~=0.3.0
+pandas~=1.2.4
+plotly~=4.11.0
+numpy~=1.18.5
+ipython~=7.16.1
+matplotlib~=3.2.2

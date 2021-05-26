@@ -1,0 +1,16 @@
+# IntelliJ
+.idea/
+
+# Delf data
+*.pickle
+
+# EPANET produced files
+*.bin
+*.rpt
+*.csv
+temp.inp
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class

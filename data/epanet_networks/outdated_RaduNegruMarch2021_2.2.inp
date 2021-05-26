@@ -1,0 +1,2327 @@
+[TITLE]
+Scenario: Base 
+Date: 29-Mar-21 2:20:41 PM 
+
+[JUNCTIONS]
+;ID              	Elev        	Demand      	Pattern         
+ Jonctiune-267   	9.39        	0.0381      	SCADA           	;
+ Jonctiune-1224  	8.6         	0           	                	;
+ Jonctiune-1225  	9.01        	0.0674      	SCADA           	;
+ Jonctiune-1226  	9           	0.0423      	SCADA           	;
+ Jonctiune-1404  	11.92       	0.0058      	SCADA           	;
+ Jonctiune-1405  	12.04       	0.0058      	SCADA           	;
+ Jonctiune-1406  	11.67       	0.05        	SCADA           	;
+ Jonctiune-1407  	12.54       	0.1         	SCADA           	;
+ Jonctiune-1413  	10.23       	0.03985     	SCADA           	;
+ Jonctiune-1414  	12.46       	0.02145     	SCADA           	;
+ Jonctiune-1415  	11.66       	0.2623      	SCADA           	;
+ Jonctiune-1419  	12.27       	0.00095     	SCADA           	;
+ Jonctiune-1421  	12.3        	0.04115     	SCADA           	;
+ Jonctiune-1606  	9.8         	0.06295     	SCADA           	;
+ Jonctiune-1610  	10.86       	0.0068      	SCADA           	;
+ Jonctiune-1616  	11.2        	0           	                	;
+ Jonctiune-1628  	11.89       	0           	                	;
+ Jonctiune-1632  	11.52       	0           	                	;
+ Jonctiune-1634  	12.91       	0           	                	;
+ Jonctiune-1635  	10.99       	0.0657      	SCADA           	;
+ Jonctiune-1636  	8.96        	0.0554      	SCADA           	;
+ Jonctiune-1637  	9.57        	0           	                	;
+ Jonctiune-1638  	9.21        	0.1033      	SCADA           	;
+ Jonctiune-1641  	10.52       	0.0554      	SCADA           	;
+ Jonctiune-1642  	13.98       	0.222       	SCADA           	;
+ Jonctiune-1646  	13.87       	0           	                	;
+ Jonctiune-1872  	9.25        	0.02815     	SCADA           	;
+ Jonctiune-1873  	8.66        	0.0288      	SCADA           	;
+ Jonctiune-1874  	10.68       	0.183       	SCADA           	;
+ Jonctiune-1875  	12.45       	0.176       	SCADA           	;
+ SenzorComunarzi-NatVech	12.05       	0.0185      	SCADA           	;
+ Jonctiune-1877  	10.81       	0.10035     	SCADA           	;
+ Jonctiune-1995  	11.55       	0.0013      	SCADA           	;
+ Jonctiune-1996  	11.29       	0.0258      	SCADA           	;
+ Jonctiune-1997  	11.29       	0.01255     	SCADA           	;
+ Jonctiune-1998  	11.29       	0.08095     	SCADA           	;
+ Jonctiune-2176  	10.99       	0.0874      	SCADA           	;
+ Jonctiune-2177  	11.37       	0.27845     	SCADA           	;
+ SenzorCernauti-Sebesului	10.92       	0.0081      	SCADA           	;
+ Jonctiune-2179  	10.48       	0.0531      	SCADA           	;
+ Jonctiune-2180  	10.48       	0.06675     	SCADA           	;
+ Jonctiune-2181  	10.74       	0.06675     	SCADA           	;
+ Jonctiune-2182  	10.5        	0           	                	;
+ Jonctiune-2184  	11.18       	0.0558      	SCADA           	;
+ Jonctiune-2185  	11.33       	0.05        	SCADA           	;
+ Jonctiune-2186  	11.67       	0.0368      	SCADA           	;
+ Jonctiune-2187  	11.84       	0.10305     	SCADA           	;
+ Jonctiune-2188  	11.84       	0.0392      	SCADA           	;
+ Jonctiune-2189  	11.84       	0.0298      	SCADA           	;
+ Jonctiune-2190  	11.84       	0.027       	SCADA           	;
+ Jonctiune-2191  	11.58       	0.0144      	SCADA           	;
+ Jonctiune-2192  	11.94       	0.31435     	SCADA           	;
+ Jonctiune-2193  	11.39       	0.24295     	SCADA           	;
+ Jonctiune-2194  	10.77       	0.2312      	SCADA           	;
+ Jonctiune-2195  	10.77       	0.552       	SCADA           	;
+ Jonctiune-2196  	11.4        	0.3291      	SCADA           	;
+ Jonctiune-2197  	6.26        	0.20055     	SCADA           	;
+ SenzorChisinau-Titulescu	7.58        	0.15805     	SCADA           	;
+ Jonctiune-2199  	9.32        	0.0652      	SCADA           	;
+ Jonctiune-2200  	9.32        	0.2469      	SCADA           	;
+ Jonctiune-2201  	10.95       	0           	                	;
+ Jonctiune-2202  	10.27       	0.10505     	SCADA           	;
+ Jonctiune-2203  	11.07       	0.3455      	SCADA           	;
+ Jonctiune-2204  	11.39       	0.0776      	SCADA           	;
+ Jonctiune-2205  	13.42       	0           	                	;
+ Jonctiune-2206  	13.74       	0.3198      	SCADA           	;
+ Jonctiune-2207  	9.58        	0.10455     	SCADA           	;
+ Jonctiune-2208  	6.79        	0.10375     	SCADA           	;
+ Jonctiune-2729  	5.35        	0.0334      	SCADA           	;
+ Jonctiune-2730  	5.88        	0           	                	;
+ Jonctiune-2734  	13.62       	0.0189      	SCADA           	;
+ Jonctiune-2735  	12.48       	0           	                	;
+ Jonctiune-2736  	12.48       	0.0655      	SCADA           	;
+ Jonctiune-2737  	13.08       	0           	                	;
+ Jonctiune-2738  	13.4        	0.0041      	SCADA           	;
+ Jonctiune-2739  	10.72       	0.00945     	SCADA           	;
+ PT2             	11.86       	3.305       	SCADA           	;
+ Jonctiune-2743  	9.96        	0.1         	SCADA           	;
+ Jonctiune-2744  	12.69       	0           	                	;
+ Jonctiune-2749  	7.36        	0.038       	SCADA           	;
+ Jonctiune-2750  	7.27        	0.02905     	SCADA           	;
+ Jonctiune-2751  	7.87        	0.04895     	SCADA           	;
+ Jonctiune-2752  	8.52        	0.046       	SCADA           	;
+ Jonctiune-2753  	7.21        	0.0817      	SCADA           	;
+ Jonctiune-2755  	8.42        	0.0125      	SCADA           	;
+ Jonctiune-2756  	5.19        	0.10075     	SCADA           	;
+ Jonctiune-2773  	8.35        	0.20475     	SCADA           	;
+ Jonctiune-2774  	9.03        	0.11185     	SCADA           	;
+ Jonctiune-2776  	11.18       	0.0052      	SCADA           	;
+ Jonctiune-2777  	10.62       	0.0092      	SCADA           	;
+ Jonctiune-2879  	10.96       	0.05225     	SCADA           	;
+ Jonctiune-2911  	7.23        	0.04895     	SCADA           	;
+ Jonctiune-2967  	11.84       	0.2         	SCADA           	;
+ Jonctiune-2968  	12.19       	0.05        	SCADA           	;
+ Jonctiune-3067  	9           	0.01125     	SCADA           	;
+ Jonctiune-3068  	12          	0.00145     	SCADA           	;
+ Jonctiune-3074  	10          	0.0711      	SCADA           	;
+ Jonctiune-3075  	9.25        	0.074       	SCADA           	;
+ Jonctiune-3386  	8.62        	0.03        	SCADA           	;
+ Jonctiune-3422  	6.7         	0.01945     	SCADA           	;
+ Jonctiune-3425  	9.1         	0.0334      	SCADA           	;
+ Jonctiune-3446  	5.5         	0.00935     	SCADA           	;
+ Jonctiune-3448  	6.86        	0.0149      	SCADA           	;
+ Jonctiune-3458  	5.25        	0.15225     	SCADA           	;
+ Jonctiune-3460  	7.18        	0.0118      	SCADA           	;
+ Jonctiune-3461  	7.96        	0.11205     	SCADA           	;
+ Jonctiune-3463  	9.17        	0.01805     	SCADA           	;
+ Jonctiune-3464  	9.2         	0.15115     	SCADA           	;
+ SenzorComunarzi-castanului	9           	0.0668      	SCADA           	;
+ Jonctiune-3466  	5.75        	0.2603      	SCADA           	;
+ Jonctiune-3467  	5.73        	0.01255     	SCADA           	;
+ Jonctiune-3470  	8.5         	0.0204      	SCADA           	;
+ Jonctiune-3471  	10.78       	0.08825     	SCADA           	;
+ Jonctiune-3510  	11.21       	0.0129      	SCADA           	;
+ Jonctiune-3566  	11.56       	0.0647      	SCADA           	;
+ Jonctiune-3912  	9.5         	0.01        	SCADA           	;
+ Jonctiune-3913  	9.8         	0.06295     	SCADA           	;
+ Jonctiune-3917  	6.71        	0.00805     	SCADA           	;
+ Jonctiune-3920  	6.72        	0.02905     	SCADA           	;
+ Jonctiune-3921  	12          	0.02        	                	;
+ Jonctiune-3956  	11          	0.01465     	SCADA           	;
+ Jonctiune-3961  	12          	0.12        	SCADA           	;
+ Jonctiune-3967  	11          	0.047       	SCADA           	;
+ Jonctiune-3972  	11.38       	0.0121      	SCADA           	;
+ Jonctiune-3974  	11.84       	0.00022     	SCADA           	;
+ Jonctiune-4595  	9           	0.0153      	SCADA           	;
+ Jonctiune-4602  	9.75        	0.18        	SCADA           	;
+ Jonctiune-4614  	9           	0.0132      	SCADA           	;
+ Jonctiune-4615  	9.5         	0.004       	SCADA           	;
+ Jonctiune-4618  	10.72       	0.02155     	SCADA           	;
+ Jonctiune-4619  	12          	0.009       	SCADA           	;
+ Jonctiune-4706  	11          	1.8214      	SCADA           	;
+ Jonctiune-4723  	7.25        	0.1904      	SCADA           	;
+ Jonctiune-4731  	12          	0.04115     	SCADA           	;
+ Jonctiune-4742  	12.04       	0.0058      	SCADA           	;
+ Jonctiune-4743  	12.04       	0.0058      	SCADA           	;
+ Jonctiune-12372 	10          	0.0017      	SCADA           	;
+ Jonctiune-J-1   	9           	0.04        	SCADA           	;
+ Jonctiune-J-3   	13.83       	0.0695      	SCADA           	;
+ PT3             	9.74        	3.127       	SCADA           	;
+ PT4             	9           	2.811       	SCADA           	;
+ Jonctiune-J-10  	5.81        	0.0339      	SCADA           	;
+ PT1             	11          	3.483       	SCADA           	;
+ Jonctiune-J-15  	13.11       	0.04        	SCADA           	;
+ Jonctiune-J-16  	9.68        	0.1594      	SCADA           	;
+ Jonctiune-J-19  	11          	0.12115     	SCADA           	;
+ Jonctiune-J-20  	8.71        	0.0602      	SCADA           	;
+ Jonctiune-J-21  	10          	0.05585     	SCADA           	;
+ Jonctiune-J-22  	10.3        	0.0119      	SCADA           	;
+ Jonctiune-J-23  	11.05       	0.18035     	SCADA           	;
+ Jonctiune-J-25  	9           	0.01945     	SCADA           	;
+ Jonctiune-J-26  	10.5        	0.1         	SCADA           	;
+ Jonctiune-J-27  	9           	0.1         	SCADA           	;
+ Jonctiune-J-31  	9.16        	0.009       	SCADA           	;
+ Jonctiune-J-32  	15.6767418122856	0.1232      	SCADA           	;
+ Jonctiune-J-33  	8.85308269970862	0.18105     	SCADA           	;
+ Jonctiune-J-34  	10.99       	0.01        	SCADA           	;
+ 197-A           	12          	0           	                	;
+ 197-B           	12          	0           	                	;
+ 198-A           	12          	0           	                	;
+ 198-B           	12          	0           	                	;
+ 199-A           	12          	0           	                	;
+ 199-B           	12          	0           	                	;
+ 200-A           	12          	0           	                	;
+ 200-B           	12          	0           	                	;
+ 201-A           	12          	0           	                	;
+ 201-B           	12          	0           	                	;
+ 202-A           	12          	0           	                	;
+ 202-B           	12          	0           	                	;
+ 203-A           	12          	0           	                	;
+ 203-B           	12          	0           	                	;
+ 205-A           	12          	0           	                	;
+ 205-B           	12          	0           	                	;
+ 206-A           	12          	0           	                	;
+ 206-B           	12          	0           	                	;
+ 207-A           	12          	0           	                	;
+ 207-B           	12          	0           	                	;
+ 210-A           	12          	0           	                	;
+ 210-B           	12          	0           	                	;
+ 212-A           	12          	0           	                	;
+ 212-B           	12          	0           	                	;
+ 213-A           	12          	0           	                	;
+ 213-B           	12          	0           	                	;
+ 214-A           	12          	0           	                	;
+ 214-B           	12          	0           	                	;
+ 215-A           	12          	0           	                	;
+ 215-B           	12          	0           	                	;
+ 216-A           	12          	0           	                	;
+ 216-B           	12          	0           	                	;
+ 217-A           	12          	0           	                	;
+ 217-B           	12          	0           	                	;
+ 218-A           	12          	0           	                	;
+ 218-B           	12          	0           	                	;
+ 226-A           	12          	0           	                	;
+ 226-B           	12          	0           	                	;
+ 228-A           	12          	0           	                	;
+ 228-B           	12          	0           	                	;
+ 229-A           	12          	0           	                	;
+ 229-B           	12          	0           	                	;
+ 230-A           	12          	0           	                	;
+ 230-B           	12          	0           	                	;
+ 231-A           	12          	0           	                	;
+ 231-B           	12          	0           	                	;
+ 232-A           	12          	0           	                	;
+ 232-B           	12          	0           	                	;
+ 233-A           	12          	0           	                	;
+ 233-B           	12          	0           	                	;
+ 235-A           	12          	0           	                	;
+ 235-B           	12          	0           	                	;
+ 236-A           	12          	0           	                	;
+ 236-B           	12          	0           	                	;
+ 237-A           	12          	0           	                	;
+ 237-B           	12          	0           	                	;
+ 240-A           	12          	0           	                	;
+ 240-B           	12          	0           	                	;
+ 241-A           	12          	0           	                	;
+ 241-B           	12          	0           	                	;
+ 242-A           	12          	0           	                	;
+ 242-B           	12          	0           	                	;
+ 243-A           	12          	0           	                	;
+ 243-B           	12          	0           	                	;
+ 244-A           	12          	0           	                	;
+ 244-B           	12          	0           	                	;
+ 245-A           	12          	0           	                	;
+ 245-B           	12          	0           	                	;
+ 246-A           	12          	0           	                	;
+ 246-B           	12          	0           	                	;
+ 247-A           	12          	0           	                	;
+ 247-B           	12          	0           	                	;
+ 248-A           	12          	0           	                	;
+ 248-B           	12          	0           	                	;
+ 249-A           	12          	0           	                	;
+ 249-B           	12          	0           	                	;
+ 250-A           	12          	0           	                	;
+ 250-B           	12          	0           	                	;
+ 251-A           	12          	0           	                	;
+ 251-B           	12          	0           	                	;
+ 253-A           	12          	0           	                	;
+ 253-B           	12          	0           	                	;
+ 254-A           	12          	0           	                	;
+ 254-B           	12          	0           	                	;
+ 255-A           	12          	0           	                	;
+ 255-B           	12          	0           	                	;
+ 256-A           	12          	0           	                	;
+ 256-B           	12          	0           	                	;
+ 257-A           	12          	0           	                	;
+ 257-B           	12          	0           	                	;
+ 258-A           	12          	0           	                	;
+ 258-B           	12          	0           	                	;
+ 259-A           	12          	0           	                	;
+ 259-B           	12          	0           	                	;
+ 260-A           	12          	0           	                	;
+ 260-B           	12          	0           	                	;
+ 261-A           	12          	0           	                	;
+ 261-B           	12          	0           	                	;
+ 263-A           	12          	0           	                	;
+ 263-B           	12          	0           	                	;
+ 264-A           	12          	0           	                	;
+ 264-B           	12          	0           	                	;
+ 265-A           	12          	0           	                	;
+ 265-B           	12          	0           	                	;
+ 266-A           	12          	0           	                	;
+ 266-B           	12          	0           	                	;
+ 267-A           	12          	0           	                	;
+ 267-B           	12          	0           	                	;
+ 268-A           	12          	0           	                	;
+ 268-B           	12          	0           	                	;
+ 269-A           	12          	0           	                	;
+ 269-B           	12          	0           	                	;
+ 270-A           	12          	0           	                	;
+ 270-B           	12          	0           	                	;
+ 271-A           	12          	0           	                	;
+ 271-B           	12          	0           	                	;
+ 275-A           	12          	0           	                	;
+ 275-B           	12          	0           	                	;
+ 276-A           	12          	0           	                	;
+ 276-B           	12          	0           	                	;
+ 279-A           	12          	0           	                	;
+ 279-B           	12          	0           	                	;
+ 280-A           	12          	0           	                	;
+ 280-B           	12          	0           	                	;
+ 281-A           	12          	0           	                	;
+ 281-B           	12          	0           	                	;
+ 282-A           	12          	0           	                	;
+ 282-B           	12          	0           	                	;
+ 283-A           	12          	0           	                	;
+ 283-B           	12          	0           	                	;
+ 286-A           	12          	0           	                	;
+ 286-B           	12          	0           	                	;
+ 287-A           	12          	0           	                	;
+ 287-B           	12          	0           	                	;
+ 288-A           	12          	0           	                	;
+ 288-B           	12          	0           	                	;
+ 290-A           	12          	0           	                	;
+ 290-B           	12          	0           	                	;
+ 291-A           	12          	0           	                	;
+ 291-B           	12          	0           	                	;
+ 748-A           	13          	0           	                	;
+ 748-B           	13          	0           	                	;
+ 751-A           	10.8060569001732	0           	                	;
+ 751-B           	10.8060569001732	0           	                	;
+ 760-A           	11          	0           	                	;
+ 760-B           	11          	0           	                	;
+ 763-A           	4.90597556184912	0           	                	;
+ 763-B           	4.90597556184912	0           	                	;
+
+[RESERVOIRS]
+;ID              	Head        	Pattern         
+ GA-Braila       	10          	                	;
+ Apollo          	0           	                	;
+ RaduNegruMare   	0           	                	;
+ RaduNegru2      	0           	                	;
+
+[TANKS]
+;ID              	Elevation   	InitLevel   	MinLevel    	MaxLevel    	Diameter    	MinVol      	VolCurve        	Overflow
+
+[PIPES]
+;ID              	Node1           	Node2           	Length      	Diameter    	Roughness   	MinorLoss   	Status
+ Conducta-2592   	Jonctiune-3422  	245-A           	0.40000000001249	110         	0.304800000001219	0           	Open  	;
+ Conducta-2560   	Jonctiune-2749  	Jonctiune-3386  	1.83370422811807	1000        	0.304800000001219	0           	Open  	;
+ Conducta-2980   	Jonctiune-1875  	241-B           	1.85412143789789	100         	0.304800000001219	0           	Open  	;
+ Conducta-2579   	Jonctiune-3425  	Jonctiune-J-1   	4.64043181651281	300         	0.304800000001219	0           	Open  	;
+ Conducta-3577   	Jonctiune-3458  	Jonctiune-4723  	3.443033037851	110         	0.304800000001219	0           	Open  	;
+ Conducta-2053   	Jonctiune-2753  	Jonctiune-2911  	3.59279130862215	100         	0.304800000001219	0           	Open  	;
+ Conducta-1283   	Jonctiune-2196  	Jonctiune-1404  	3.83300920005183	110         	0.304800000001219	0           	Open  	;
+ Conducta-1440   	249-A           	Jonctiune-1872  	4.26098925981418	125         	0.304800000001219	0           	Open  	;
+ Conducta-1286   	Jonctiune-2200  	Jonctiune-2199  	4.7026585998925	100         	0.304800000001219	0           	Open  	;
+ Conducta-1073   	Jonctiune-1998  	Jonctiune-1996  	6.07603521541963	100         	0.304800000001219	0           	Open  	;
+ Conducta-701    	Jonctiune-2186  	Jonctiune-1414  	8.16495970126324	100         	0.304800000001219	0           	Open  	;
+ Conducta-2977   	Jonctiune-1421  	Jonctiune-3961  	7.88121740573786	110         	0.304800000001219	0           	Open  	;
+ Conducta-2954   	255-B           	Jonctiune-2752  	8.47260360228815	100         	0.304800000001219	0           	Open  	;
+ Conducta-581    	Jonctiune-1226  	Jonctiune-1224  	11.3277358563818	110         	0.304800000001219	0           	Open  	;
+ Conducta-1269   	Jonctiune-2179  	Jonctiune-2180  	16.1463438503054	100         	0.304800000001219	0           	Open  	;
+ Conducta-1927   	Jonctiune-J-3   	Jonctiune-2734  	20.1650762415809	200         	0.304800000001219	0           	Open  	;
+ Conducta-1935   	Jonctiune-2744  	Jonctiune-2735  	21.5845324854402	200         	0.304800000001219	0           	Open  	;
+ Conducta-1945   	280-A           	Jonctiune-2755  	22.0071498800877	250         	0.304800000001219	0           	Open  	;
+ Conducta-2976   	258-B           	Jonctiune-1632  	26.2481738562617	250         	0.304800000001219	0           	Open  	;
+ Conducta-2637   	Jonctiune-3446  	Jonctiune-J-10  	28.2345698276602	100         	0.304800000001219	0           	Open  	;
+ Conducta-11958  	Jonctiune-12372 	Jonctiune-2185  	56.9151908724384	100         	0.304800000001219	0           	Open  	;
+ Conducta-1942   	Jonctiune-2750  	280-B           	71.889553407209	250         	0.304800000001219	0           	Open  	;
+ Conducta-2209   	Jonctiune-3075  	Jonctiune-4614  	68.8550815129609	100         	0.304800000001219	0           	Open  	;
+ Conducta-951    	Jonctiune-1616  	Jonctiune-2743  	111.106615090273	200         	0.304800000001219	0           	Open  	;
+ Conducta-1289   	Jonctiune-2202  	Jonctiune-3956  	69.7584194094017	100         	0.304800000001219	0           	Open  	;
+ Conducta-2720   	Jonctiune-3471  	Jonctiune-2182  	70.0970026938281	110         	0.304800000001219	0           	Open  	;
+ Conducta-1300   	Jonctiune-2207  	Jonctiune-2739  	71.0335132236759	100         	0.304800000001219	0           	Open  	;
+ Conducta-1276   	Jonctiune-2189  	Jonctiune-2190  	71.7430821248989	100         	0.304800000001219	0           	Open  	;
+ Conducta-2611   	Jonctiune-3467  	Jonctiune-2750  	71.960210323741	500         	0.304800000001219	0           	Open  	;
+ Conducta-3534   	Jonctiune-4742  	Jonctiune-4743  	71.9844284142546	63          	0.304800000001219	0           	Open  	;
+ Conducta-2960   	Jonctiune-2197  	Jonctiune-3448  	72.0888162372063	100         	0.304800000001219	0           	Open  	;
+ Conducta-1940   	Jonctiune-4723  	Jonctiune-3466  	72.4680255755983	110         	0.304800000001219	0           	Open  	;
+ Conducta-1071   	Jonctiune-1996  	Jonctiune-1997  	73.7027636958097	200         	0.304800000001219	0           	Open  	;
+ Conducta-702    	Jonctiune-2186  	Jonctiune-2177  	73.17428385473	150         	0.304800000001219	0           	Open  	;
+ Conducta-1931   	Jonctiune-2737  	Jonctiune-J-15  	73.6304192187512	200         	0.304800000001219	0           	Open  	;
+ Conducta-3578   	Jonctiune-3458  	Jonctiune-2756  	74.5980620456303	110         	0.304800000001219	0           	Open  	;
+ Conducta-2953   	Jonctiune-3912  	Jonctiune-3471  	74.6103073892987	100         	0.304800000001219	0           	Open  	;
+ Conducta-2044   	Jonctiune-1405  	Jonctiune-1406  	74.6430298755473	110         	0.304800000001219	0           	Open  	;
+ Conducta-2210   	Jonctiune-3075  	Jonctiune-4615  	74.7724839734334	50          	0.304800000001219	0           	Open  	;
+ Conducta-1281   	Jonctiune-2195  	Jonctiune-2777  	75.2879109812312	100         	0.304800000001219	0           	Open  	;
+ Conducta-1278   	Jonctiune-2187  	Jonctiune-2192  	75.5517350049167	100         	0.304800000001219	0           	Open  	;
+ Conducta-1293   	Jonctiune-2203  	Jonctiune-2204  	75.5754674589077	100         	0.304800000001219	0           	Open  	;
+ Conducta-1934   	Jonctiune-J-15  	Jonctiune-2744  	75.7395858442746	200         	0.304800000001219	0           	Open  	;
+ Conducta-1298   	Jonctiune-J-16  	Jonctiune-2207  	75.7791755880782	200         	0.304800000001219	0           	Open  	;
+ Conducta-1297   	Jonctiune-2200  	Jonctiune-J-16  	76.3370207627847	250         	0.304800000001219	0           	Open  	;
+ Conducta-2198   	Jonctiune-2204  	Jonctiune-3068  	76.5708141617406	100         	0.304800000001219	0           	Open  	;
+ Conducta-1946   	Jonctiune-2756  	Jonctiune-3446  	78.7890908487924	110         	0.304800000001219	0           	Open  	;
+ Conducta-11960  	Jonctiune-12372 	Jonctiune-4731  	78.4812270334251	100         	0.304800000001219	0           	Open  	;
+ Conducta-3604   	Jonctiune-2735  	Jonctiune-1875  	78.5953681086185	200         	0.304800000001219	0           	Open  	;
+ Conducta-1941   	Jonctiune-3466  	Jonctiune-2753  	79.233269324107	110         	0.304800000001219	0           	Open  	;
+ Conducta-2719   	SenzorComunarzi-castanului	Jonctiune-2879  	79.8740993403407	110         	0.304800000001219	0           	Open  	;
+ Conducta-2017   	Jonctiune-2193  	Jonctiune-2187  	80.2199906265437	100         	0.304800000001219	0           	Open  	;
+ Conducta-1929   	Jonctiune-2205  	Jonctiune-2736  	80.8358771737744	200         	0.304800000001219	0           	Open  	;
+ Conducta-11961  	Jonctiune-2182  	Jonctiune-12372 	80.8839622459336	100         	0.304800000001219	0           	Open  	;
+ Conducta-1274   	Jonctiune-2177  	Jonctiune-1995  	84.57551991841	150         	0.304800000001219	0           	Open  	;
+ Conducta-1280   	Jonctiune-2194  	Jonctiune-2195  	84.1912461280128	100         	0.304800000001219	0           	Open  	;
+ Conducta-1279   	Jonctiune-2776  	Jonctiune-2194  	85.031121642204	100         	0.304800000001219	0           	Open  	;
+ Conducta-1930   	Jonctiune-2736  	Jonctiune-2737  	86.7727587771431	200         	0.304800000001219	0           	Open  	;
+ Conducta-2206   	Jonctiune-2207  	Jonctiune-4618  	88.0503094510396	63          	0.304800000001219	0           	Open  	;
+ Conducta-1295   	Jonctiune-2206  	Jonctiune-2205  	92.1833444449447	150         	0.304800000001219	0           	Open  	;
+ Conducta-837    	Jonctiune-J-19  	Jonctiune-2200  	94.7155605195945	200         	0.304800000001219	0           	Open  	;
+ Conducta-2612   	Jonctiune-1872  	Jonctiune-3464  	118.657121623188	100         	0.304800000001219	0           	Open  	;
+ Conducta-825    	Jonctiune-1634  	Jonctiune-2737  	122.309661896704	250         	0.304800000001219	0           	Open  	;
+ Conducta-1070   	Jonctiune-1995  	Jonctiune-1996  	130.088840518872	150         	0.304800000001219	0           	Open  	;
+ Conducta-2018   	Jonctiune-3967  	Jonctiune-2193  	131.902857940802	100         	0.304800000001219	0           	Open  	;
+ Conducta-827    	Jonctiune-1636  	Jonctiune-1641  	138.908023707601	250         	0.304800000001219	0           	Open  	;
+ Conducta-1275   	Jonctiune-2188  	Jonctiune-2187  	146.449147397802	100         	0.304800000001219	0           	Open  	;
+ Conducta-582    	Jonctiune-1226  	SenzorChisinau-Titulescu	154.897006631747	150         	0.304800000001219	0           	Open  	;
+ Conducta-11947  	Jonctiune-J-21  	Jonctiune-J-22  	153.087911432424	100         	0.304800000001219	0           	Open  	;
+ Conducta-1074   	Jonctiune-2176  	Jonctiune-J-23  	163.526910060503	200         	0.304800000001219	0           	Open  	;
+ Conducta-2636   	Jonctiune-J-10  	Jonctiune-3920  	164.160489055411	100         	0.304800000001219	0           	Open  	;
+ Conducta-2722   	Jonctiune-3471  	Jonctiune-1413  	171.439013316723	110         	0.304800000001219	0           	Open  	;
+ Conducta-1284   	SenzorChisinau-Titulescu	Jonctiune-2197  	172.103517298705	100         	0.304800000001219	0           	Open  	;
+ Conducta-2194   	Jonctiune-4731  	Jonctiune-2196  	172.502534501538	100         	0.304800000001219	0           	Open  	;
+ Conducta-2580   	Jonctiune-3422  	Jonctiune-J-25  	186.110639830345	1000        	0.304800000001219	0           	Open  	;
+ Conducta-705    	Jonctiune-2187  	Jonctiune-1421  	182.145330919991	100         	0.304800000001219	0           	Open  	;
+ Conducta-2721   	Jonctiune-2879  	Jonctiune-3471  	183.45991985293	110         	0.304800000001219	0           	Open  	;
+ Conducta-1947   	Jonctiune-2756  	Jonctiune-2197  	190.648251255001	110         	0.304800000001219	0           	Open  	;
+ Conducta-1973   	Jonctiune-J-16  	Jonctiune-2773  	195.454145172713	100         	0.304800000001219	0           	Open  	;
+ Conducta-954    	SenzorComunarzi-NatVech	Jonctiune-1877  	209.319006401576	250         	0.304800000001219	0           	Open  	;
+ Conducta-1072   	Jonctiune-1877  	Jonctiune-1998  	223.507705655073	100         	0.304800000001219	0           	Open  	;
+ Conducta-703    	Jonctiune-1413  	Jonctiune-2196  	228.065977949415	110         	0.304800000001219	0           	Open  	;
+ Conducta-2052   	Jonctiune-2911  	Jonctiune-2751  	235.289488433036	100         	0.304800000001219	0           	Open  	;
+ Conducta-1271   	Jonctiune-J-23  	Jonctiune-2184  	243.504153659872	100         	0.304800000001219	0           	Open  	;
+ Conducta-1296   	Jonctiune-J-16  	Jonctiune-2203  	249.378207542107	100         	0.304800000001219	0           	Open  	;
+ Conducta-1291   	Jonctiune-2202  	Jonctiune-4706  	262.994279612424	65          	0.304800000001219	0           	Open  	;
+ Conducta-1917   	Jonctiune-3466  	Jonctiune-2208  	298.078739258831	110         	0.304800000001219	0           	Open  	;
+ Conducta-1270   	Jonctiune-2180  	Jonctiune-2181  	304.254648124059	100         	0.304800000001219	0           	Open  	;
+ Conducta-2208   	Jonctiune-2197  	Jonctiune-3074  	311.750256707943	100         	0.304800000001219	0           	Open  	;
+ Conducta-2955   	Jonctiune-2753  	255-A           	354.788791477893	100         	0.304800000001219	0           	Open  	;
+ Conducta-1294   	Jonctiune-2204  	Jonctiune-2736  	355.391602497959	100         	0.304800000001219	0           	Open  	;
+ Conducta-2591   	245-B           	Jonctiune-3458  	364.809801437052	110         	0.304800000001219	0           	Open  	;
+ Conducta-1282   	Jonctiune-J-23  	Jonctiune-2196  	365.807600743888	100         	0.304800000001219	0           	Open  	;
+ Conducta-1285   	Jonctiune-2199  	SenzorChisinau-Titulescu	370.465597341883	100         	0.304800000001219	0           	Open  	;
+ Conducta-2988   	Jonctiune-2177  	275-A           	398.267207588805	100         	0.304800000001219	0           	Open  	;
+ Conducta-1974   	Jonctiune-2773  	Jonctiune-4723  	542.786342362345	100         	0.304800000001219	0           	Open  	;
+ Conducta-1290   	Jonctiune-2734  	Jonctiune-2202  	589.637003893312	100         	0.304800000001219	0           	Open  	;
+ Conducta-2904(2)	Jonctiune-2967  	291-B           	0.150000000176695	200         	0.304800000001219	0           	Open  	;
+ Conducta-2099(1)	Jonctiune-2967  	290-A           	0.149999999991256	110         	0.304800000001219	0           	Open  	;
+ Conducta-2099(2)	290-B           	Jonctiune-2968  	267.815743155653	110         	0.304800000001219	0           	Open  	;
+ Conducta-699(1) 	Jonctiune-1414  	207-A           	0.400000000013761	110         	0.304800000001219	0           	Open  	;
+ Conducta-952(1) 	Jonctiune-1875  	268-A           	10.3805112397482	200         	0.304800000001219	0           	Open  	;
+ Conducta-952(2) 	268-B           	SenzorComunarzi-NatVech	0.400000000010724	200         	0.304800000001219	0           	Open  	;
+ Conducta-1932(1)	SenzorComunarzi-NatVech	270-A           	0.40000000000453	150         	0.304800000001219	0           	Open  	;
+ Conducta-1932(2)	270-B           	Jonctiune-4619  	68.8588382354281	150         	0.304800000001219	0           	Open  	;
+ Conducta-580(1) 	197-A           	Jonctiune-1225  	159.094761058069	110         	0.304800000001219	0           	Open  	;
+ Conducta-580(2) 	Jonctiune-1224  	197-B           	0.400000000051663	110         	0.304800000001219	0           	Open  	;
+ Conducta-3609(1)	198-A           	Jonctiune-4742  	65.8677298723512	110         	0.304800000001219	0           	Open  	;
+ Conducta-3609(2)	Jonctiune-1404  	198-B           	0.400000000036877	110         	0.304800000001219	0           	Open  	;
+ Conducta-2725(1)	199-A           	Jonctiune-2188  	43.5029985160918	100         	0.304800000001219	0           	Open  	;
+ Conducta-2725(2)	Jonctiune-1405  	199-B           	0.402218447412546	100         	0.304800000001219	0           	Open  	;
+ Conducta-3610(1)	200-A           	Jonctiune-1405  	0.399999999998069	110         	0.304800000001219	0           	Open  	;
+ Conducta-3610(2)	Jonctiune-4742  	200-B           	10.9341060402321	110         	0.304800000001219	0           	Open  	;
+ Conducta-2724(1)	Jonctiune-1405  	201-A           	0.388358956881732	100         	0.304800000001219	0           	Open  	;
+ Conducta-2724(2)	201-B           	Jonctiune-2189  	51.6959828776425	100         	0.304800000001219	0           	Open  	;
+ Conducta-1277(1)	Jonctiune-1406  	253-A           	0.915545274346164	63          	0.304800000001219	0           	Open  	;
+ Conducta-1277(2)	253-B           	Jonctiune-2191  	79.2161135295759	63          	0.304800000001219	0           	Open  	;
+ Conducta-695(2) 	Jonctiune-1406  	202-B           	0.400000000141588	110         	0.304800000001219	0           	Open  	;
+ Conducta-696(1) 	203-A           	Jonctiune-1406  	0.897568190599851	76          	0.304800000001219	0           	Open  	;
+ Conducta-696(2) 	Jonctiune-2192  	203-B           	185.64089762263	76          	0.304800000001219	0           	Open  	;
+ Conducta-704(1) 	205-A           	Jonctiune-1415  	184.026463085414	110         	0.304800000001219	0           	Open  	;
+ Conducta-704(2) 	Jonctiune-1413  	205-B           	0.407634923124955	110         	0.304800000001219	0           	Open  	;
+ Conducta-699(2)(1)	207-B           	206-A           	611.809380566139	110         	0.304800000001219	0           	Open  	;
+ Conducta-699(2)(2)	206-B           	Jonctiune-1415  	0.400000000012168	110         	0.304800000001219	0           	Open  	;
+ Conducta-948(1) 	Jonctiune-1606  	210-A           	0.400000000092296	110         	0.304800000001219	0           	Open  	;
+ Conducta-948(2) 	210-B           	Jonctiune-267   	168.610767289174	110         	0.304800000001219	0           	Open  	;
+ Conducta-2952(1)	254-A           	Jonctiune-3912  	2.24894336211082	110         	0.304800000001219	0           	Open  	;
+ Conducta-2952(2)	Jonctiune-1606  	254-B           	0.400000000020787	110         	0.304800000001219	0           	Open  	;
+ Conducta-950(1) 	Jonctiune-1610  	212-A           	0.399999999978948	110         	0.304800000001219	0           	Open  	;
+ Conducta-950(2) 	212-B           	Jonctiune-1415  	75.185748572223	110         	0.304800000001219	0           	Open  	;
+ Conducta-2982(2)	213-B           	Jonctiune-1610  	0.40000000005097	110         	0.304800000001219	0           	Open  	;
+ Conducta-958(2) 	214-B           	Jonctiune-1610  	0.399999999999517	110         	0.304800000001219	0           	Open  	;
+ Conducta-817(1) 	Jonctiune-267   	215-A           	0.399999999985755	110         	0.304800000001219	0           	Open  	;
+ Conducta-817(2) 	215-B           	Jonctiune-1873  	11.130598080461	110         	0.304800000001219	0           	Open  	;
+ Conducta-949(1) 	Jonctiune-267   	216-A           	0.400000000041545	100         	0.304800000001219	0           	Open  	;
+ Conducta-949(2) 	216-B           	Jonctiune-1413  	78.4489324129984	100         	0.304800000001219	0           	Open  	;
+ Conducta-956(1) 	Jonctiune-1877  	217-A           	246.930222596836	250         	0.304800000001219	0           	Open  	;
+ Conducta-956(2) 	217-B           	Jonctiune-1616  	0.53863371256598	250         	0.304800000001219	0           	Open  	;
+ Conducta-822(1) 	226-A           	Jonctiune-1628  	0.37274472708912	250         	0.304800000001219	0           	Open  	;
+ Conducta-822(2) 	Jonctiune-2735  	226-B           	142.567787618589	250         	0.304800000001219	0           	Open  	;
+ Conducta-823(1) 	Jonctiune-1628  	228-A           	0.325325088050224	200         	0.304800000001219	0           	Open  	;
+ Conducta-823(2) 	228-B           	PT2             	26.8433558513629	200         	0.304800000001219	0           	Open  	;
+ Conducta-824(1) 	Jonctiune-1632  	229-A           	2.90840748610228	150         	0.304800000001219	0           	Open  	;
+ Conducta-824(2) 	229-B           	PT1             	48.4783862108634	150         	0.304800000001219	0           	Open  	;
+ Conducta-11778(1)	Jonctiune-3068  	230-B           	75.0980137460153	100         	0.304800000001219	0           	Open  	;
+ Conducta-828(1) 	231-A           	Jonctiune-1636  	0.160429317951217	250         	0.304800000001219	0           	Open  	;
+ Conducta-828(2) 	Jonctiune-1637  	231-B           	59.7478335170586	250         	0.304800000001219	0           	Open  	;
+ Conducta-2975(1)	Jonctiune-1641  	232-A           	0.400000000017422	250         	0.304800000001219	0           	Open  	;
+ Conducta-830(1) 	233-A           	Jonctiune-1641  	0.400000000129216	200         	0.304800000001219	0           	Open  	;
+ Conducta-830(2) 	Jonctiune-2207  	233-B           	76.1174109789712	200         	0.304800000001219	0           	Open  	;
+ Conducta-818(1) 	Jonctiune-1616  	218-A           	0.564565114173857	200         	0.304800000001219	0           	Open  	;
+ Conducta-818(2) 	218-B           	Jonctiune-2176  	143.619757841938	200         	0.304800000001219	0           	Open  	;
+ Conducta-831(1) 	235-A           	Jonctiune-1642  	0.400000000085387	100         	0.304800000001219	0           	Open  	;
+ Conducta-831(2) 	Jonctiune-2744  	235-B           	9.21679732246663	100         	0.304800000001219	0           	Open  	;
+ Conducta-833(1) 	Jonctiune-1646  	236-A           	0.399999999991509	100         	0.304800000001219	0           	Open  	;
+ Conducta-833(2) 	236-B           	Jonctiune-2738  	14.5016437398539	100         	0.304800000001219	0           	Open  	;
+ Conducta-1933(1)	Jonctiune-2203  	237-A           	390.077784841012	100         	0.304800000001219	0           	Open  	;
+ Conducta-1933(2)	237-B           	Jonctiune-1646  	0.399999999890976	100         	0.304800000001219	0           	Open  	;
+ Conducta-958(1)(1)	Jonctiune-1873  	240-A           	0.235230568416713	110         	0.304800000001219	0           	Open  	;
+ Conducta-958(1)(2)	240-B           	214-A           	176.49705074653	110         	0.304800000001219	0           	Open  	;
+ Conducta-2594(1)	Jonctiune-3386  	242-A           	0.287254268759433	50          	0.304800000001219	0           	Open  	;
+ Conducta-2594(2)	242-B           	Jonctiune-J-26  	222.689877267335	50          	0.304800000001219	0           	Open  	;
+ Conducta-1939(1)	243-A           	Jonctiune-3422  	97.1792842703171	1000        	0.304800000001219	0           	Open  	;
+ Conducta-1939(2)	Jonctiune-2749  	243-B           	0.230248502500314	1000        	0.304800000001219	0           	Open  	;
+ Conducta-2189(1)	Jonctiune-2749  	244-A           	0.256472154941225	600         	0.365760000001463	0           	Open  	;
+ Conducta-1915(1)	Jonctiune-4706  	246-A           	742.733124568723	300         	0.304800000001219	0           	Open  	;
+ Conducta-1915(2)	246-B           	Jonctiune-2729  	0.399999999906277	300         	0.304800000001219	0           	Open  	;
+ Conducta-3576(1)	247-A           	Jonctiune-2774  	356.477260871039	110         	0.304800000001219	0           	Open  	;
+ Conducta-3576(2)	Jonctiune-2755  	247-B           	0.150000000005885	110         	0.304800000001219	0           	Open  	;
+ Conducta-1943(1)	Jonctiune-2755  	248-A           	0.15000000002448	110         	0.304800000001219	0           	Open  	;
+ Conducta-1943(2)	248-B           	Jonctiune-3470  	103.775697424505	110         	0.304800000001219	0           	Open  	;
+ Conducta-1944(1)	Jonctiune-J-31  	249-B           	0.0443940885557657	250         	0.304800000001219	0           	Open  	;
+ Conducta-1944(2)	Jonctiune-2755  	Jonctiune-J-31  	71.4263384980915	250         	0.304800000001219	0           	Open  	;
+ Conducta-1441(1)	Jonctiune-J-31  	250-A           	0.175481180860191	250         	0.304800000001219	0           	Open  	;
+ Conducta-1441(2)	250-B           	Jonctiune-J-20  	308.402997728163	250         	0.304800000001219	0           	Open  	;
+ Conducta-2189(2)(1)	244-B           	251-A           	298.912777097867	600         	0.304800000001219	0           	Open  	;
+ Conducta-2189(2)(2)	251-B           	Jonctiune-3467  	0.399999999932446	600         	0.304800000001219	0           	Open  	;
+ Conducta-2961(1)	Jonctiune-3448  	256-A           	0.400000000023326	40          	0.304800000001219	0           	Open  	;
+ Conducta-2961(2)	256-B           	Jonctiune-3917  	5.82346200304586	40          	0.304800000001219	0           	Open  	;
+ Conducta-2959(1)	Jonctiune-3448  	257-A           	0.399999999991953	100         	0.304800000001219	0           	Open  	;
+ Conducta-2959(2)	257-B           	Jonctiune-2730  	4.06495079509058	100         	0.304800000001219	0           	Open  	;
+ Conducta-1288(1)	259-A           	Jonctiune-2201  	0.400000000001702	100         	0.304800000001219	0           	Open  	;
+ Conducta-1288(2)	Jonctiune-2206  	259-B           	450.350510956985	100         	0.304800000001219	0           	Open  	;
+ Conducta-1292(1)	Jonctiune-2201  	261-A           	0.400000000033637	100         	0.304800000001219	0           	Open  	;
+ Conducta-1292(2)	261-B           	Jonctiune-2203  	76.2125069504918	100         	0.304800000001219	0           	Open  	;
+ Conducta-1287(1)	Jonctiune-2200  	260-A           	249.302753361199	100         	0.304800000001219	0           	Open  	;
+ Conducta-1287(2)	260-B           	Jonctiune-2201  	0.399999999982417	100         	0.304800000001219	0           	Open  	;
+ Conducta-2978(1)	Jonctiune-3566  	263-A           	0.400000000007778	200         	0.304800000001219	0           	Open  	;
+ Conducta-2978(2)	263-B           	Jonctiune-2776  	9.18274538634281	200         	0.304800000001219	0           	Open  	;
+ Conducta-2979(1)	264-A           	Jonctiune-3967  	20.3998994703196	110         	0.304800000001219	0           	Open  	;
+ Conducta-2979(2)	SenzorCernauti-Sebesului	264-B           	0.399999999987735	110         	0.304800000001219	0           	Open  	;
+ Conducta-2987(1)	275-B           	265-A           	196.846281997086	100         	0.304800000001219	0           	Open  	;
+ Conducta-2987(2)	265-B           	SenzorCernauti-Sebesului	0.399999999971443	100         	0.304800000001219	0           	Open  	;
+ Conducta-700(1) 	Jonctiune-1415  	267-A           	72.1525679902248	110         	0.304800000001219	0           	Open  	;
+ Conducta-700(2) 	267-B           	SenzorCernauti-Sebesului	0.399999999987527	110         	0.304800000001219	0           	Open  	;
+ Conducta-1268(1)	SenzorCernauti-Sebesului	266-A           	0.400000000076468	100         	0.304800000001219	0           	Open  	;
+ Conducta-1268(2)	266-B           	Jonctiune-2179  	172.635169697738	100         	0.304800000001219	0           	Open  	;
+ Conducta-953(1) 	SenzorComunarzi-NatVech	269-A           	0.400000000068638	150         	0.304800000001219	0           	Open  	;
+ Conducta-953(2) 	269-B           	Jonctiune-2186  	78.7549434391083	150         	0.304800000001219	0           	Open  	;
+ Conducta-2983(1)	241-A           	271-A           	208.042148844685	110         	0.304800000001219	0           	Open  	;
+ Conducta-2983(2)	271-B           	Jonctiune-3972  	0.4000000001295	110         	0.304800000001219	0           	Open  	;
+ Conducta-826(1) 	276-A           	Jonctiune-1634  	0.199999999995481	250         	0.304800000001219	0           	Open  	;
+ Conducta-826(2) 	Jonctiune-1632  	276-B           	136.579599718841	250         	0.304800000001219	0           	Open  	;
+ Conducta-3391(1)	Jonctiune-2750  	279-A           	0.149999999941368	300         	0.304800000001219	0           	Open  	;
+ Conducta-3391(2)	279-B           	Jonctiune-1638  	433.128055628692	300         	0.304800000001219	0           	Open  	;
+ Conducta-957(1) 	Jonctiune-1872  	281-A           	0.15000000004416	100         	0.304800000001219	0           	Open  	;
+ Conducta-957(2) 	281-B           	Jonctiune-3075  	184.646129765664	100         	0.304800000001219	0           	Open  	;
+ Conducta-2613(1)	Jonctiune-1872  	283-A           	0.150000000072281	100         	0.304800000001219	0           	Open  	;
+ Conducta-2613(2)	283-B           	Jonctiune-4595  	77.5552648264042	100         	0.304800000001219	0           	Open  	;
+ Conducta-2945(1)	282-A           	SenzorComunarzi-castanului	75.3533364490578	110         	0.304800000001219	0           	Open  	;
+ Conducta-2945(2)	Jonctiune-1872  	282-B           	0.149999999908531	110         	0.304800000001219	0           	Open  	;
+ Conducta-9419(1)	Jonctiune-4602  	286-A           	0.149999999943168	200         	0.304800000001219	0           	Open  	;
+ Conducta-9419(2)	286-B           	PT3             	30.9775132820191	200         	0.304800000001219	0           	Open  	;
+ Conducta-3348(1)	287-A           	Jonctiune-1637  	109.919934587092	300         	0.304800000001219	0           	Open  	;
+ Conducta-3348(2)	Jonctiune-1638  	287-B           	0.150000000034401	300         	0.304800000001219	0           	Open  	;
+ Conducta-3347(1)	Jonctiune-1638  	288-A           	0.149999999898983	200         	0.304800000001219	0           	Open  	;
+ Conducta-3347(2)	288-B           	PT4             	41.5369136620869	200         	0.304800000001219	0           	Open  	;
+ Conducta-2564(1)	Jonctiune-3067  	Jonctiune-J-21  	183.171996431866	100         	0.304800000001219	0           	Open  	;
+ Conducta-2564(2)	Jonctiune-J-21  	Jonctiune-4706  	180.760516368206	100         	0.304800000001219	0           	Open  	;
+ Conducta-1977(1)(1)	Jonctiune-J-20  	Jonctiune-4602  	139.609139436627	250         	0.304800000001219	0           	Open  	;
+ Conducta-P-5(1) 	Jonctiune-3974  	Jonctiune-2967  	0.799920388247378	1000        	0.03000000096012	0           	Open  	;
+ Conducta-695(1)(1)	Jonctiune-3921  	Jonctiune-1407  	91.9735608016011	110         	0.304800000001219	0           	Open  	;
+ Conducta-695(1)(2)	202-A           	Jonctiune-3921  	0.786451135247491	110         	0.304800000001219	0           	Open  	;
+ Conducta-2946(1)	Jonctiune-3913  	Jonctiune-1606  	0.163116204233098	110         	0.304800000001219	0           	Open  	;
+ Conducta-2946(2)	SenzorComunarzi-castanului	Jonctiune-3913  	193.096118159653	110         	0.304800000001219	0           	Open  	;
+ Conducta-11959(1)	Jonctiune-1996  	Jonctiune-3510  	437.615524349418	100         	0.304800000001219	0           	Open  	;
+ Conducta-11959(2)	Jonctiune-3510  	Jonctiune-12372 	356.553168115915	100         	0.304800000001219	0           	Open  	;
+ Conducta-2956(2)	Jonctiune-2774  	Jonctiune-3463  	6.23918035344778	150         	0.304800000001219	0           	Open  	;
+ Conducta-1916(1)	Jonctiune-1226  	Jonctiune-3461  	8.84769600088234	100         	0.304800000001219	0           	Open  	;
+ Conducta-1916(2)	Jonctiune-3466  	Jonctiune-3461  	357.352130794596	100         	0.304800000001219	0           	Open  	;
+ Conducta-2196(1)	Jonctiune-3460  	Jonctiune-3067  	6.09293087783549	150         	0.304800000001219	0           	Open  	;
+ Conducta-2196(2)	SenzorChisinau-Titulescu	Jonctiune-3460  	67.6263947839868	150         	0.304800000001219	0           	Open  	;
+ Conducta-2063(1)	Jonctiune-2729  	Jonctiune-3425  	421.592245912779	300         	0.304800000001219	0           	Open  	;
+ Conducta-2063(2)	Jonctiune-3425  	Jonctiune-J-27  	24.0543001302758	300         	0.304800000001219	0           	Open  	;
+ Conducta-2982(1)(1)	Jonctiune-3972  	Jonctiune-1874  	54.8945124638978	110         	0.304800000001219	0           	Open  	;
+ Conducta-2982(1)(2)	Jonctiune-1874  	213-A           	389.240853142207	110         	0.304800000001219	0           	Open  	;
+ Conducta-2975(2)(1)	232-B           	Jonctiune-1635  	167.697302379629	250         	0.304800000001219	0           	Open  	;
+ Conducta-2975(2)(2)	Jonctiune-1635  	258-A           	112.050271844302	250         	0.304800000001219	0           	Open  	;
+ Conducta-1272(2)	Jonctiune-2184  	Jonctiune-1419  	8.20083662669921	110         	0.304800000001219	0           	Open  	;
+ Conducta-P-5(2)(1)	748-B           	Jonctiune-3974  	0.860957729003352	1000        	0.03000000096012	0           	Open  	;
+ Conducta-P-5(2)(2)	Apollo          	748-A           	0.202691404480204	1000        	0.03000000096012	0           	Open  	;
+ Conducta-P-3(1) 	GA-Braila       	751-A           	4.97924246756986	200         	0.259080000001036	0           	Open  	;
+ Conducta-P-3(2) 	751-B           	Jonctiune-J-3   	5.8523287386162	200         	0.259080000001036	0           	Open  	;
+ Conducta-P-8(1) 	RaduNegru2      	760-A           	8.10588020722275	152.40000000061	0.304800000001219	0           	Open  	;
+ Conducta-P-8(2) 	760-B           	Jonctiune-J-19  	7.25333151736701	152.40000000061	0.304800000001219	0           	Open  	;
+ Conducta-P-7(1) 	RaduNegruMare   	763-A           	2.54298017725386	1000        	0.304800000001219	0           	Open  	;
+ Conducta-P-7(2) 	763-B           	Jonctiune-2749  	2.30871428371993	1000        	0.304800000001219	0           	Open  	;
+ Conducta-1928(1)	Jonctiune-2734  	Jonctiune-J-32  	71.5124648434966	200         	0.304800000001219	0           	Open  	;
+ Conducta-1928(2)	Jonctiune-J-32  	Jonctiune-2206  	79.7251399413304	200         	0.304800000001219	0           	Open  	;
+ Conducta-2962(1)	Jonctiune-J-33  	Jonctiune-3917  	153.386075402674	100         	0.304800000001219	0           	Open  	;
+ Conducta-2962(2)	Jonctiune-3067  	Jonctiune-J-33  	10.5152582788872	100         	0.304800000001219	0           	Open  	;
+ Conducta-P-9    	230-A           	Jonctiune-J-34  	0.0211253030200029	100         	0.259080000001036	0           	Open  	;
+ Conducta-2904(1)(2)	Jonctiune-3961  	Jonctiune-3566  	71.2464226882543	200         	0.304800000001219	0           	Open  	;
+ Conducta-2956(1)(1)	Jonctiune-3463  	Jonctiune-2752  	81.7858465408198	150         	0.304800000001219	0           	Open  	;
+ Conducta-2956(1)(2)	Jonctiune-2752  	Jonctiune-1226  	80.3908631370379	150         	0.304800000001219	0           	Open  	;
+ Conducta-2904(1)(1)(1)	291-A           	Jonctiune-1419  	124.436387711549	200         	0.304800000001219	0           	Open  	;
+ Conducta-2904(1)(1)(2)	Jonctiune-1419  	Jonctiune-3961  	249.997201214665	200         	0.304800000001219	0           	Open  	;
+
+[PUMPS]
+;ID              	Node1           	Node2           	Parameters
+ Apollo          	748-A           	748-B           	HEAD Apollo	SPEED 1.12	;
+ GABraila        	751-A           	751-B           	HEAD GABraila	SPEED 1	;
+ RaduNEgrumic    	760-A           	760-B           	HEAD RaduNEgrumic	SPEED 1	;
+ RaduNegruMare   	763-A           	763-B           	HEAD RaduNegruMare	SPEED 1	;
+
+[VALVES]
+;ID              	Node1           	Node2           	Diameter    	Type	Setting     	MinorLoss   
+ Vana-524        	197-A           	197-B           	100         	PBV 	0           	0           	;
+ Vana-588        	198-A           	198-B           	100         	PBV 	0           	0           	;
+ Vana-589        	199-A           	199-B           	100         	PBV 	0           	0           	;
+ Vana-590        	200-A           	200-B           	100         	PBV 	0           	0           	;
+ Vana-591        	201-A           	201-B           	63          	PBV 	0           	0           	;
+ Vana-592        	202-A           	202-B           	100         	PBV 	0           	0           	;
+ Vana-593        	203-A           	203-B           	50          	PBV 	0           	0           	;
+ Vana-595        	205-A           	205-B           	100         	PBV 	0           	0           	;
+ Vana-596        	206-A           	206-B           	100         	PBV 	0           	0           	;
+ Vana-597        	207-A           	207-B           	100         	PBV 	0           	0           	;
+ Vana-676        	210-A           	210-B           	100         	PBV 	0           	0           	;
+ Vana-678        	212-A           	212-B           	150         	PBV 	0           	0           	;
+ Vana-679        	213-A           	213-B           	150         	PBV 	0           	0           	;
+ Vana-680        	214-A           	214-B           	150         	PBV 	0           	0           	;
+ Vana-681        	215-A           	215-B           	100         	PBV 	0           	0           	;
+ Vana-682        	216-A           	216-B           	100         	PBV 	0           	0           	;
+ Vana-683        	217-A           	217-B           	300         	PBV 	0           	0           	;
+ Vana-684        	218-A           	218-B           	300         	PBV 	0           	0           	;
+ Vana-692        	226-A           	226-B           	200         	PBV 	0           	0           	;
+ Vana-694        	228-A           	228-B           	200         	PBV 	0           	0           	;
+ Vana-695        	229-A           	229-B           	100         	PBV 	0           	0           	;
+ Vana-696        	230-A           	230-B           	50          	PBV 	0           	0           	;
+ Vana-697        	231-A           	231-B           	250         	PBV 	0           	0           	;
+ Vana-698        	232-A           	232-B           	250         	PBV 	0           	0           	;
+ Vana-699        	233-A           	233-B           	200         	PBV 	0           	0           	;
+ Vana-701        	235-A           	235-B           	100         	PBV 	0           	0           	;
+ Vana-702        	236-A           	236-B           	100         	PBV 	0           	0           	;
+ Vana-703        	237-A           	237-B           	200         	PBV 	0           	0           	;
+ Vana-829        	240-A           	240-B           	100         	PBV 	0           	0           	;
+ Vana-830        	241-A           	241-B           	100         	PBV 	0           	0           	;
+ Vana-999        	242-A           	242-B           	1000        	PBV 	0           	0           	;
+ Vana-1000       	243-A           	243-B           	1000        	PBV 	0           	0           	;
+ Vana-1001       	244-A           	244-B           	600         	PBV 	0           	0           	;
+ Vana-1017       	245-A           	245-B           	100         	PBV 	0           	0           	;
+ Vana-1020       	246-A           	246-B           	300         	PBV 	0           	0           	;
+ Vana-1027       	247-A           	247-B           	100         	PBV 	0           	0           	;
+ Vana-1028       	248-A           	248-B           	100         	PBV 	0           	0           	;
+ Vana-1029       	249-A           	249-B           	100         	PBV 	0           	0           	;
+ Vana-1030       	250-A           	250-B           	250         	PBV 	0           	0           	;
+ Vana-1031       	251-A           	251-B           	600         	PBV 	0           	0           	;
+ Vana-1116       	253-A           	253-B           	50          	PBV 	0           	0           	;
+ Vana-1305       	254-A           	254-B           	100         	PBV 	0           	0           	;
+ Vana-1306       	255-A           	255-B           	100         	PBV 	0           	0           	;
+ Vana-1308       	256-A           	256-B           	40          	PBV 	0           	0           	;
+ Vana-1309       	257-A           	257-B           	100         	PBV 	0           	0           	;
+ Vana-1327       	258-A           	258-B           	250         	PBV 	0           	0           	;
+ Vana-1328       	259-A           	259-B           	100         	PBV 	0           	0           	;
+ Vana-1329       	260-A           	260-B           	100         	PBV 	0           	0           	;
+ Vana-1330       	261-A           	261-B           	125         	PBV 	0           	0           	;
+ Vana-1332       	263-A           	263-B           	200         	PBV 	0           	0           	;
+ Vana-1333       	264-A           	264-B           	100         	PBV 	0           	0           	;
+ Vana-1334       	265-A           	265-B           	100         	PBV 	0           	0           	;
+ Vana-1335       	266-A           	266-B           	100         	PBV 	0           	0           	;
+ Vana-1336       	267-A           	267-B           	100         	PBV 	0           	0           	;
+ Vana-1337       	268-A           	268-B           	300         	PBV 	0           	0           	;
+ Vana-1338       	269-A           	269-B           	150         	PBV 	0           	0           	;
+ Vana-1339       	270-A           	270-B           	150         	PBV 	0           	0           	;
+ Vana-1340       	271-A           	271-B           	100         	PBV 	0           	0           	;
+ Vana-1346       	275-A           	275-B           	100         	PBV 	0           	0           	;
+ Vana-1350       	276-A           	276-B           	250         	PBV 	0           	0           	;
+ Vana-1695       	279-A           	279-B           	300         	PBV 	0           	0           	;
+ Vana-1696       	280-A           	280-B           	250         	PBV 	0           	0           	;
+ Vana-1697       	281-A           	281-B           	100         	PBV 	0           	0           	;
+ Vana-1698       	282-A           	282-B           	100         	PBV 	0           	0           	;
+ Vana-1699       	283-A           	283-B           	100         	PBV 	0           	0           	;
+ Vana-1702       	286-A           	286-B           	200         	PBV 	0           	0           	;
+ Vana-1703       	287-A           	287-B           	250         	PBV 	0           	0           	;
+ Vana-1704       	288-A           	288-B           	200         	PBV 	0           	0           	;
+ Vana-1735       	290-A           	290-B           	100         	PBV 	0           	0           	;
+ Vana-1736       	291-A           	291-B           	200         	PBV 	0           	0           	;
+
+[TAGS]
+
+[DEMANDS]
+;Junction        	Demand      	Pattern         	Category
+
+[STATUS]
+;ID              	Status/Setting
+ Apollo          	1.12
+
+[PATTERNS]
+;ID              	Multipliers
+;
+ SCADA           	0.75        	0.46        	0.33        	0.31        	0.3         	0.27        
+ SCADA           	0.39        	0.71        	1.28        	1.67        	1.69        	1.46        
+ SCADA           	1.33        	1.11        	1.15        	1.05        	0.89        	0.97        
+ SCADA           	1.1         	1.23        	1.43        	1.4         	1.47        	1.27        
+;
+ GradualGABraila 	0.813       	0.813       	0.813       	0.813       	0.813       	0.813       
+ GradualGABraila 	1           	1           	1           	1           	1           	1           
+ GradualGABraila 	1           	1           	1           	1           	1           	1           
+ GradualGABraila 	1           	1           	1           	1           	1           	1           
+ GradualGABraila 	0.813       
+;
+ GradualApollo   	0.857       	0.857       	0.857       	0.857       	0.857       	0.857       
+ GradualApollo   	1           	1           	1           	1           	1           	1           
+ GradualApollo   	1           	1           	1           	1           	1           	1           
+ GradualApollo   	1           	1           	1           	1           	1           	1           
+ GradualApollo   	0.857       
+;
+ GradualRaduNegru-Apollo	1           	1           	1           	1           	1           	1           
+ GradualRaduNegru-Apollo	1           	0.937       	0.937       	0.937       	0.937       	0.937       
+ GradualRaduNegru-Apollo	0.937       	0.937       	0.937       	0.937       	0.937       	0.937       
+ GradualRaduNegru-Apollo	0.937       	0.937       	0.937       	0.937       	0.937       	1           
+
+[CURVES]
+;ID              	X-Value     	Y-Value
+;PUMP: PUMP: PUMP:
+ Apollo          	36.32       	16          
+;PUMP: PUMP: EFFICIENCY:
+ ApolloE         	0           	100         
+;PUMP: PUMP: PUMP:
+ GABraila        	41          	12.5        
+;PUMP: PUMP: EFFICIENCY:
+ GABrailaE       	0           	100         
+;PUMP: PUMP: PUMP:
+ RaduNEgrumic    	71.36       	20          
+;PUMP: PUMP: EFFICIENCY:
+ RaduNEgrumicE   	0           	100         
+;PUMP: PUMP: PUMP:
+ RaduNegruMare   	160         	20          
+;PUMP: PUMP: EFFICIENCY:
+ RaduNegruMareE  	0           	100         
+
+[CONTROLS]
+
+
+[RULES]
+
+
+[ENERGY]
+ Global Efficiency  	75
+ Global Price       	0
+ Demand Charge      	0
+ Pump 	Apollo          	Efficiency	ApolloE
+ Pump 	GABraila        	Efficiency	GABrailaE
+ Pump 	RaduNEgrumic    	Efficiency	RaduNEgrumicE
+ Pump 	RaduNegruMare   	Efficiency	RaduNegruMareE
+
+[EMITTERS]
+;Junction        	Coefficient
+
+[QUALITY]
+;Node            	InitQual
+
+[SOURCES]
+;Node            	Type        	Quality     	Pattern
+
+[REACTIONS]
+;Type     	Pipe/Tank       	Coefficient
+
+
+[REACTIONS]
+ Order Bulk            	1
+ Order Tank            	1
+ Order Wall            	1
+ Global Bulk           	0
+ Global Wall           	0
+ Limiting Potential    	0
+ Roughness Correlation 	0
+
+[MIXING]
+;Tank            	Model
+
+[TIMES]
+ Duration           	24:00 
+ Hydraulic Timestep 	1:00 
+ Quality Timestep   	0:00 
+ Pattern Timestep   	1:00 
+ Pattern Start      	0:00 
+ Report Timestep    	0:00 
+ Report Start       	0:00 
+ Start ClockTime    	12 am
+ Statistic          	NONE
+
+[REPORT]
+ Status             	No
+ Summary            	No
+ Page               	0
+
+[OPTIONS]
+ Units              	LPS
+ Headloss           	D-W
+ Specific Gravity   	0.998
+ Viscosity          	0.982157860636364
+ Trials             	100
+ Accuracy           	0.001
+ CHECKFREQ          	2
+ MAXCHECK           	10
+ DAMPLIMIT          	0
+ Unbalanced         	Continue 10
+ Pattern            	1
+ Demand Multiplier  	1.0
+ Demand Model       	PDA
+ Minimum Pressure   	0
+ Required Pressure  	0.1
+ Pressure Exponent  	0.5
+ Emitter Exponent   	0.5
+ Quality            	NONE mg/L
+ Diffusivity        	1
+ Tolerance          	0.01
+
+[COORDINATES]
+;Node            	X-Coord           	Y-Coord
+Jonctiune-267   	730350.550        	420432.790        
+Jonctiune-1224  	730623.493        	420275.606        
+Jonctiune-1225  	730700.991        	420415.007        
+Jonctiune-1226  	730617.916        	420265.746        
+Jonctiune-1404  	730091.632        	420603.803        
+Jonctiune-1405  	730026.661        	420646.239        
+Jonctiune-1406  	729964.076        	420686.917        
+Jonctiune-1407  	729885.406        	420736.815        
+Jonctiune-1413  	730285.959        	420477.353        
+Jonctiune-1414  	730678.855        	421170.761        
+Jonctiune-1415  	730379.000        	420636.598        
+Jonctiune-1419  	730390.732        	421131.794        
+Jonctiune-1421  	730210.961        	420961.038        
+Jonctiune-1606  	730266.520        	420286.150        
+Jonctiune-1610  	730443.360        	420597.040        
+Jonctiune-1616  	730536.748        	420761.599        
+Jonctiune-1628  	730776.430        	421021.980        
+Jonctiune-1632  	730890.666        	420895.750        
+Jonctiune-1634  	730957.312        	421015.169        
+Jonctiune-1635  	730820.715        	420776.541        
+Jonctiune-1636  	730668.383        	420510.039        
+Jonctiune-1637  	730639.180        	420457.730        
+Jonctiune-1638  	730584.070        	420362.450        
+Jonctiune-1641  	730737.640        	420630.440        
+Jonctiune-1642  	730868.220        	421149.380        
+Jonctiune-1646  	731184.618        	421101.312        
+Jonctiune-1872  	730235.874        	420078.166        
+Jonctiune-1873  	730355.970        	420442.967        
+Jonctiune-1874  	730635.583        	420935.954        
+Jonctiune-1875  	730769.123        	421163.655        
+SenzorComunarzi-NatVech	730761.029        	421159.518        
+Jonctiune-1877  	730659.029        	420976.743        
+Jonctiune-1995  	730531.066        	421213.322        
+Jonctiune-1996  	730466.427        	421100.789        
+Jonctiune-1997  	730405.939        	421141.812        
+Jonctiune-1998  	730471.997        	421099.088        
+Jonctiune-2176  	730416.059        	420834.058        
+Jonctiune-2177  	730612.578        	421193.404        
+SenzorCernauti-Sebesului	730318.013        	420675.896        
+Jonctiune-2179  	730232.392        	420525.531        
+Jonctiune-2180  	730224.379        	420511.513        
+Jonctiune-2181  	730072.271        	420248.013        
+Jonctiune-2182  	730143.358        	420365.955        
+Jonctiune-2184  	730397.171        	421130.343        
+Jonctiune-2185  	730046.234        	420360.755        
+Jonctiune-2186  	730683.491        	421175.364        
+Jonctiune-2187  	730122.605        	420802.494        
+Jonctiune-2188  	730050.836        	420674.836        
+Jonctiune-2189  	730007.437        	420604.804        
+Jonctiune-2190  	729968.018        	420544.861        
+Jonctiune-2191  	729934.032        	420622.231        
+Jonctiune-2192  	730059.044        	420843.336        
+Jonctiune-2193  	730189.247        	420757.974        
+Jonctiune-2194  	730355.295        	420878.914        
+Jonctiune-2195  	730426.140        	420833.425        
+Jonctiune-2196  	730094.664        	420601.459        
+Jonctiune-2197  	730659.268        	420030.656        
+SenzorChisinau-Titulescu	730744.713        	420180.045        
+Jonctiune-2199  	730927.362        	420502.337        
+Jonctiune-2200  	730929.704        	420506.415        
+Jonctiune-2201  	731053.351        	420723.353        
+Jonctiune-2202  	731115.729        	420685.900        
+Jonctiune-2203  	730988.974        	420764.881        
+Jonctiune-2204  	730925.785        	420806.340        
+Jonctiune-2205  	731181.566        	421108.258        
+Jonctiune-2206  	731272.837        	421116.452        
+Jonctiune-2207  	730801.971        	420589.019        
+Jonctiune-2208  	730289.220        	419688.588        
+Jonctiune-2729  	730629.829        	419816.297        
+Jonctiune-2730  	730724.719        	419990.995        
+Jonctiune-2734  	731399.352        	421199.132        
+Jonctiune-2735  	730845.910        	421146.895        
+Jonctiune-2736  	731101.055        	421115.504        
+Jonctiune-2737  	731014.552        	421122.341        
+Jonctiune-2738  	731199.493        	421100.410        
+Jonctiune-2739  	730837.072        	420649.965        
+PT2             	730787.339        	421005.043        
+Jonctiune-2743  	730593.636        	420722.192        
+Jonctiune-2744  	730866.346        	421139.948        
+Jonctiune-2749  	730284.029        	419686.786        
+Jonctiune-2750  	730371.472        	419984.970        
+Jonctiune-2751  	730252.270        	419782.440        
+Jonctiune-2752  	730548.661        	420306.568        
+Jonctiune-2753  	730370.629        	419989.939        
+Jonctiune-2755  	730299.900        	420038.065        
+Jonctiune-2756  	730563.805        	419865.636        
+Jonctiune-2773  	730766.551        	420379.784        
+Jonctiune-2774  	730476.171        	420348.079        
+Jonctiune-2776  	730283.626        	420924.658        
+Jonctiune-2777  	730489.714        	420793.095        
+Jonctiune-2879  	730110.326        	420169.011        
+Jonctiune-2911  	730368.848        	419986.819        
+Jonctiune-2967  	730482.355        	421215.494        
+Jonctiune-2968  	730738.536        	421170.939        
+Jonctiune-3067  	730806.878        	420140.421        
+Jonctiune-3068  	730887.157        	420740.226        
+Jonctiune-3074  	730398.015        	420200.704        
+Jonctiune-3075  	730327.208        	420238.780        
+Jonctiune-3386  	730283.445        	419688.524        
+Jonctiune-3422  	730317.415        	419595.331        
+Jonctiune-3425  	730417.590        	419452.038        
+Jonctiune-3446  	730627.231        	419822.403        
+Jonctiune-3448  	730721.053        	419993.544        
+Jonctiune-3458  	730501.084        	419906.021        
+Jonctiune-3460  	730801.725        	420143.672        
+Jonctiune-3461  	730613.683        	420257.977        
+Jonctiune-3463  	730479.757        	420350.627        
+Jonctiune-3464  	730177.763        	419974.712        
+SenzorComunarzi-castanului	730171.623        	420117.800        
+Jonctiune-3466  	730437.352        	419947.207        
+Jonctiune-3467  	730432.394        	419946.671        
+Jonctiune-3470  	730249.024        	419947.443        
+Jonctiune-3471  	730202.159        	420327.800        
+Jonctiune-3510  	730250.664        	420720.124        
+Jonctiune-3566  	730275.074        	420928.980        
+Jonctiune-3912  	730265.362        	420288.161        
+Jonctiune-3913  	730266.442        	420286.007        
+Jonctiune-3917  	730724.148        	419998.943        
+Jonctiune-3920  	730719.719        	419991.060        
+Jonctiune-3921  	729963.078        	420687.558        
+Jonctiune-3956  	731057.298        	420724.006        
+Jonctiune-3961  	730215.239        	420967.657        
+Jonctiune-3967  	730300.478        	420687.084        
+Jonctiune-3972  	730662.455        	420983.822        
+Jonctiune-3974  	730481.905        	421214.833        
+Jonctiune-4595  	730294.507        	420035.415        
+Jonctiune-4602  	730459.822        	420466.757        
+Jonctiune-4614  	730384.872        	420201.151        
+Jonctiune-4615  	730264.460        	420279.444        
+Jonctiune-4618  	730758.218        	420512.608        
+Jonctiune-4619  	730827.711        	421140.801        
+Jonctiune-4706  	730990.490        	420454.640        
+Jonctiune-4723  	730498.320        	419908.075        
+Jonctiune-4731  	730009.111        	420451.672        
+Jonctiune-4742  	730036.150        	420640.041        
+Jonctiune-4743  	729995.930        	420580.362        
+Jonctiune-12372 	730075.312        	420409.679        
+Jonctiune-J-1   	730420.876        	419452.453        
+Jonctiune-J-3   	731415.500        	421211.210        
+PT3             	730470.890        	420446.302        
+PT4             	730570.215        	420384.137        
+Jonctiune-J-10  	730642.060        	419846.430        
+PT1             	730848.857        	420908.105        
+Jonctiune-J-15  	730941.160        	421128.260        
+Jonctiune-J-16  	730865.740        	420548.080        
+Jonctiune-J-19  	731009.337        	420455.183        
+Jonctiune-J-20  	730391.960        	420344.770        
+Jonctiune-J-21  	730899.286        	420298.575        
+Jonctiune-J-22  	730770.510        	420381.353        
+Jonctiune-J-23  	730277.361        	420918.372        
+Jonctiune-J-25  	730422.676        	419451.462        
+Jonctiune-J-26  	730183.985        	419864.138        
+Jonctiune-J-27  	730406.161        	419430.877        
+Jonctiune-J-31  	730239.653        	420076.431        
+Jonctiune-J-32  	731340.263        	421158.966        
+Jonctiune-J-33  	730801.663        	420131.301        
+Jonctiune-J-34  	730821.242        	420776.254        
+197-A           	730623.687        	420275.956        
+197-B           	730623.687        	420275.956        
+198-A           	730091.297        	420604.022        
+198-B           	730091.297        	420604.022        
+199-A           	730026.883        	420646.575        
+199-B           	730026.883        	420646.575        
+200-A           	730026.996        	420646.020        
+200-B           	730026.996        	420646.020        
+201-A           	730026.445        	420645.916        
+201-B           	730026.445        	420645.916        
+202-A           	729963.741        	420687.135        
+202-B           	729963.741        	420687.135        
+203-A           	729964.026        	420687.584        
+203-B           	729964.026        	420687.584        
+205-A           	730286.164        	420477.705        
+205-B           	730286.164        	420477.705        
+206-A           	730379.198        	420636.946        
+206-B           	730379.198        	420636.946        
+207-A           	730678.673        	421170.405        
+207-B           	730678.673        	421170.405        
+210-A           	730266.718        	420286.498        
+210-B           	730266.718        	420286.498        
+212-A           	730443.026        	420597.260        
+212-B           	730443.026        	420597.260        
+213-A           	730443.557        	420597.388        
+213-B           	730443.557        	420597.388        
+214-A           	730443.164        	420596.691        
+214-B           	730443.164        	420596.691        
+215-A           	730350.738        	420433.143        
+215-B           	730350.738        	420433.143        
+216-A           	730350.214        	420433.007        
+216-B           	730350.214        	420433.007        
+217-A           	730537.035        	420762.055        
+217-B           	730537.035        	420762.055        
+218-A           	730536.265        	420761.891        
+218-B           	730536.265        	420761.891        
+226-A           	730776.620        	421022.301        
+226-B           	730776.620        	421022.301        
+228-A           	730776.715        	421021.824        
+228-B           	730776.715        	421021.824        
+229-A           	730888.371        	420897.537        
+229-B           	730888.371        	420897.537        
+230-A           	730821.262        	420776.245        
+230-B           	730821.262        	420776.245        
+231-A           	730668.302        	420509.900        
+231-B           	730668.302        	420509.900        
+232-A           	730737.846        	420630.783        
+232-B           	730737.846        	420630.783        
+233-A           	730737.979        	420630.228        
+233-B           	730737.979        	420630.228        
+235-A           	730868.142        	421148.988        
+235-B           	730868.142        	421148.988        
+236-A           	731185.018        	421101.287        
+236-B           	731185.018        	421101.287        
+237-A           	731184.422        	421100.963        
+237-B           	731184.422        	421100.963        
+240-A           	730356.087        	420443.172        
+240-B           	730356.087        	420443.172        
+241-A           	730767.452        	421162.850        
+241-B           	730767.452        	421162.850        
+242-A           	730283.352        	419688.796        
+242-B           	730283.352        	419688.796        
+243-A           	730284.100        	419686.567        
+243-B           	730284.100        	419686.567        
+244-A           	730284.269        	419686.877        
+244-B           	730284.269        	419686.877        
+245-A           	730317.635        	419595.664        
+245-B           	730317.635        	419595.664        
+246-A           	730630.026        	419816.645        
+246-B           	730630.026        	419816.645        
+247-A           	730299.973        	420038.196        
+247-B           	730299.973        	420038.196        
+248-A           	730299.826        	420037.934        
+248-B           	730299.826        	420037.934        
+249-A           	730239.616        	420076.455        
+249-B           	730239.616        	420076.455        
+250-A           	730239.788        	420076.543        
+250-B           	730239.788        	420076.543        
+251-A           	730432.240        	419946.301        
+251-B           	730432.240        	419946.301        
+253-A           	729963.451        	420686.690        
+253-B           	729963.451        	420686.690        
+254-A           	730266.170        	420286.344        
+254-B           	730266.170        	420286.344        
+255-A           	730544.666        	420299.096        
+255-B           	730544.666        	420299.096        
+256-A           	730721.251        	419993.891        
+256-B           	730721.251        	419993.891        
+257-A           	730721.381        	419993.315        
+257-B           	730721.381        	419993.315        
+258-A           	730876.371        	420873.735        
+258-B           	730876.371        	420873.735        
+259-A           	731053.551        	420723.699        
+259-B           	731053.551        	420723.699        
+260-A           	731053.157        	420723.003        
+260-B           	731053.157        	420723.003        
+261-A           	731053.010        	420723.563        
+261-B           	731053.010        	420723.563        
+263-A           	730275.420        	420928.779        
+263-B           	730275.420        	420928.779        
+264-A           	730317.678        	420676.114        
+264-B           	730317.678        	420676.114        
+265-A           	730318.200        	420676.250        
+265-B           	730318.200        	420676.250        
+266-A           	730317.819        	420675.546        
+266-B           	730317.819        	420675.546        
+267-A           	730318.351        	420675.683        
+267-B           	730318.351        	420675.683        
+268-A           	730761.215        	421159.872        
+268-B           	730761.215        	421159.872        
+269-A           	730760.636        	421159.592        
+269-B           	730760.636        	421159.592        
+270-A           	730761.414        	421159.410        
+270-B           	730761.414        	421159.410        
+271-A           	730662.650        	420984.171        
+271-B           	730662.650        	420984.171        
+275-A           	730415.623        	420847.265        
+275-B           	730415.623        	420847.265        
+276-A           	730957.213        	421014.995        
+276-B           	730957.213        	421014.995        
+279-A           	730371.544        	419985.101        
+279-B           	730371.544        	419985.101        
+280-A           	730318.155        	420025.783        
+280-B           	730318.155        	420025.783        
+281-A           	730235.951        	420078.295        
+281-B           	730235.951        	420078.295        
+282-A           	730235.747        	420078.246        
+282-B           	730235.747        	420078.246        
+283-A           	730236.002        	420078.087        
+283-B           	730236.002        	420078.087        
+286-A           	730459.951        	420466.679        
+286-B           	730459.951        	420466.679        
+287-A           	730584.145        	420362.580        
+287-B           	730584.145        	420362.580        
+288-A           	730583.944        	420362.531        
+288-B           	730583.944        	420362.531        
+290-A           	730482.391        	421215.640        
+290-B           	730482.391        	421215.640        
+291-A           	730482.205        	421215.488        
+291-B           	730482.205        	421215.488        
+748-A           	730482.538        	421215.416        
+748-B           	730482.538        	421215.416        
+751-A           	731420.078        	421214.856        
+751-B           	731420.078        	421214.856        
+760-A           	731016.259        	420453.017        
+760-B           	731016.259        	420453.017        
+763-A           	730281.971        	419685.740        
+763-B           	730281.971        	419685.740        
+GA-Braila       	731424.044        	421217.867        
+Apollo          	730482.710        	421215.309        
+RaduNegruMare   	730279.800        	419684.416        
+RaduNegru2      	731024.067        	420450.839        
+
+[VERTICES]
+;Link            	X-Coord           	Y-Coord
+Conducta-2579   	730419.855        	419450.714        
+Conducta-2579   	730420.668        	419452.088        
+Conducta-1440   	730239.579        	420076.474        
+Conducta-1440   	730236.082        	420078.326        
+Conducta-1073   	730468.708        	421100.966        
+Conducta-701    	730681.211        	421171.287        
+Conducta-701    	730679.533        	421172.194        
+Conducta-1269   	730226.227        	420514.746        
+Conducta-1935   	730866.346        	421139.948        
+Conducta-1945   	730318.155        	420025.783        
+Conducta-1945   	730303.052        	420035.729        
+Conducta-2976   	730876.371        	420873.735        
+Conducta-11958  	730071.412        	420403.441        
+Conducta-1942   	730347.684        	420000.896        
+Conducta-1942   	730340.545        	420005.676        
+Conducta-1942   	730328.997        	420013.408        
+Conducta-1942   	730323.419        	420017.143        
+Conducta-1942   	730326.247        	420020.532        
+Conducta-1942   	730319.939        	420024.558        
+Conducta-951    	730570.118        	420742.272        
+Conducta-951    	730578.950        	420737.300        
+Conducta-951    	730588.190        	420753.102        
+Conducta-951    	730604.661        	420743.192        
+Conducta-951    	730605.733        	420742.388        
+Conducta-1289   	731115.702        	420685.918        
+Conducta-1289   	731093.532        	420700.376        
+Conducta-1289   	731093.291        	420700.533        
+Conducta-1289   	731089.444        	420703.042        
+Conducta-1289   	731089.160        	420703.227        
+Conducta-1289   	731081.389        	420708.295        
+Conducta-1289   	731080.875        	420708.630        
+Conducta-1289   	731077.199        	420711.028        
+Conducta-1289   	731065.573        	420718.609        
+Conducta-1289   	731065.274        	420718.805        
+Conducta-1289   	731061.586        	420721.210        
+Conducta-1289   	731061.543        	420721.238        
+Conducta-2720   	730178.454        	420343.476        
+Conducta-1300   	730805.362        	420594.810        
+Conducta-1300   	730804.758        	420595.164        
+Conducta-1300   	730823.854        	420628.151        
+Conducta-1276   	730007.250        	420604.520        
+Conducta-1276   	730000.960        	420594.956        
+Conducta-1276   	729998.595        	420591.360        
+Conducta-1276   	729994.778        	420585.554        
+Conducta-1276   	729982.392        	420566.719        
+Conducta-1276   	729977.941        	420559.951        
+Conducta-1276   	729975.632        	420556.439        
+Conducta-1276   	729971.144        	420549.614        
+Conducta-3534   	730016.702        	420611.378        
+Conducta-3534   	730002.847        	420591.673        
+Conducta-2960   	730671.234        	420023.325        
+Conducta-2960   	730693.901        	420009.028        
+Conducta-1940   	730496.637        	419909.166        
+Conducta-1940   	730496.637        	419909.166        
+Conducta-1940   	730463.138        	419931.676        
+Conducta-1071   	730466.045        	421102.797        
+Conducta-1071   	730418.134        	421133.893        
+Conducta-702    	730672.289        	421178.080        
+Conducta-702    	730665.243        	421180.065        
+Conducta-702    	730647.373        	421184.581        
+Conducta-702    	730629.696        	421189.046        
+Conducta-702    	730619.690        	421191.573        
+Conducta-1931   	730980.904        	421125.054        
+Conducta-1931   	730965.054        	421126.333        
+Conducta-3578   	730545.460        	419877.525        
+Conducta-3578   	730561.546        	419867.100        
+Conducta-2953   	730255.125        	420294.660        
+Conducta-2953   	730247.245        	420299.663        
+Conducta-2953   	730241.253        	420303.467        
+Conducta-2953   	730213.390        	420321.157        
+Conducta-2044   	730026.066        	420646.626        
+Conducta-2044   	730024.043        	420647.941        
+Conducta-2044   	730011.698        	420655.965        
+Conducta-2044   	730009.967        	420657.089        
+Conducta-2044   	730006.462        	420659.368        
+Conducta-2044   	730006.253        	420659.503        
+Conducta-2044   	729999.061        	420664.178        
+Conducta-2044   	729995.473        	420666.510        
+Conducta-2044   	729994.925        	420666.866        
+Conducta-2044   	729994.603        	420667.075        
+Conducta-2044   	729987.218        	420671.876        
+Conducta-2044   	729979.586        	420676.836        
+Conducta-2044   	729979.340        	420676.996        
+Conducta-2044   	729973.130        	420681.032        
+Conducta-2044   	729973.130        	420681.032        
+Conducta-2044   	729970.571        	420682.696        
+Conducta-2210   	730326.275        	420239.383        
+Conducta-2210   	730323.196        	420241.373        
+Conducta-2210   	730274.064        	420273.117        
+Conducta-1281   	730450.610        	420817.850        
+Conducta-1278   	730112.976        	420808.753        
+Conducta-1278   	730112.019        	420809.375        
+Conducta-1278   	730109.122        	420811.258        
+Conducta-1278   	730097.026        	420819.006        
+Conducta-1278   	730088.605        	420824.400        
+Conducta-1278   	730084.446        	420827.065        
+Conducta-1278   	730076.358        	420832.245        
+Conducta-1278   	730072.529        	420834.699        
+Conducta-1278   	730066.503        	420838.558        
+Conducta-1293   	730973.668        	420774.923        
+Conducta-1293   	730960.322        	420783.680        
+Conducta-1293   	730959.086        	420784.491        
+Conducta-1293   	730954.965        	420787.195        
+Conducta-1293   	730954.334        	420787.609        
+Conducta-1293   	730941.481        	420796.041        
+Conducta-1293   	730936.450        	420799.343        
+Conducta-1293   	730931.117        	420802.841        
+Conducta-1934   	730929.812        	421130.433        
+Conducta-1934   	730922.260        	421131.880        
+Conducta-1934   	730875.079        	421138.463        
+Conducta-1298   	730840.777        	420564.072        
+Conducta-1298   	730822.913        	420575.515        
+Conducta-1298   	730812.771        	420582.055        
+Conducta-1297   	730916.649        	420514.915        
+Conducta-1297   	730893.768        	420529.814        
+Conducta-1297   	730887.284        	420534.035        
+Conducta-2198   	730914.389        	420786.805        
+Conducta-1946   	730562.953        	419866.188        
+Conducta-1946   	730563.805        	419865.636        
+Conducta-1946   	730588.911        	419848.502        
+Conducta-11960  	730070.131        	420413.119        
+Conducta-11960  	730029.082        	420438.374        
+Conducta-11960  	730016.207        	420448.007        
+Conducta-3604   	730814.690        	421153.688        
+Conducta-1941   	730377.181        	419985.729        
+Conducta-2017   	730186.006        	420760.611        
+Conducta-2017   	730178.520        	420766.703        
+Conducta-2017   	730169.859        	420772.170        
+Conducta-2017   	730161.797        	420777.259        
+Conducta-2017   	730155.034        	420781.528        
+Conducta-2017   	730151.756        	420783.597        
+Conducta-2017   	730149.074        	420785.290        
+Conducta-1929   	731151.542        	421110.960        
+Conducta-11961  	730141.547        	420367.116        
+Conducta-11961  	730102.192        	420392.611        
+Conducta-1274   	730589.712        	421199.002        
+Conducta-1274   	730531.107        	421213.888        
+Conducta-1280   	730377.169        	420864.794        
+Conducta-1279   	730283.803        	420924.551        
+Conducta-1279   	730283.980        	420924.443        
+Conducta-1279   	730304.535        	420911.915        
+Conducta-1279   	730311.529        	420907.368        
+Conducta-1279   	730340.627        	420888.450        
+Conducta-1930   	731069.113        	421118.055        
+Conducta-1295   	731270.242        	421115.730        
+Conducta-1295   	731257.505        	421111.866        
+Conducta-1295   	731220.489        	421108.345        
+Conducta-1295   	731217.829        	421108.092        
+Conducta-1295   	731202.788        	421109.194        
+Conducta-837    	731007.069        	420456.518        
+Conducta-837    	730988.467        	420467.463        
+Conducta-837    	730968.255        	420480.861        
+Conducta-837    	730968.163        	420480.922        
+Conducta-837    	730956.138        	420488.892        
+Conducta-837    	730955.334        	420489.425        
+Conducta-837    	730938.996        	420500.256        
+Conducta-837    	730938.716        	420500.441        
+Conducta-2612   	730213.637        	420038.564        
+Conducta-2612   	730206.207        	420025.331        
+Conducta-2612   	730190.113        	419996.669        
+Conducta-2612   	730186.694        	419990.581        
+Conducta-2612   	730181.635        	419981.593        
+Conducta-825    	730962.836        	421024.367        
+Conducta-825    	730997.146        	421085.782        
+Conducta-825    	730998.732        	421088.621        
+Conducta-825    	731014.982        	421117.640        
+Conducta-1070   	730521.645        	421196.558        
+Conducta-1070   	730520.981        	421195.370        
+Conducta-1070   	730499.417        	421156.764        
+Conducta-1070   	730489.051        	421138.205        
+Conducta-1070   	730469.394        	421103.005        
+Conducta-1070   	730469.394        	421103.005        
+Conducta-2018   	730288.462        	420694.729        
+Conducta-2018   	730285.177        	420696.819        
+Conducta-2018   	730265.917        	420709.058        
+Conducta-2018   	730253.247        	420717.109        
+Conducta-2018   	730243.383        	420723.378        
+Conducta-2018   	730238.570        	420726.436        
+Conducta-2018   	730227.088        	420733.769        
+Conducta-2018   	730202.151        	420749.694        
+Conducta-2018   	730196.217        	420753.484        
+Conducta-2018   	730194.979        	420754.275        
+Conducta-2018   	730189.469        	420757.793        
+Conducta-827    	730686.966        	420541.270        
+Conducta-827    	730707.038        	420576.134        
+Conducta-827    	730719.008        	420596.926        
+Conducta-827    	730720.280        	420599.135        
+Conducta-827    	730721.170        	420600.681        
+Conducta-1275   	730057.866        	420687.341        
+Conducta-1275   	730058.418        	420688.322        
+Conducta-1275   	730072.374        	420713.147        
+Conducta-1275   	730099.242        	420760.938        
+Conducta-1275   	730117.553        	420793.509        
+Conducta-1275   	730122.370        	420802.075        
+Conducta-582    	730636.374        	420254.235        
+Conducta-582    	730640.066        	420244.930        
+Conducta-582    	730706.349        	420204.054        
+Conducta-582    	730719.977        	420195.650        
+Conducta-582    	730730.505        	420189.158        
+Conducta-11947  	730875.563        	420313.561        
+Conducta-11947  	730871.890        	420315.881        
+Conducta-11947  	730869.850        	420317.209        
+Conducta-11947  	730863.094        	420321.608        
+Conducta-11947  	730858.053        	420324.891        
+Conducta-11947  	730847.757        	420331.596        
+Conducta-11947  	730847.142        	420331.996        
+Conducta-11947  	730816.686        	420351.516        
+Conducta-11947  	730809.147        	420356.348        
+Conducta-11947  	730806.925        	420357.786        
+Conducta-11947  	730793.734        	420366.323        
+Conducta-1074   	730376.530        	420859.460        
+Conducta-1074   	730312.238        	420900.466        
+Conducta-1074   	730283.076        	420918.969        
+Conducta-1074   	730280.052        	420918.653        
+Conducta-2636   	730642.060        	419846.430        
+Conducta-2722   	730216.919        	420352.884        
+Conducta-2722   	730221.976        	420361.975        
+Conducta-2722   	730227.519        	420371.940        
+Conducta-2722   	730233.206        	420382.163        
+Conducta-2722   	730236.449        	420387.992        
+Conducta-2722   	730240.968        	420396.150        
+Conducta-2722   	730244.617        	420402.735        
+Conducta-2722   	730245.536        	420404.394        
+Conducta-2722   	730249.108        	420410.842        
+Conducta-2722   	730249.254        	420411.105        
+Conducta-2722   	730257.721        	420426.388        
+Conducta-2722   	730260.289        	420431.021        
+Conducta-2722   	730262.329        	420434.705        
+Conducta-2722   	730265.299        	420440.064        
+Conducta-2722   	730265.920        	420441.185        
+Conducta-2722   	730272.939        	420453.854        
+Conducta-2722   	730274.706        	420457.043        
+Conducta-1284   	730689.285        	420083.017        
+Conducta-1284   	730666.238        	420042.177        
+Conducta-2194   	730017.448        	420466.957        
+Conducta-2194   	730022.417        	420475.282        
+Conducta-2194   	730022.655        	420475.696        
+Conducta-2194   	730022.737        	420475.839        
+Conducta-2194   	730027.903        	420484.851        
+Conducta-2194   	730028.608        	420486.081        
+Conducta-2194   	730032.062        	420492.106        
+Conducta-2194   	730033.862        	420495.245        
+Conducta-2194   	730039.142        	420504.455        
+Conducta-2194   	730041.011        	420507.715        
+Conducta-2194   	730044.956        	420514.596        
+Conducta-2194   	730047.113        	420518.359        
+Conducta-2194   	730051.123        	420525.354        
+Conducta-2194   	730051.956        	420526.806        
+Conducta-2194   	730053.460        	420529.435        
+Conducta-2194   	730054.513        	420531.276        
+Conducta-2194   	730061.220        	420542.999        
+Conducta-2194   	730066.099        	420551.529        
+Conducta-2194   	730067.412        	420553.823        
+Conducta-2194   	730068.307        	420555.387        
+Conducta-2194   	730071.522        	420561.007        
+Conducta-2194   	730081.017        	420577.604        
+Conducta-2194   	730083.185        	420581.393        
+Conducta-2580   	730317.172        	419594.984        
+Conducta-2580   	730321.013        	419584.882        
+Conducta-2580   	730359.028        	419496.893        
+Conducta-2580   	730392.059        	419466.387        
+Conducta-2580   	730418.508        	419453.735        
+Conducta-2580   	730420.876        	419452.453        
+Conducta-2580   	730422.326        	419451.655        
+Conducta-705    	730131.238        	420817.850        
+Conducta-705    	730132.321        	420819.775        
+Conducta-705    	730132.901        	420820.808        
+Conducta-705    	730147.471        	420846.775        
+Conducta-705    	730149.011        	420849.521        
+Conducta-705    	730152.918        	420856.484        
+Conducta-705    	730156.687        	420863.202        
+Conducta-705    	730161.434        	420871.662        
+Conducta-705    	730166.941        	420881.477        
+Conducta-705    	730171.154        	420888.986        
+Conducta-705    	730178.176        	420901.501        
+Conducta-705    	730178.733        	420902.494        
+Conducta-705    	730197.237        	420935.473        
+Conducta-705    	730202.022        	420944.002        
+Conducta-705    	730209.799        	420957.862        
+Conducta-705    	730211.479        	420960.857        
+Conducta-2721   	730116.239        	420179.114        
+Conducta-2721   	730129.192        	420201.674        
+Conducta-2721   	730129.485        	420202.185        
+Conducta-2721   	730140.819        	420221.390        
+Conducta-2721   	730143.626        	420226.146        
+Conducta-2721   	730146.901        	420231.697        
+Conducta-2721   	730153.083        	420242.171        
+Conducta-2721   	730153.555        	420242.972        
+Conducta-2721   	730154.222        	420244.101        
+Conducta-2721   	730156.175        	420247.411        
+Conducta-2721   	730158.756        	420251.785        
+Conducta-2721   	730160.454        	420254.661        
+Conducta-2721   	730162.211        	420257.664        
+Conducta-2721   	730167.981        	420267.523        
+Conducta-2721   	730169.382        	420269.917        
+Conducta-2721   	730174.303        	420278.324        
+Conducta-2721   	730183.115        	420293.382        
+Conducta-2721   	730188.179        	420302.034        
+Conducta-2721   	730191.536        	420307.769        
+Conducta-2721   	730195.336        	420314.262        
+Conducta-1947   	730567.513        	419871.708        
+Conducta-1947   	730608.765        	419944.057        
+Conducta-1947   	730636.018        	419990.879        
+Conducta-1947   	730652.950        	420019.971        
+Conducta-1973   	730836.451        	420497.646        
+Conducta-1973   	730772.339        	420387.263        
+Conducta-1973   	730771.232        	420385.358        
+Conducta-954    	730750.077        	421138.902        
+Conducta-954    	730736.032        	421113.690        
+Conducta-954    	730715.153        	421075.818        
+Conducta-954    	730681.198        	421015.439        
+Conducta-954    	730681.198        	421015.439        
+Conducta-1072   	730654.807        	420979.074        
+Conducta-1072   	730643.984        	420986.220        
+Conducta-1072   	730641.792        	420987.668        
+Conducta-1072   	730630.384        	420995.201        
+Conducta-1072   	730607.549        	421010.279        
+Conducta-1072   	730589.874        	421021.949        
+Conducta-1072   	730582.815        	421026.569        
+Conducta-1072   	730575.964        	421031.053        
+Conducta-1072   	730567.982        	421036.277        
+Conducta-1072   	730555.959        	421044.145        
+Conducta-1072   	730544.613        	421051.570        
+Conducta-1072   	730540.549        	421054.230        
+Conducta-1072   	730522.381        	421066.251        
+Conducta-1072   	730510.452        	421074.143        
+Conducta-703    	730281.417        	420480.346        
+Conducta-703    	730256.497        	420496.770        
+Conducta-703    	730246.039        	420503.662        
+Conducta-703    	730228.801        	420514.823        
+Conducta-703    	730207.447        	420528.650        
+Conducta-703    	730177.086        	420548.310        
+Conducta-703    	730167.139        	420554.876        
+Conducta-703    	730140.368        	420572.548        
+Conducta-703    	730113.606        	420590.214        
+Conducta-703    	730113.216        	420590.435        
+Conducta-703    	730098.061        	420599.023        
+Conducta-703    	730096.702        	420599.998        
+Conducta-2052   	730349.248        	419952.490        
+Conducta-2052   	730344.057        	419943.398        
+Conducta-2052   	730338.962        	419934.475        
+Conducta-2052   	730332.121        	419922.493        
+Conducta-2052   	730308.170        	419880.543        
+Conducta-2052   	730307.220        	419878.878        
+Conducta-2052   	730275.692        	419823.546        
+Conducta-2052   	730268.789        	419811.432        
+Conducta-1271   	730285.747        	420932.233        
+Conducta-1271   	730289.670        	420938.717        
+Conducta-1271   	730297.836        	420953.207        
+Conducta-1271   	730304.098        	420964.319        
+Conducta-1271   	730305.429        	420966.680        
+Conducta-1271   	730311.727        	420977.855        
+Conducta-1271   	730318.516        	420989.902        
+Conducta-1271   	730324.004        	420999.641        
+Conducta-1271   	730325.538        	421002.362        
+Conducta-1271   	730326.236        	421003.600        
+Conducta-1271   	730326.437        	421003.957        
+Conducta-1271   	730332.687        	421015.048        
+Conducta-1271   	730336.413        	421021.659        
+Conducta-1271   	730344.315        	421035.680        
+Conducta-1271   	730347.717        	421041.717        
+Conducta-1271   	730357.698        	421059.427        
+Conducta-1271   	730362.237        	421067.481        
+Conducta-1271   	730366.713        	421075.423        
+Conducta-1271   	730367.635        	421077.060        
+Conducta-1271   	730371.139        	421083.277        
+Conducta-1271   	730371.928        	421084.677        
+Conducta-1271   	730371.989        	421084.785        
+Conducta-1271   	730378.221        	421095.843        
+Conducta-1271   	730382.678        	421103.751        
+Conducta-1271   	730389.470        	421115.804        
+Conducta-1296   	730887.098        	420586.031        
+Conducta-1296   	730896.287        	420602.164        
+Conducta-1296   	730955.247        	420705.671        
+Conducta-1296   	730969.186        	420730.141        
+Conducta-1917   	730437.228        	419946.979        
+Conducta-1917   	730428.341        	419930.823        
+Conducta-1917   	730414.021        	419903.860        
+Conducta-1917   	730388.021        	419858.170        
+Conducta-1917   	730382.036        	419847.570        
+Conducta-1917   	730373.510        	419832.468        
+Conducta-1917   	730364.541        	419816.580        
+Conducta-1917   	730337.541        	419769.440        
+Conducta-1917   	730332.320        	419760.786        
+Conducta-1917   	730297.012        	419702.264        
+Conducta-1270   	730221.157        	420505.878        
+Conducta-1270   	730217.408        	420499.319        
+Conducta-1270   	730205.358        	420478.348        
+Conducta-1270   	730204.678        	420477.164        
+Conducta-1270   	730198.736        	420466.821        
+Conducta-1270   	730196.146        	420462.314        
+Conducta-1270   	730192.996        	420456.831        
+Conducta-1270   	730171.509        	420419.436        
+Conducta-1270   	730164.400        	420407.063        
+Conducta-1270   	730163.982        	420406.335        
+Conducta-1270   	730156.191        	420392.775        
+Conducta-1270   	730150.579        	420383.008        
+Conducta-1270   	730148.632        	420379.582        
+Conducta-1270   	730143.905        	420371.265        
+Conducta-1270   	730141.547        	420367.116        
+Conducta-1270   	730138.013        	420360.898        
+Conducta-1270   	730133.615        	420353.159        
+Conducta-1270   	730124.534        	420337.594        
+Conducta-1270   	730123.799        	420336.334        
+Conducta-1270   	730116.703        	420324.170        
+Conducta-1270   	730108.807        	420310.638        
+Conducta-1270   	730098.925        	420293.698        
+Conducta-1270   	730092.167        	420282.116        
+Conducta-1270   	730085.187        	420270.151        
+Conducta-2208   	730655.439        	420033.761        
+Conducta-2208   	730545.325        	420104.542        
+Conducta-2208   	730516.129        	420123.696        
+Conducta-2208   	730473.150        	420151.773        
+Conducta-2208   	730465.926        	420156.493        
+Conducta-2208   	730440.493        	420173.108        
+Conducta-2208   	730412.240        	420191.564        
+Conducta-2955   	730370.996        	419990.582        
+Conducta-2955   	730371.460        	419991.395        
+Conducta-2955   	730378.172        	420003.150        
+Conducta-2955   	730383.071        	420011.730        
+Conducta-2955   	730383.264        	420012.069        
+Conducta-2955   	730391.504        	420026.439        
+Conducta-2955   	730400.319        	420041.812        
+Conducta-2955   	730413.888        	420065.475        
+Conducta-2955   	730434.048        	420100.632        
+Conducta-2955   	730434.227        	420100.944        
+Conducta-2955   	730439.249        	420109.703        
+Conducta-2955   	730441.891        	420114.309        
+Conducta-2955   	730443.110        	420116.436        
+Conducta-2955   	730460.804        	420147.292        
+Conducta-2955   	730465.926        	420156.493        
+Conducta-2955   	730477.350        	420177.017        
+Conducta-2955   	730479.095        	420180.153        
+Conducta-2955   	730489.797        	420199.518        
+Conducta-2955   	730492.740        	420204.843        
+Conducta-2955   	730503.768        	420224.800        
+Conducta-2955   	730509.721        	420235.573        
+Conducta-2955   	730510.847        	420237.609        
+Conducta-2955   	730513.707        	420242.787        
+Conducta-2955   	730522.748        	420259.146        
+Conducta-2955   	730524.115        	420261.620        
+Conducta-2955   	730526.313        	420265.598        
+Conducta-2955   	730530.214        	420272.657        
+Conducta-2955   	730533.237        	420278.128        
+Conducta-2955   	730544.666        	420299.096        
+Conducta-1294   	730937.511        	420826.607        
+Conducta-1294   	730972.768        	420889.295        
+Conducta-1294   	731039.662        	421007.331        
+Conducta-1294   	731100.078        	421113.783        
+Conducta-2591   	730317.635        	419595.664        
+Conducta-2591   	730336.545        	419624.258        
+Conducta-2591   	730383.969        	419695.969        
+Conducta-2591   	730459.038        	419834.127        
+Conducta-2591   	730497.090        	419906.703        
+Conducta-2591   	730500.346        	419904.673        
+Conducta-1282   	730272.229        	420909.891        
+Conducta-1282   	730265.053        	420897.437        
+Conducta-1282   	730257.918        	420885.054        
+Conducta-1282   	730254.882        	420879.785        
+Conducta-1282   	730254.343        	420878.850        
+Conducta-1282   	730254.303        	420878.782        
+Conducta-1282   	730250.244        	420871.736        
+Conducta-1282   	730249.883        	420871.111        
+Conducta-1282   	730248.334        	420868.423        
+Conducta-1282   	730243.969        	420860.847        
+Conducta-1282   	730240.996        	420855.688        
+Conducta-1282   	730239.040        	420852.293        
+Conducta-1282   	730234.150        	420843.807        
+Conducta-1282   	730225.427        	420828.668        
+Conducta-1282   	730224.801        	420827.582        
+Conducta-1282   	730223.285        	420824.952        
+Conducta-1282   	730220.554        	420820.211        
+Conducta-1282   	730219.248        	420817.945        
+Conducta-1282   	730211.083        	420803.775        
+Conducta-1282   	730209.140        	420800.404        
+Conducta-1282   	730206.327        	420795.522        
+Conducta-1282   	730195.476        	420776.690        
+Conducta-1282   	730193.578        	420773.468        
+Conducta-1282   	730186.006        	420760.611        
+Conducta-1282   	730179.800        	420750.074        
+Conducta-1282   	730168.192        	420729.889        
+Conducta-1282   	730161.170        	420717.678        
+Conducta-1282   	730157.982        	420712.134        
+Conducta-1282   	730154.457        	420705.973        
+Conducta-1282   	730153.826        	420704.869        
+Conducta-1282   	730152.295        	420702.193        
+Conducta-1282   	730150.911        	420699.775        
+Conducta-1282   	730147.581        	420693.953        
+Conducta-1282   	730146.853        	420692.680        
+Conducta-1282   	730146.525        	420692.108        
+Conducta-1282   	730142.716        	420685.450        
+Conducta-1282   	730141.791        	420683.832        
+Conducta-1282   	730138.156        	420677.479        
+Conducta-1282   	730137.842        	420676.931        
+Conducta-1282   	730135.132        	420672.193        
+Conducta-1282   	730129.925        	420663.091        
+Conducta-1282   	730129.325        	420662.044        
+Conducta-1282   	730128.622        	420660.815        
+Conducta-1282   	730121.296        	420648.009        
+Conducta-1282   	730119.898        	420645.565        
+Conducta-1282   	730102.673        	420615.457        
+Conducta-1282   	730101.263        	420612.993        
+Conducta-1285   	730919.388        	420488.451        
+Conducta-1285   	730909.623        	420471.510        
+Conducta-1285   	730844.535        	420358.589        
+Conducta-1285   	730823.630        	420322.084        
+Conducta-1285   	730781.519        	420245.580        
+Conducta-1285   	730758.095        	420203.068        
+Conducta-2988   	730608.825        	421186.846        
+Conducta-2988   	730605.826        	421181.661        
+Conducta-2988   	730595.835        	421164.388        
+Conducta-2988   	730592.072        	421157.882        
+Conducta-2988   	730590.788        	421155.662        
+Conducta-2988   	730584.505        	421144.800        
+Conducta-2988   	730584.112        	421144.120        
+Conducta-2988   	730575.232        	421128.769        
+Conducta-2988   	730571.736        	421122.725        
+Conducta-2988   	730567.359        	421115.156        
+Conducta-2988   	730566.798        	421114.187        
+Conducta-2988   	730563.519        	421108.517        
+Conducta-2988   	730558.734        	421100.246        
+Conducta-2988   	730550.522        	421086.049        
+Conducta-2988   	730545.688        	421077.691        
+Conducta-2988   	730534.475        	421057.752        
+Conducta-2988   	730529.768        	421049.381        
+Conducta-2988   	730510.620        	421015.332        
+Conducta-2988   	730495.696        	420988.606        
+Conducta-2988   	730480.743        	420961.830        
+Conducta-2988   	730466.318        	420935.997        
+Conducta-2988   	730456.802        	420918.956        
+Conducta-2988   	730452.384        	420911.044        
+Conducta-2988   	730442.511        	420893.365        
+Conducta-2988   	730441.142        	420890.912        
+Conducta-2988   	730436.043        	420881.782        
+Conducta-2988   	730433.242        	420876.765        
+Conducta-2988   	730415.623        	420847.265        
+Conducta-1974   	730763.972        	420376.713        
+Conducta-1974   	730691.033        	420248.537        
+Conducta-1974   	730688.549        	420244.190        
+Conducta-1974   	730675.061        	420220.586        
+Conducta-1974   	730665.279        	420203.510        
+Conducta-1974   	730598.661        	420087.219        
+Conducta-1974   	730591.194        	420073.761        
+Conducta-1974   	730587.214        	420066.588        
+Conducta-1974   	730533.428        	419973.823        
+Conducta-1974   	730519.998        	419945.865        
+Conducta-1974   	730505.464        	419920.527        
+Conducta-1290   	731401.618        	421184.073        
+Conducta-1290   	731372.656        	421130.258        
+Conducta-1290   	731272.641        	420956.539        
+Conducta-1290   	731155.519        	420754.129        
+Conducta-1290   	731152.763        	420749.366        
+Conducta-1290   	731122.993        	420699.018        
+Conducta-2904(2)	730482.205        	421215.488        
+Conducta-2099(2)	730482.391        	421215.640        
+Conducta-2099(2)	730482.895        	421217.637        
+Conducta-2099(2)	730488.786        	421222.648        
+Conducta-2099(2)	730500.215        	421228.501        
+Conducta-2099(2)	730679.880        	421184.277        
+Conducta-952(1) 	730765.263        	421164.387        
+Conducta-952(1) 	730763.198        	421163.636        
+Conducta-1932(2)	730761.414        	421159.410        
+Conducta-580(1) 	730625.700        	420279.576        
+Conducta-580(1) 	730633.386        	420293.402        
+Conducta-580(1) 	730635.150        	420296.574        
+Conducta-580(1) 	730639.709        	420304.775        
+Conducta-580(1) 	730645.590        	420315.353        
+Conducta-580(1) 	730655.456        	420333.100        
+Conducta-580(1) 	730665.876        	420351.843        
+Conducta-580(1) 	730671.261        	420361.530        
+Conducta-580(1) 	730674.421        	420367.215        
+Conducta-580(1) 	730678.146        	420373.915        
+Conducta-580(1) 	730680.499        	420378.146        
+Conducta-580(1) 	730681.788        	420380.465        
+Conducta-580(1) 	730682.325        	420381.432        
+Conducta-580(1) 	730687.883        	420391.429        
+Conducta-580(1) 	730698.771        	420411.015        
+Conducta-580(2) 	730623.687        	420275.956        
+Conducta-3609(1)	730089.500        	420605.196        
+Conducta-3609(1)	730078.525        	420612.364        
+Conducta-3609(1)	730076.781        	420613.503        
+Conducta-3609(1)	730069.830        	420618.043        
+Conducta-3609(1)	730062.025        	420623.141        
+Conducta-3609(1)	730056.942        	420626.461        
+Conducta-3609(1)	730055.552        	420627.369        
+Conducta-3609(1)	730046.299        	420633.412        
+Conducta-3609(1)	730044.798        	420634.393        
+Conducta-3609(2)	730091.297        	420604.022        
+Conducta-2725(1)	730029.553        	420650.664        
+Conducta-2725(1)	730035.203        	420647.029        
+Conducta-2725(1)	730043.740        	420662.214        
+Conducta-2725(1)	730044.417        	420663.418        
+Conducta-2725(1)	730047.604        	420669.087        
+Conducta-2725(2)	730026.883        	420646.575        
+Conducta-3610(2)	730034.166        	420641.337        
+Conducta-3610(2)	730032.273        	420642.573        
+Conducta-3610(2)	730030.309        	420643.856        
+Conducta-3610(2)	730028.133        	420645.278        
+Conducta-3610(2)	730026.996        	420646.020        
+Conducta-2724(2)	730026.445        	420645.916        
+Conducta-2724(2)	730026.445        	420645.916        
+Conducta-2724(2)	730025.468        	420644.452        
+Conducta-2724(2)	730031.180        	420640.912        
+Conducta-2724(2)	730017.193        	420619.642        
+Conducta-1277(1)	729963.806        	420686.488        
+Conducta-1277(2)	729963.451        	420686.690        
+Conducta-1277(2)	729963.109        	420686.894        
+Conducta-1277(2)	729962.714        	420686.290        
+Conducta-1277(2)	729969.974        	420681.758        
+Conducta-1277(2)	729965.287        	420673.990        
+Conducta-1277(2)	729958.962        	420663.508        
+Conducta-1277(2)	729954.053        	420655.382        
+Conducta-695(2) 	729963.741        	420687.135        
+Conducta-696(1) 	729964.336        	420687.365        
+Conducta-696(2) 	730035.421        	420803.489        
+Conducta-696(2) 	730032.187        	420798.034        
+Conducta-696(2) 	730031.262        	420796.473        
+Conducta-696(2) 	730025.686        	420787.068        
+Conducta-696(2) 	730017.924        	420773.976        
+Conducta-696(2) 	730017.706        	420773.607        
+Conducta-696(2) 	730016.770        	420772.029        
+Conducta-696(2) 	730011.205        	420762.642        
+Conducta-696(2) 	730008.299        	420757.740        
+Conducta-696(2) 	730001.661        	420746.543        
+Conducta-696(2) 	729999.735        	420743.295        
+Conducta-696(2) 	729999.206        	420742.403        
+Conducta-696(2) 	729992.502        	420731.095        
+Conducta-696(2) 	729988.012        	420723.520        
+Conducta-696(2) 	729983.198        	420715.400        
+Conducta-696(2) 	729982.004        	420713.367        
+Conducta-696(2) 	729979.574        	420709.232        
+Conducta-696(2) 	729977.198        	420705.186        
+Conducta-696(2) 	729972.090        	420696.493        
+Conducta-696(2) 	729966.392        	420686.770        
+Conducta-696(2) 	729963.938        	420688.214        
+Conducta-696(2) 	729963.696        	420687.824        
+Conducta-696(2) 	729964.026        	420687.584        
+Conducta-704(1) 	730301.617        	420504.314        
+Conducta-704(1) 	730310.427        	420519.374        
+Conducta-704(1) 	730312.232        	420522.459        
+Conducta-704(1) 	730313.354        	420524.378        
+Conducta-704(1) 	730313.703        	420524.974        
+Conducta-704(1) 	730319.270        	420534.491        
+Conducta-704(1) 	730321.253        	420537.879        
+Conducta-704(1) 	730323.555        	420541.815        
+Conducta-704(1) 	730327.662        	420548.835        
+Conducta-704(1) 	730330.935        	420554.430        
+Conducta-704(1) 	730334.352        	420560.272        
+Conducta-704(1) 	730335.099        	420561.548        
+Conducta-704(1) 	730338.583        	420567.505        
+Conducta-704(1) 	730341.719        	420572.864        
+Conducta-704(1) 	730343.187        	420575.374        
+Conducta-704(1) 	730345.154        	420578.737        
+Conducta-704(1) 	730349.006        	420585.322        
+Conducta-704(1) 	730352.935        	420592.038        
+Conducta-704(1) 	730356.054        	420597.406        
+Conducta-704(1) 	730360.336        	420604.719        
+Conducta-704(1) 	730363.803        	420610.642        
+Conducta-704(2) 	730286.164        	420477.705        
+Conducta-699(2)(1)	730678.673        	421170.405        
+Conducta-699(2)(1)	730673.983        	421161.229        
+Conducta-699(2)(1)	730665.950        	421145.515        
+Conducta-699(2)(1)	730665.044        	421143.743        
+Conducta-699(2)(1)	730662.822        	421139.397        
+Conducta-699(2)(1)	730661.871        	421137.536        
+Conducta-699(2)(1)	730658.749        	421131.607        
+Conducta-699(2)(1)	730654.949        	421124.389        
+Conducta-699(2)(1)	730652.954        	421120.599        
+Conducta-699(2)(1)	730652.206        	421119.277        
+Conducta-699(2)(1)	730648.607        	421112.909        
+Conducta-699(2)(1)	730646.125        	421108.517        
+Conducta-699(2)(1)	730641.626        	421100.556        
+Conducta-699(2)(1)	730634.062        	421087.173        
+Conducta-699(2)(1)	730633.453        	421086.094        
+Conducta-699(2)(1)	730629.162        	421078.501        
+Conducta-699(2)(1)	730627.695        	421075.907        
+Conducta-699(2)(1)	730625.909        	421072.747        
+Conducta-699(2)(1)	730621.079        	421064.199        
+Conducta-699(2)(1)	730619.024        	421060.564        
+Conducta-699(2)(1)	730616.879        	421056.769        
+Conducta-699(2)(1)	730615.381        	421054.118        
+Conducta-699(2)(1)	730610.767        	421045.953        
+Conducta-699(2)(1)	730610.294        	421045.117        
+Conducta-699(2)(1)	730609.838        	421044.310        
+Conducta-699(2)(1)	730602.897        	421032.028        
+Conducta-699(2)(1)	730602.712        	421031.701        
+Conducta-699(2)(1)	730595.047        	421018.138        
+Conducta-699(2)(1)	730591.863        	421012.504        
+Conducta-699(2)(1)	730581.140        	420993.529        
+Conducta-699(2)(1)	730575.253        	420983.113        
+Conducta-699(2)(1)	730574.598        	420981.955        
+Conducta-699(2)(1)	730574.132        	420981.131        
+Conducta-699(2)(1)	730571.664        	420976.763        
+Conducta-699(2)(1)	730571.054        	420975.683        
+Conducta-699(2)(1)	730569.406        	420972.768        
+Conducta-699(2)(1)	730565.653        	420966.127        
+Conducta-699(2)(1)	730565.210        	420965.343        
+Conducta-699(2)(1)	730559.002        	420954.358        
+Conducta-699(2)(1)	730558.716        	420953.852        
+Conducta-699(2)(1)	730558.123        	420952.802        
+Conducta-699(2)(1)	730554.196        	420945.854        
+Conducta-699(2)(1)	730554.070        	420945.632        
+Conducta-699(2)(1)	730551.486        	420941.059        
+Conducta-699(2)(1)	730551.359        	420940.834        
+Conducta-699(2)(1)	730550.313        	420938.984        
+Conducta-699(2)(1)	730548.232        	420935.302        
+Conducta-699(2)(1)	730547.985        	420934.864        
+Conducta-699(2)(1)	730547.175        	420933.431        
+Conducta-699(2)(1)	730543.109        	420926.237        
+Conducta-699(2)(1)	730542.490        	420925.141        
+Conducta-699(2)(1)	730542.442        	420925.056        
+Conducta-699(2)(1)	730540.898        	420922.324        
+Conducta-699(2)(1)	730538.388        	420917.884        
+Conducta-699(2)(1)	730535.718        	420913.158        
+Conducta-699(2)(1)	730535.405        	420912.604        
+Conducta-699(2)(1)	730535.219        	420912.277        
+Conducta-699(2)(1)	730533.973        	420910.072        
+Conducta-699(2)(1)	730530.673        	420904.232        
+Conducta-699(2)(1)	730529.309        	420901.819        
+Conducta-699(2)(1)	730527.410        	420898.459        
+Conducta-699(2)(1)	730526.762        	420897.313        
+Conducta-699(2)(1)	730519.689        	420884.797        
+Conducta-699(2)(1)	730519.542        	420884.537        
+Conducta-699(2)(1)	730519.135        	420883.816        
+Conducta-699(2)(1)	730518.480        	420882.658        
+Conducta-699(2)(1)	730517.016        	420880.066        
+Conducta-699(2)(1)	730513.285        	420873.464        
+Conducta-699(2)(1)	730513.063        	420873.073        
+Conducta-699(2)(1)	730511.645        	420870.564        
+Conducta-699(2)(1)	730508.663        	420865.286        
+Conducta-699(2)(1)	730507.679        	420863.545        
+Conducta-699(2)(1)	730506.509        	420861.475        
+Conducta-699(2)(1)	730502.550        	420854.470        
+Conducta-699(2)(1)	730499.742        	420849.502        
+Conducta-699(2)(1)	730499.004        	420848.195        
+Conducta-699(2)(1)	730494.619        	420840.437        
+Conducta-699(2)(1)	730482.577        	420819.130        
+Conducta-699(2)(1)	730473.621        	420803.282        
+Conducta-699(2)(1)	730473.039        	420802.253        
+Conducta-699(2)(1)	730472.614        	420801.504        
+Conducta-699(2)(1)	730467.512        	420792.517        
+Conducta-699(2)(1)	730466.682        	420791.054        
+Conducta-699(2)(1)	730448.841        	420759.626        
+Conducta-699(2)(1)	730448.515        	420759.052        
+Conducta-699(2)(1)	730448.191        	420758.482        
+Conducta-699(2)(1)	730442.047        	420747.658        
+Conducta-699(2)(1)	730441.819        	420747.257        
+Conducta-699(2)(1)	730439.888        	420743.856        
+Conducta-699(2)(1)	730430.833        	420727.903        
+Conducta-699(2)(1)	730430.446        	420727.223        
+Conducta-699(2)(1)	730426.908        	420720.991        
+Conducta-699(2)(1)	730419.401        	420707.767        
+Conducta-699(2)(1)	730418.206        	420705.660        
+Conducta-699(2)(1)	730417.346        	420704.146        
+Conducta-699(2)(1)	730415.086        	420700.165        
+Conducta-699(2)(1)	730411.243        	420693.396        
+Conducta-699(2)(1)	730409.413        	420690.171        
+Conducta-699(2)(1)	730405.519        	420683.312        
+Conducta-699(2)(1)	730403.067        	420678.992        
+Conducta-699(2)(1)	730401.839        	420676.829        
+Conducta-699(2)(1)	730401.810        	420676.778        
+Conducta-699(2)(1)	730400.337        	420674.185        
+Conducta-699(2)(1)	730388.014        	420652.477        
+Conducta-699(2)(1)	730382.524        	420642.806        
+Conducta-699(2)(2)	730379.198        	420636.946        
+Conducta-948(2) 	730266.718        	420286.498        
+Conducta-948(2) 	730272.362        	420296.413        
+Conducta-948(2) 	730282.377        	420314.016        
+Conducta-948(2) 	730297.234        	420340.127        
+Conducta-948(2) 	730310.454        	420363.364        
+Conducta-948(2) 	730311.363        	420364.935        
+Conducta-948(2) 	730340.315        	420415.008        
+Conducta-948(2) 	730343.048        	420419.733        
+Conducta-2952(1)	730265.651        	420286.631        
+Conducta-2952(1)	730265.589        	420288.017        
+Conducta-2952(2)	730266.170        	420286.344        
+Conducta-950(2) 	730443.026        	420597.260        
+Conducta-950(2) 	730436.130        	420601.800        
+Conducta-950(2) 	730424.447        	420609.492        
+Conducta-950(2) 	730421.759        	420611.261        
+Conducta-950(2) 	730419.072        	420613.031        
+Conducta-950(2) 	730409.707        	420618.311        
+Conducta-950(2) 	730390.685        	420629.036        
+Conducta-2982(2)	730443.557        	420597.388        
+Conducta-958(2) 	730443.164        	420596.691        
+Conducta-817(2) 	730350.738        	420433.143        
+Conducta-817(2) 	730354.906        	420440.976        
+Conducta-949(2) 	730350.214        	420433.007        
+Conducta-949(2) 	730348.665        	420435.884        
+Conducta-949(2) 	730339.366        	420442.247        
+Conducta-949(2) 	730305.986        	420463.925        
+Conducta-949(2) 	730292.725        	420472.894        
+Conducta-956(1) 	730636.084        	420935.807        
+Conducta-956(1) 	730627.059        	420920.198        
+Conducta-956(1) 	730613.046        	420895.831        
+Conducta-956(1) 	730596.827        	420867.350        
+Conducta-956(1) 	730589.054        	420853.344        
+Conducta-956(1) 	730578.434        	420834.787        
+Conducta-956(1) 	730557.148        	420797.188        
+Conducta-956(2) 	730537.035        	420762.055        
+Conducta-822(2) 	730818.263        	421096.629        
+Conducta-822(2) 	730779.337        	421026.892        
+Conducta-822(2) 	730776.620        	421022.301        
+Conducta-823(2) 	730776.715        	421021.824        
+Conducta-823(2) 	730791.927        	421013.197        
+Conducta-824(2) 	730888.371        	420897.537        
+Conducta-824(2) 	730871.480        	420906.233        
+Conducta-824(2) 	730853.327        	420915.846        
+Conducta-11778(1)	730834.301        	420768.949        
+Conducta-828(2) 	730668.302        	420509.900        
+Conducta-830(2) 	730791.575        	420595.851        
+Conducta-830(2) 	730773.181        	420607.940        
+Conducta-830(2) 	730766.262        	420612.487        
+Conducta-830(2) 	730764.606        	420613.576        
+Conducta-830(2) 	730759.353        	420616.861        
+Conducta-830(2) 	730748.634        	420623.564        
+Conducta-830(2) 	730737.979        	420630.228        
+Conducta-818(2) 	730536.265        	420761.891        
+Conducta-818(2) 	730511.683        	420776.719        
+Conducta-818(2) 	730472.614        	420801.504        
+Conducta-818(2) 	730456.685        	420811.610        
+Conducta-818(2) 	730454.674        	420808.666        
+Conducta-831(2) 	730866.346        	421139.948        
+Conducta-831(2) 	730868.142        	421148.988        
+Conducta-833(2) 	731185.018        	421101.287        
+Conducta-1933(1)	730997.400        	420779.673        
+Conducta-1933(1)	731003.135        	420789.866        
+Conducta-1933(1)	731097.198        	420957.044        
+Conducta-1933(1)	731145.963        	421043.560        
+Conducta-1933(1)	731156.781        	421062.753        
+Conducta-1933(1)	731174.366        	421094.177        
+Conducta-1933(1)	731184.232        	421100.605        
+Conducta-1933(2)	731184.422        	421100.963        
+Conducta-958(1)(2)	730356.087        	420443.172        
+Conducta-958(1)(2)	730377.705        	420480.975        
+Conducta-958(1)(2)	730382.192        	420488.820        
+Conducta-958(1)(2)	730402.712        	420524.702        
+Conducta-958(1)(2)	730403.076        	420525.349        
+Conducta-958(1)(2)	730418.142        	420552.180        
+Conducta-958(1)(2)	730426.840        	420567.667        
+Conducta-958(1)(2)	730427.802        	420569.381        
+Conducta-2594(2)	730283.352        	419688.796        
+Conducta-2594(2)	730283.246        	419689.023        
+Conducta-2594(2)	730283.106        	419689.046        
+Conducta-2594(2)	730256.539        	419683.140        
+Conducta-2594(2)	730256.539        	419683.140        
+Conducta-2594(2)	730234.457        	419742.599        
+Conducta-2594(2)	730218.235        	419786.279        
+Conducta-2594(2)	730185.412        	419860.921        
+Conducta-2594(2)	730184.218        	419863.612        
+Conducta-1939(1)	730284.344        	419685.805        
+Conducta-1939(1)	730291.632        	419663.021        
+Conducta-1939(1)	730316.153        	419597.661        
+Conducta-1939(2)	730284.100        	419686.567        
+Conducta-1915(1)	730993.217        	420452.887        
+Conducta-1915(1)	730965.525        	420405.711        
+Conducta-1915(1)	730892.003        	420280.034        
+Conducta-1915(1)	730831.444        	420173.902        
+Conducta-1915(1)	730799.828        	420118.045        
+Conducta-1915(1)	730728.738        	419991.628        
+Conducta-1915(1)	730726.079        	419993.296        
+Conducta-1915(1)	730724.899        	419991.300        
+Conducta-1915(1)	730724.719        	419990.995        
+Conducta-1915(1)	730723.412        	419988.785        
+Conducta-1915(1)	730726.543        	419986.980        
+Conducta-1915(1)	730720.412        	419976.014        
+Conducta-1915(1)	730653.572        	419858.160        
+Conducta-1915(2)	730630.026        	419816.645        
+Conducta-3576(1)	730322.060        	420077.706        
+Conducta-3576(1)	730328.735        	420089.625        
+Conducta-3576(1)	730340.967        	420111.131        
+Conducta-3576(1)	730344.828        	420117.920        
+Conducta-3576(1)	730360.644        	420145.728        
+Conducta-3576(1)	730369.061        	420160.528        
+Conducta-3576(1)	730371.706        	420165.177        
+Conducta-3576(1)	730392.665        	420201.253        
+Conducta-3576(1)	730399.517        	420213.301        
+Conducta-3576(1)	730405.316        	420223.497        
+Conducta-3576(1)	730407.804        	420227.871        
+Conducta-3576(1)	730435.047        	420275.772        
+Conducta-3576(1)	730448.047        	420298.629        
+Conducta-3576(2)	730299.973        	420038.196        
+Conducta-1943(2)	730299.826        	420037.934        
+Conducta-1943(2)	730286.510        	420014.266        
+Conducta-1943(2)	730277.920        	419998.958        
+Conducta-1943(2)	730273.945        	419991.852        
+Conducta-1943(2)	730265.387        	419976.598        
+Conducta-1943(2)	730264.937        	419975.803        
+Conducta-1943(2)	730249.024        	419947.443        
+Conducta-1944(2)	730254.577        	420067.094        
+Conducta-1441(2)	730239.788        	420076.543        
+Conducta-1441(2)	730241.192        	420079.075        
+Conducta-1441(2)	730245.640        	420086.685        
+Conducta-1441(2)	730254.155        	420100.921        
+Conducta-1441(2)	730258.458        	420108.453        
+Conducta-1441(2)	730262.365        	420115.292        
+Conducta-1441(2)	730271.139        	420130.649        
+Conducta-1441(2)	730280.338        	420146.751        
+Conducta-1441(2)	730298.937        	420179.304        
+Conducta-1441(2)	730303.638        	420187.532        
+Conducta-1441(2)	730310.619        	420199.752        
+Conducta-1441(2)	730329.938        	420233.566        
+Conducta-1441(2)	730330.619        	420234.757        
+Conducta-1441(2)	730332.004        	420237.182        
+Conducta-1441(2)	730334.250        	420241.113        
+Conducta-1441(2)	730338.961        	420249.359        
+Conducta-1441(2)	730358.763        	420284.314        
+Conducta-1441(2)	730366.020        	420297.124        
+Conducta-1441(2)	730373.458        	420310.253        
+Conducta-1441(2)	730374.850        	420312.850        
+Conducta-1441(2)	730376.622        	420316.156        
+Conducta-1441(2)	730380.514        	420323.417        
+Conducta-1441(2)	730387.570        	420336.581        
+Conducta-2189(2)(1)	730284.269        	419686.877        
+Conducta-2189(2)(1)	730285.168        	419687.251        
+Conducta-2189(2)(1)	730285.811        	419688.532        
+Conducta-2189(2)(1)	730287.737        	419692.375        
+Conducta-2189(2)(1)	730327.934        	419762.652        
+Conducta-2189(2)(1)	730430.155        	419941.274        
+Conducta-2189(2)(2)	730432.240        	419946.301        
+Conducta-2961(2)	730721.251        	419993.891        
+Conducta-2961(2)	730723.194        	419997.294        
+Conducta-2959(2)	730721.381        	419993.315        
+Conducta-1288(2)	731270.172        	421104.489        
+Conducta-1288(2)	731249.829        	421068.671        
+Conducta-1288(2)	731212.235        	421002.477        
+Conducta-1288(2)	731201.750        	420984.015        
+Conducta-1288(2)	731177.789        	420941.826        
+Conducta-1288(2)	731146.135        	420886.092        
+Conducta-1288(2)	731123.300        	420845.885        
+Conducta-1288(2)	731109.328        	420821.285        
+Conducta-1288(2)	731070.505        	420752.928        
+Conducta-1288(2)	731053.551        	420723.699        
+Conducta-1292(2)	731053.010        	420723.563        
+Conducta-1292(2)	731040.276        	420731.423        
+Conducta-1292(2)	731031.005        	420737.469        
+Conducta-1292(2)	731010.783        	420750.657        
+Conducta-1292(2)	730989.139        	420764.772        
+Conducta-1287(1)	730939.065        	420522.717        
+Conducta-1287(1)	730943.349        	420530.221        
+Conducta-1287(1)	730985.000        	420603.185        
+Conducta-1287(1)	731014.613        	420655.059        
+Conducta-1287(1)	731043.100        	420704.961        
+Conducta-1287(1)	731045.791        	420709.660        
+Conducta-1287(2)	731053.157        	420723.003        
+Conducta-2978(2)	730275.420        	420928.779        
+Conducta-2979(2)	730317.678        	420676.114        
+Conducta-2987(1)	730408.936        	420834.099        
+Conducta-2987(1)	730403.388        	420824.520        
+Conducta-2987(1)	730390.022        	420801.428        
+Conducta-2987(1)	730386.133        	420794.710        
+Conducta-2987(1)	730381.619        	420786.910        
+Conducta-2987(1)	730373.542        	420772.957        
+Conducta-2987(1)	730372.343        	420770.886        
+Conducta-2987(1)	730369.156        	420765.380        
+Conducta-2987(1)	730365.706        	420759.418        
+Conducta-2987(1)	730356.338        	420743.234        
+Conducta-2987(1)	730353.833        	420738.906        
+Conducta-2987(1)	730351.127        	420734.232        
+Conducta-2987(1)	730340.894        	420716.552        
+Conducta-2987(1)	730336.024        	420708.137        
+Conducta-2987(1)	730328.188        	420694.601        
+Conducta-2987(1)	730324.956        	420689.017        
+Conducta-2987(2)	730318.200        	420676.250        
+Conducta-700(1) 	730378.875        	420636.679        
+Conducta-700(1) 	730368.567        	420643.350        
+Conducta-700(1) 	730341.009        	420661.169        
+Conducta-700(1) 	730329.261        	420668.765        
+Conducta-700(1) 	730326.806        	420670.352        
+Conducta-700(2) 	730318.351        	420675.683        
+Conducta-1268(2)	730317.819        	420675.546        
+Conducta-1268(2)	730307.562        	420657.065        
+Conducta-1268(2)	730289.619        	420625.638        
+Conducta-1268(2)	730285.839        	420619.025        
+Conducta-1268(2)	730283.011        	420614.078        
+Conducta-1268(2)	730271.051        	420593.156        
+Conducta-1268(2)	730253.646        	420562.711        
+Conducta-1268(2)	730252.587        	420560.859        
+Conducta-1268(2)	730250.505        	420557.216        
+Conducta-1268(2)	730235.347        	420530.701        
+Conducta-953(2) 	730760.636        	421159.592        
+Conducta-953(2) 	730712.410        	421168.761        
+Conducta-953(2) 	730701.499        	421171.155        
+Conducta-953(2) 	730694.684        	421172.650        
+Conducta-2983(1)	730766.952        	421162.582        
+Conducta-2983(1)	730758.936        	421156.532        
+Conducta-2983(1)	730749.243        	421139.181        
+Conducta-2983(1)	730734.414        	421112.635        
+Conducta-2983(1)	730675.169        	421006.582        
+Conducta-2983(2)	730662.650        	420984.171        
+Conducta-826(2) 	730915.742        	420939.505        
+Conducta-826(2) 	730928.272        	420961.030        
+Conducta-826(2) 	730950.141        	421002.581        
+Conducta-826(2) 	730957.213        	421014.995        
+Conducta-3391(2)	730371.544        	419985.101        
+Conducta-3391(2)	730383.852        	420007.615        
+Conducta-3391(2)	730474.756        	420166.066        
+Conducta-3391(2)	730552.954        	420305.996        
+Conducta-3391(2)	730555.963        	420311.381        
+Conducta-3391(2)	730556.553        	420313.196        
+Conducta-957(2) 	730235.951        	420078.295        
+Conducta-957(2) 	730250.783        	420103.251        
+Conducta-957(2) 	730251.220        	420104.023        
+Conducta-957(2) 	730259.893        	420119.830        
+Conducta-957(2) 	730264.034        	420127.376        
+Conducta-957(2) 	730267.080        	420132.928        
+Conducta-957(2) 	730268.797        	420136.057        
+Conducta-957(2) 	730268.797        	420136.057        
+Conducta-957(2) 	730268.797        	420136.057        
+Conducta-957(2) 	730268.797        	420136.057        
+Conducta-957(2) 	730268.797        	420136.057        
+Conducta-957(2) 	730268.797        	420136.057        
+Conducta-957(2) 	730293.387        	420177.374        
+Conducta-957(2) 	730296.295        	420182.456        
+Conducta-957(2) 	730299.626        	420188.277        
+Conducta-957(2) 	730302.285        	420192.926        
+Conducta-957(2) 	730306.444        	420200.578        
+Conducta-957(2) 	730311.883        	420210.585        
+Conducta-2613(2)	730236.002        	420078.087        
+Conducta-2613(2)	730242.567        	420074.022        
+Conducta-2613(2)	730239.939        	420068.754        
+Conducta-2945(1)	730195.320        	420103.826        
+Conducta-2945(1)	730192.050        	420105.895        
+Conducta-2945(1)	730184.646        	420110.210        
+Conducta-2945(2)	730235.747        	420078.246        
+Conducta-9419(2)	730476.380        	420456.689        
+Conducta-3348(2)	730584.145        	420362.580        
+Conducta-3347(2)	730583.944        	420362.531        
+Conducta-3347(2)	730578.544        	420365.990        
+Conducta-3347(2)	730577.014        	420369.008        
+Conducta-3347(2)	730569.386        	420373.916        
+Conducta-3347(2)	730561.757        	420378.825        
+Conducta-3347(2)	730565.918        	420386.474        
+Conducta-2564(1)	730898.582        	420297.356        
+Conducta-1977(1)(1)	730399.011        	420357.529        
+Conducta-1977(1)(1)	730437.579        	420424.774        
+Conducta-695(1)(1)	729961.807        	420688.356        
+Conducta-695(1)(1)	729961.506        	420688.547        
+Conducta-695(1)(1)	729946.627        	420697.984        
+Conducta-695(1)(1)	729945.664        	420698.595        
+Conducta-695(1)(1)	729944.134        	420699.565        
+Conducta-695(1)(1)	729932.865        	420706.713        
+Conducta-695(1)(1)	729929.354        	420708.940        
+Conducta-695(1)(1)	729922.032        	420713.584        
+Conducta-695(1)(1)	729919.479        	420715.203        
+Conducta-695(1)(1)	729918.094        	420716.082        
+Conducta-695(1)(1)	729907.306        	420722.924        
+Conducta-695(1)(1)	729902.175        	420726.179        
+Conducta-695(1)(1)	729893.558        	420731.644        
+Conducta-695(1)(1)	729890.386        	420733.656        
+Conducta-695(1)(2)	729963.078        	420687.558        
+Conducta-695(1)(2)	729963.078        	420687.558        
+Conducta-2946(1)	730266.491        	420286.098        
+Conducta-2946(2)	730187.070        	420145.772        
+Conducta-2946(2)	730195.923        	420161.805        
+Conducta-2946(2)	730200.815        	420170.452        
+Conducta-2946(2)	730201.970        	420172.494        
+Conducta-2946(2)	730202.266        	420173.019        
+Conducta-2946(2)	730208.407        	420183.875        
+Conducta-2946(2)	730209.856        	420186.437        
+Conducta-2946(2)	730210.883        	420188.253        
+Conducta-2946(2)	730214.970        	420195.478        
+Conducta-2946(2)	730218.201        	420201.190        
+Conducta-2946(2)	730223.989        	420211.422        
+Conducta-2946(2)	730224.819        	420212.889        
+Conducta-2946(2)	730225.566        	420214.210        
+Conducta-2946(2)	730238.483        	420237.046        
+Conducta-2946(2)	730240.987        	420241.473        
+Conducta-2946(2)	730241.380        	420242.155        
+Conducta-2946(2)	730241.991        	420243.215        
+Conducta-2946(2)	730259.813        	420274.145        
+Conducta-2946(2)	730261.158        	420276.479        
+Conducta-2946(2)	730264.490        	420282.489        
+Conducta-2946(2)	730266.441        	420286.007        
+Conducta-11959(1)	730465.536        	421098.131        
+Conducta-11959(1)	730459.714        	421087.893        
+Conducta-11959(1)	730455.148        	421079.863        
+Conducta-11959(1)	730446.356        	421064.404        
+Conducta-11959(1)	730439.021        	421051.505        
+Conducta-11959(1)	730430.812        	421037.070        
+Conducta-11959(1)	730430.326        	421036.215        
+Conducta-11959(1)	730423.706        	421024.576        
+Conducta-11959(1)	730421.705        	421021.057        
+Conducta-11959(1)	730415.980        	421010.989        
+Conducta-11959(1)	730410.554        	421001.449        
+Conducta-11959(1)	730406.511        	420994.339        
+Conducta-11959(1)	730405.131        	420991.913        
+Conducta-11959(1)	730390.026        	420965.351        
+Conducta-11959(1)	730383.316        	420953.551        
+Conducta-11959(1)	730368.001        	420926.622        
+Conducta-11959(1)	730367.457        	420925.665        
+Conducta-11959(1)	730365.527        	420922.271        
+Conducta-11959(1)	730352.519        	420899.397        
+Conducta-11959(1)	730346.248        	420888.520        
+Conducta-11959(1)	730344.388        	420885.295        
+Conducta-11959(1)	730338.625        	420875.299        
+Conducta-11959(1)	730337.780        	420873.834        
+Conducta-11959(1)	730330.333        	420860.645        
+Conducta-11959(1)	730312.406        	420828.896        
+Conducta-11959(1)	730312.241        	420828.603        
+Conducta-11959(1)	730297.335        	420802.205        
+Conducta-11959(1)	730290.629        	420790.327        
+Conducta-11959(1)	730281.193        	420773.617        
+Conducta-11959(1)	730270.512        	420754.700        
+Conducta-11959(1)	730259.454        	420735.116        
+Conducta-11959(1)	730250.664        	420720.124        
+Conducta-11959(2)	730247.542        	420713.927        
+Conducta-11959(2)	730240.724        	420701.800        
+Conducta-11959(2)	730225.263        	420674.595        
+Conducta-11959(2)	730224.910        	420673.974        
+Conducta-11959(2)	730211.527        	420650.425        
+Conducta-11959(2)	730201.141        	420632.150        
+Conducta-11959(2)	730192.779        	420617.436        
+Conducta-11959(2)	730173.321        	420583.199        
+Conducta-11959(2)	730159.320        	420558.381        
+Conducta-11959(2)	730133.880        	420513.290        
+Conducta-11959(2)	730130.052        	420506.506        
+Conducta-11959(2)	730128.795        	420504.278        
+Conducta-11959(2)	730123.030        	420494.058        
+Conducta-11959(2)	730122.330        	420492.818        
+Conducta-11959(2)	730121.601        	420491.526        
+Conducta-11959(2)	730118.212        	420485.519        
+Conducta-11959(2)	730114.238        	420478.475        
+Conducta-11959(2)	730102.260        	420457.244        
+Conducta-11959(2)	730098.848        	420451.197        
+Conducta-11959(2)	730091.330        	420437.871        
+Conducta-11959(2)	730087.895        	420431.782        
+Conducta-11959(2)	730082.751        	420422.665        
+Conducta-2956(2)	730477.812        	420351.731        
+Conducta-2956(2)	730479.757        	420350.627        
+Conducta-1916(2)	730457.198        	419980.889        
+Conducta-1916(2)	730470.255        	420003.048        
+Conducta-1916(2)	730496.372        	420049.649        
+Conducta-1916(2)	730496.372        	420049.649        
+Conducta-1916(2)	730517.126        	420086.679        
+Conducta-1916(2)	730529.897        	420109.591        
+Conducta-1916(2)	730543.060        	420133.207        
+Conducta-1916(2)	730552.367        	420149.738        
+Conducta-1916(2)	730554.962        	420154.347        
+Conducta-1916(2)	730576.467        	420192.544        
+Conducta-1916(2)	730597.859        	420230.329        
+Conducta-1916(2)	730607.129        	420247.872        
+Conducta-1916(2)	730613.683        	420257.977        
+Conducta-2196(2)	730773.737        	420161.528        
+Conducta-2196(2)	730801.725        	420143.672        
+Conducta-2196(2)	730801.725        	420143.672        
+Conducta-2063(1)	730615.328        	419790.570        
+Conducta-2063(1)	730589.282        	419744.351        
+Conducta-2063(1)	730418.508        	419453.735        
+Conducta-2063(2)	730417.590        	419452.038        
+Conducta-2063(2)	730413.272        	419444.061        
+Conducta-2063(2)	730409.551        	419436.781        
+Conducta-2982(1)(1)	730640.274        	420944.300        
+Conducta-2982(1)(1)	730635.821        	420936.367        
+Conducta-2982(1)(2)	730633.117        	420931.633        
+Conducta-2982(1)(2)	730610.243        	420891.594        
+Conducta-2982(1)(2)	730608.405        	420888.378        
+Conducta-2982(1)(2)	730605.972        	420884.119        
+Conducta-2982(1)(2)	730589.115        	420854.614        
+Conducta-2982(1)(2)	730572.311        	420824.919        
+Conducta-2982(1)(2)	730571.052        	420822.693        
+Conducta-2982(1)(2)	730558.498        	420800.508        
+Conducta-2982(1)(2)	730503.285        	420702.938        
+Conducta-2982(1)(2)	730497.320        	420692.397        
+Conducta-2982(1)(2)	730494.314        	420687.653        
+Conducta-2982(1)(2)	730485.484        	420672.372        
+Conducta-2982(1)(2)	730482.461        	420667.005        
+Conducta-2982(1)(2)	730477.550        	420658.282        
+Conducta-2975(2)(1)	730737.846        	420630.783        
+Conducta-2975(2)(1)	730746.576        	420645.353        
+Conducta-2975(2)(1)	730759.309        	420667.973        
+Conducta-2975(2)(1)	730760.297        	420669.728        
+Conducta-2975(2)(1)	730783.775        	420710.960        
+Conducta-2975(2)(1)	730812.966        	420764.291        
+Conducta-2975(2)(2)	730820.715        	420776.541        
+Conducta-2975(2)(2)	730826.037        	420787.279        
+Conducta-2975(2)(2)	730864.127        	420850.766        
+Conducta-2975(2)(2)	730876.302        	420873.602        
+Conducta-1272(2)	730396.711        	421130.684        
+Conducta-1272(2)	730392.772        	421133.602        
+Conducta-1272(2)	730390.732        	421131.794        
+Conducta-1928(1)	731350.333        	421164.467        
+Conducta-1928(2)	731331.095        	421152.548        
+Conducta-2962(2)	730801.839        	420131.805        
+Conducta-2904(1)(2)	730215.239        	420967.657        
+Conducta-2904(1)(2)	730229.126        	420958.681        
+Conducta-2904(1)(2)	730239.918        	420951.705        
+Conducta-2904(1)(2)	730243.710        	420949.254        
+Conducta-2904(1)(2)	730248.728        	420946.010        
+Conducta-2904(1)(2)	730257.616        	420940.265        
+Conducta-2904(1)(2)	730263.131        	420936.700        
+Conducta-2904(1)(2)	730264.208        	420936.004        
+Conducta-2956(1)(1)	730499.636        	420337.915        
+Conducta-2956(1)(1)	730513.218        	420329.231        
+Conducta-2956(1)(2)	730548.661        	420306.568        
+Conducta-2956(1)(2)	730565.895        	420296.409        
+Conducta-2904(1)(1)(1)	730480.384        	421215.417        
+Conducta-2904(1)(1)(1)	730391.226        	421132.476        
+Conducta-2904(1)(1)(2)	730390.732        	421131.794        
+Conducta-2904(1)(1)(2)	730389.754        	421131.202        
+Conducta-2904(1)(1)(2)	730305.023        	421058.561        
+Conducta-2904(1)(1)(2)	730283.764        	421040.059        
+Conducta-2904(1)(1)(2)	730260.291        	421019.484        
+Conducta-2904(1)(1)(2)	730253.223        	421013.126        
+Conducta-2904(1)(1)(2)	730212.528        	420976.519        
+Conducta-2904(1)(1)(2)	730209.431        	420973.733        
+Conducta-2904(1)(1)(2)	730208.903        	420973.213        
+Conducta-2904(1)(1)(2)	730209.216        	420972.101        
+Conducta-2904(1)(1)(2)	730210.155        	420970.944        
+
+[LABELS]
+;X-Coord             Y-Coord             Label & Anchor Node
+
+[BACKDROP]
+  DIMENSIONS  	729808.474        	419341.528        	731500.975        	421307.216        
+ UNITS          	None
+ FILE           	
+ OFFSET         	0.00            	0.00            
+
+[END]
