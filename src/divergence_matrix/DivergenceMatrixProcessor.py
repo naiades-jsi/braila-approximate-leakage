@@ -126,6 +126,17 @@ class DivergenceMatrixProcessor:
         return order_correlation_df, basic_correlation_df
 
     def nodes_which_effect_the_sensors_most(self, leak_amount, selected_node):
+        """
+        Method creates a dataframe of nodes which have the same simulated amount. And only keeps the node affected by
+        it that was passed in selected node. Method returns an array of nodes that effect the selected node the most
+        at time of 36 000 of 10:00.
+        TODO 36 000 -> only one hour should remain in dataframe no need to choose an hour
+
+        :param leak_amount: Amount of leakage in LPS, this string will be compared to dataframe names to choose
+        the right ones. Example: 16.0
+        :param selected_node: The node which interest us. A single string with node name. Example: "763-B"
+        :return: Returns an array of nodes which effect the selected nodes the most in terms of leakage.
+        """
         df = self.create_df_with_specific_leak_on_one_node(leak_amount, selected_node)
         column_name = "sorted_array"
 

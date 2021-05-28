@@ -59,9 +59,11 @@ class EPANETUtils:
 
     def run_simulation(self, water_network_model=None):
         """
-        Net.options.hydraulic.demand_model=Method   #Using PDD as demand method
-        Net.options.time.duration = Time*24*3600    #Time of simulation
-        :return:
+        Runs the epanet simulation on the water model of the instance or the model that was passed to it.
+
+        :return: Returns the wntr.sim.results.SimulationResults object. Important properties of the object are
+        SimulationResults.link and SimulationResults.node with which we can access the pressures/flowrate of the
+        simulation.
         """
         if water_network_model is None:
             water_network_model = self.get_original_water_network_model()
@@ -83,7 +85,15 @@ class EPANETUtils:
             new_file_name = new_file_name + ".json"
         return new_file_name
 
-    def get_pipe_length(self, pipe=None, water_network_model=None, ):
+    def get_pipe_length(self, pipe=None, water_network_model=None):
+        """
+        Methods gets the lengths in a water model and return all lengths if no pipe was provided or just the length of
+        one pipe.
+
+        :param pipe: The name of the pipe of which we would like to get the length.
+        :param water_network_model: Water network model in which to search for the length of the pipe.
+        :return: Returns the length of the pipe in float.
+        """
         if water_network_model is None:
             water_network_model = self.get_original_water_network_model()
 
@@ -247,11 +257,11 @@ class EPANETUtils:
         Method takes in the node on which we want to add a leak and the amount of leakage in m^3/s.
         Leakage is simulated as extra constant demand.
 
-        
-        :param node:
-        :param leak_to_simulate:
-        :param water_network_model:
-        :return:
+        :param node: The name of the node as a string. Example: "751-B"
+        :param leak_to_simulate: Amount of leak in m^3/s. Example: 0.003 TODO change this to LPS
+        :param water_network_model: Water network model on which we would like to add a leak. If none is provided the
+        model of the instance will be taken.
+        :return: Returns a dataframe with pressures (in m) on all nodes.
         """
         if leak_to_simulate < 0:
             raise Exception("Leak to simulate must be bigger or equal to 0, please readjust the parameter: " + leak_to_simulate)
@@ -275,11 +285,9 @@ class EPANETUtils:
 
     def run_leakage_scenario(self, leaks_arr=None, generate_diff_dict=False, retrieve_specific_nodes_arr=None):
         """
-        TODO
-        1. Run the simulation in normal without leaks
-        2. Then run the simulation for three times 50% leak, 100% leak, 150% leak
-        3. Generate a JSON with structure:
-
+        Methods simulates leaks on every node in the network
+        # TODO add documentation
+        Generate a JSON with structure:
         1 LiterPerSecond is 0.001 m^3/s
             Leakednode:
                 leak50:
@@ -289,7 +297,13 @@ class EPANETUtils:
                 leak150:
                     all_nodes (including this one): pressure
         4. Make an IF flag to generate from this JSON or DataFrame a correlation matrix
+
+        :param leaks_arr:
+        :param generate_diff_dict:
+        :param retrieve_specific_nodes_arr:
+        :return:
         """
+
         diff_dict = None
 
         if leaks_arr is None:
@@ -311,6 +325,7 @@ class EPANETUtils:
                 node_leak_nodes_dict[node][leak_name] = self.add_leakage_on_node_and_run_simulation(node, leak).to_dict()
 
         if generate_diff_dict:
+            # TODO check why here are the same two ifs
             diff_dict = self.generate_difference_dict(node_leak_nodes_dict, leak_names)
 
         if retrieve_specific_nodes_arr is not None and len(retrieve_specific_nodes_arr) > 0:
@@ -329,7 +344,7 @@ class EPANETUtils:
 
     def generate_difference_dict(self, leak_data_dict, leak_names):
         """
-        TODO
+        TODO add documentation
         :param leak_data_dict:
         :param leak_names:
         :return:
@@ -350,7 +365,7 @@ class EPANETUtils:
 
     def generate_difference_between_two_dataframes(self, leak_data, leak_data_is_dict=True, original_df=None):
         """
-        TODO
+        TODO add documentation
         :param leak_data:
         :param leak_data_is_dict:
         :param original_df:
