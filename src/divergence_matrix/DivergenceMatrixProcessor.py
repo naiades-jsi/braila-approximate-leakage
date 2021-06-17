@@ -1,4 +1,7 @@
 import pandas as pd
+import numpy as np
+from jenkspy import jenks_breaks
+
 from copy import deepcopy
 
 
@@ -60,7 +63,7 @@ class DivergenceMatrixProcessor:
 
         return new_array_of_dfs
 
-    def create_df_with_specific_leak_on_one_node(self, leak_amount, selected_node):
+    def extract_df_with_specific_leak_on_one_node(self, leak_amount, selected_node):
         """
         Combines methods retrieve_indexes_with_specified_leak and create_array_of_dfs_with_selected_column to generate
         a dataframe with all the important data.
@@ -87,7 +90,7 @@ class DivergenceMatrixProcessor:
         :returns: Returns two dataframes which are correlation matrices. First takes into account the order of the
         elements and the second just checks the contents of the arrays.
         """
-        df = self.create_df_with_specific_leak_on_one_node(leak_amount, selected_node)
+        df = self.extract_df_with_specific_leak_on_one_node(leak_amount, selected_node)
         column_name = "sorted_array"
 
         nodes_order_df = pd.DataFrame(columns=[column_name])
@@ -137,7 +140,7 @@ class DivergenceMatrixProcessor:
         :param selected_node: The node which interest us. A single string with node name. Example: "763-B"
         :return: Returns an array of nodes which effect the selected nodes the most in terms of leakage.
         """
-        df = self.create_df_with_specific_leak_on_one_node(leak_amount, selected_node)
+        df = self.extract_df_with_specific_leak_on_one_node(leak_amount, selected_node)
         column_name = "sorted_array"
 
         nodes_order_df = pd.DataFrame(columns=[column_name])
@@ -146,4 +149,56 @@ class DivergenceMatrixProcessor:
             nodes_order_df.loc[timestamp] = [arr_of_sorted_nodes]
 
         return nodes_order_df.loc[36000].array[0]
+
+    def get_affected_nodes_groups(self, leak_amount, selected_node, method="descending_values"):
+        """
+        Method creates a dataframe of nodes which have the same simulated amount. And only keeps the node affected by
+        it that was passed in selected node. Method returns an array of nodes that effect the selected node the most
+        at time of 36 000 of 10:00.
+        TODO 36 000 -> only one hour should remain in dataframe no need to choose an hour
+
+        :param method:
+        :param leak_amount: Amount of leakage in LPS, this string will be compared to dataframe names to choose
+        the right ones. Example: 16.0
+        :param selected_node: The node which interest us. A single string with node name. Example: "763-B"
+        :return: Returns an array of nodes which effect the selected nodes the most in terms of leakage.
+        """
+        time_stamp = 36000
+        num_of_groups = 3
+
+        series_at_timestamp = self.extract_df_with_specific_leak_on_one_node(leak_amount, selected_node)[time_stamp]
+        # Series must be sorted for all the following steps
+        sorted_series_at_timestamp = series_at_timestamp.sort_values(ascending=False).reset_index()
+        if method == "descending_values":
+            groups_indexes = self.get_cutoff_indexes_by_descending_values(sorted_series_at_timestamp, num_of_groups)
+        elif method == "jenks_natural_breaks":
+            groups_indexes = self.get_cutoff_indexes_by_jenks_natural_breaks(sorted_series_at_timestamp, num_of_groups)
+        elif method == "kde":
+            print("Not implemented")
+        else:
+            print("Not implemented")
+
+        return self.generate_groups_dict(groups_indexes, sorted_series_at_timestamp, time_stamp)
+
+    def get_cutoff_indexes_by_descending_values(self, data_series, num_of_groups):
+        series_len = len(data_series)
+        group_size = round(series_len / num_of_groups)
+
+        cutoff_indexes = np.append(np.arange(0, series_len, group_size), series_len)
+        return cutoff_indexes
+
+    def get_cutoff_indexes_by_jenks_natural_breaks(self, data_series, num_of_groups):
+        group_break_values = jenks_breaks(data_series, nb_class=num_of_groups)
+
+        return 2
+
+    def generate_groups_dict(self, cutoff_indexes, series_node_value, timestamp):
+        group_names = ["MINIMALLY_AFFECTED", "NORMAL_AFFECTED", "SEVERE_AFFECTED", "CRITICALLY_AFFECTED"]
+        groups_dict = dict()
+
+        for index in range(0, len(cutoff_indexes) - 1):
+            groups_dict[group_names[index]] = series_node_value[cutoff_indexes[index]:cutoff_indexes[index + 1]]\
+                .set_index("index")[timestamp].to_dict()
+
+        return series_node_value, groups_dict
 
