@@ -222,5 +222,5 @@ class DivergenceMatrixProcessor:
             groups_dict[group_names[index]] = series_node_value[cutoff_indexes[index]:cutoff_indexes[index + 1]]\
                 .set_index("index")[timestamp].to_dict()
 
-        return series_node_value, groups_dict
+        return groups_dict
 
