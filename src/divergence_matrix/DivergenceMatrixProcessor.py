@@ -148,15 +148,15 @@ class DivergenceMatrixProcessor:
             arr_of_sorted_nodes = list(df[timestamp].sort_values(ascending=False).index)[:round(len(df.index) * 0.1)]
             nodes_order_df.loc[timestamp] = [arr_of_sorted_nodes]
 
-        return nodes_order_df.loc[36000].array[0]
+        return nodes_order_df.loc[36000].array[0], df
 
-    def get_affected_nodes_groups(self, leak_amount, selected_node, method="descending_values"):
+    def get_affected_nodes_groups(self, leak_amount, selected_node, num_of_groups=4, method="jenks_natural_breaks"):
         """
         Method creates a dataframe of nodes which have the same simulated amount. And only keeps the node affected by
         it that was passed in selected node. Method returns an array of nodes that effect the selected node the most
         at time of 36 000 of 10:00.
-        TODO 36 000 -> only one hour should remain in dataframe no need to choose an hour
 
+        :param num_of_groups:
         :param method:
         :param leak_amount: Amount of leakage in LPS, this string will be compared to dataframe names to choose
         the right ones. Example: 16.0
@@ -164,33 +164,55 @@ class DivergenceMatrixProcessor:
         :return: Returns an array of nodes which effect the selected nodes the most in terms of leakage.
         """
         time_stamp = 36000
-        num_of_groups = 3
-
+        groups_indexes = None
         series_at_timestamp = self.extract_df_with_specific_leak_on_one_node(leak_amount, selected_node)[time_stamp]
+
         # Series must be sorted for all the following steps
-        sorted_series_at_timestamp = series_at_timestamp.sort_values(ascending=False).reset_index()
+        sorted_df_at_timestamp = series_at_timestamp.sort_values(ascending=True).reset_index()
+        series_len = len(sorted_df_at_timestamp)
         if method == "descending_values":
-            groups_indexes = self.get_cutoff_indexes_by_descending_values(sorted_series_at_timestamp, num_of_groups)
+            groups_indexes = self.get_cutoff_indexes_by_descending_values(series_len, num_of_groups)
         elif method == "jenks_natural_breaks":
-            groups_indexes = self.get_cutoff_indexes_by_jenks_natural_breaks(sorted_series_at_timestamp, num_of_groups)
+            sorted_series = sorted_df_at_timestamp[time_stamp]
+            groups_indexes = self.get_cutoff_indexes_by_jenks_natural_breaks(sorted_series, num_of_groups)
         elif method == "kde":
             print("Not implemented")
         else:
             print("Not implemented")
 
-        return self.generate_groups_dict(groups_indexes, sorted_series_at_timestamp, time_stamp)
+        # print(groups_indexes)
+        return self.generate_groups_dict(groups_indexes, sorted_df_at_timestamp, time_stamp)
 
-    def get_cutoff_indexes_by_descending_values(self, data_series, num_of_groups):
-        series_len = len(data_series)
+    def get_cutoff_indexes_by_descending_values(self, series_len, num_of_groups):
         group_size = round(series_len / num_of_groups)
 
-        cutoff_indexes = np.append(np.arange(0, series_len, group_size), series_len)
+        cutoff_indexes = []
+        for multiplier in range(num_of_groups + 1):
+            index_to_add = int(multiplier * group_size)
+
+            if (series_len - index_to_add) >= group_size:
+                cutoff_indexes.append(index_to_add)
+            else:
+                cutoff_indexes.append(series_len)
+                break
+
         return cutoff_indexes
 
-    def get_cutoff_indexes_by_jenks_natural_breaks(self, data_series, num_of_groups):
-        group_break_values = jenks_breaks(data_series, nb_class=num_of_groups)
+    def get_cutoff_indexes_by_jenks_natural_breaks(self, series, num_of_groups):
+        values_array = series.to_numpy()
+        group_break_values = jenks_breaks(values_array, nb_class=num_of_groups)
 
-        return 2
+        cutoff_indexes = [0]
+        for index in range(1, len(group_break_values)):
+            filtered_series = series[series == group_break_values[index]]
+            # len ensures that the last element with specific value is selected
+            cutoff_indexes.append(filtered_series.index[len(filtered_series) - 1])
+
+        # For ensuring that the last value is the actual last index
+        cutoff_indexes[len(cutoff_indexes) - 1] = len(values_array)
+        # to ensure order
+        cutoff_indexes.sort()
+        return cutoff_indexes
 
     def generate_groups_dict(self, cutoff_indexes, series_node_value, timestamp):
         group_names = ["MINIMALLY_AFFECTED", "NORMAL_AFFECTED", "SEVERE_AFFECTED", "CRITICALLY_AFFECTED"]

@@ -12,7 +12,7 @@ def main(date):
     print("Most diverged node is: " + diverged_node)
 
     instance = DivergenceMatrixProcessor(config.DIVERGENCE_MATRIX_FILE)
-    arr_of_nodes = instance.nodes_which_effect_the_sensors_most(16.0, diverged_node)
+    arr_of_nodes, df = instance.nodes_which_effect_the_sensors_most(16.0, diverged_node)
 
     print("The nodes which influence this node the most are: ")
     print(pretty_print(arr_of_nodes))
