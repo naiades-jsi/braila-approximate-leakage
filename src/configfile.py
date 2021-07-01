@@ -17,4 +17,4 @@ PUMP_FILES = ["braila_flow211206H360.csv", "braila_flow211106H360.csv", "braila_
 
 # Nodes which to keep in the dataframes
 SELECTED_NODES = ["SenzorComunarzi-NatVech", "SenzorCernauti-Sebesului", "SenzorChisinau-Titulescu",
-                  "SenzorComunarzi-castanului", "751-B", "763-B", "748-B", "760-B"]
+                  "SenzorComunarzi-castanului", "Jonctiune-3974", "Jonctiune-J-3", "Jonctiune-J-19", "Jonctiune-2749"]

@@ -82,11 +82,19 @@ def rename_dict_keys_and_merge(sensor_dict, pump_dict, sensor_names_dict=None, p
         sensor_names_dict["braila_pressure5772.csv"] = "SenzorChisinau-Titulescu"
         sensor_names_dict["braila_pressure5773.csv"] = "SenzorCernauti-Sebesului"
     if pump_names_dict is None:
-        pump_names_dict = dict()                                    # from mail
-        pump_names_dict["braila_flow211206H360.csv"] = "748-B"      # ("Apollo", "748-B"), ,
-        pump_names_dict["braila_flow211106H360.csv"] = "751-B"      # ("GA-Braila", "751-B")
-        pump_names_dict["braila_flow211306H360.csv"] = "763-B"      # ("RaduNegruMare", "763-B")
-        pump_names_dict["braila_flow318505H498.csv"] = "760-B"      # ("RaduNegru2", "760-B")
+        pump_names_dict = dict()
+        # almost correct but these were not provided by CUP Braila
+        # OUTDATED but needed for backwards compatibility
+        # pump_names_dict["braila_flow211206H360.csv"] = "748-B"      # ("Apollo", "748-B"), ,
+        # pump_names_dict["braila_flow211106H360.csv"] = "751-B"      # ("GA-Braila", "751-B")
+        # pump_names_dict["braila_flow211306H360.csv"] = "763-B"      # ("RaduNegruMare", "763-B")
+        # pump_names_dict["braila_flow318505H498.csv"] = "760-B"      # ("RaduNegru2", "760-B")
+
+        # from mail (Marius)
+        pump_names_dict["braila_flow211206H360.csv"] = "Jonctiune-3974"     # ("Apollo", "Jonctiune-3974"), ,
+        pump_names_dict["braila_flow211106H360.csv"] = "Jonctiune-J-3"      # ("GA-Braila", "Jonctiune-J-3")
+        pump_names_dict["braila_flow318505H498.csv"] = "Jonctiune-J-19"     # ("RaduNegru2", "Jonctiune-J-19")
+        pump_names_dict["braila_flow211306H360.csv"] = "Jonctiune-2749"     # ("RaduNegruMare", "Jonctiune-2749")
 
     for sensor in sensor_dict:
         new_name = sensor_names_dict[sensor]
