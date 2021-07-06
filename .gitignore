@@ -1,6 +1,9 @@
 # IntelliJ
 .idea/
 
+# Html plotly visualizations
+*.html
+
 # Delf data
 *.pickle
 
