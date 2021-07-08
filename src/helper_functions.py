@@ -14,7 +14,7 @@ def pretty_print(node_arr):
     return string_to_print
 
 
-def visualize_node_groups(critical_node_name, node_groups_dict, epanet_file_path, node_size=8, link_width=1,
+def visualize_node_groups(critical_node_name, node_groups_dict, epanet_file_path, leak_amount, node_size=8, link_width=1,
                           figsize=[1920, 1080], round_ndigits=2, add_to_node_popup=None, filename='plotly_network.html',
                           auto_open=True):
     water_network_model = EPANETUtils(epanet_file_path, "PDD").get_original_water_network_model()
@@ -30,7 +30,7 @@ def visualize_node_groups(critical_node_name, node_groups_dict, epanet_file_path
 
         group = node_groups_dict[group_name]
         for node_name in group:
-            new_name = node_name.replace(", 16.0LPS", "")
+            new_name = node_name.replace(", " + str(leak_amount) + "LPS", "")
             new_name = new_name.replace("Node_", "")
             node_groups_dict_without_lps[group_name][new_name] = node_groups_dict[group_name][node_name]
 
@@ -97,7 +97,7 @@ def visualize_node_groups(critical_node_name, node_groups_dict, epanet_file_path
 
     # Create figure
     layout = plotly.graph_objs.Layout(
-        title=critical_node_name + " affected groups",
+        title=critical_node_name + " affected groups. Leak amount " + str(leak_amount),
         titlefont=dict(size=16),
         showlegend=True,
         width=figsize[0],

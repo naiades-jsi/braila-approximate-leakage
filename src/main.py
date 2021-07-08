@@ -15,14 +15,14 @@ def main(date):
     print("Most diverged node is: " + diverged_node)
 
     instance = DivergenceMatrixProcessor(config.DIVERGENCE_MATRIX_FILE)
-    node_groups_dict = instance.get_affected_nodes_groups(16.0, diverged_node, num_of_groups=4,
+    node_groups_dict = instance.get_affected_nodes_groups(config.LEAK_AMOUNT, diverged_node, num_of_groups=4,
                                                           method="jenks_natural_breaks")
 
     print("The nodes which influence this node the most are: ")
     print(node_groups_dict)
     # arr_of_nodes, df = instance.nodes_which_effect_the_sensors_most(16.0, diverged_node)
     # print(pretty_print(arr_of_nodes))
-    visualize_node_groups(diverged_node, node_groups_dict, config.EPANET_NETWORK_FILE)
+    visualize_node_groups(diverged_node, node_groups_dict, config.EPANET_NETWORK_FILE, config.LEAK_AMOUNT)
 
 
 if __name__ == "__main__":

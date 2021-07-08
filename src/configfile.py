@@ -1,4 +1,7 @@
 
+# Amount with which to run the simulation
+LEAK_AMOUNT = 4.0
+
 # Data directories
 DATA_DIRECTORY = "./../data/"
 SENSOR_DIR = DATA_DIRECTORY + "sensor_data/"
