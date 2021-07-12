@@ -50,8 +50,7 @@ def generate_error_dataframe(difference_df):
         min_error = difference_df[sensor_name].min()
 
         error_dataframe.loc[sensor_name] = [mean_error, max_error, min_error]
-        # TODO add hour of the day
-        # TODO handle abs values
+        # TODO handle abs values ?
 
     return error_dataframe
 
@@ -68,21 +67,23 @@ def find_most_critical_sensor(error_dataframe, error_metric_column="Mean-error")
     return most_critical_node
 
 
-def analyse_data_and_find_critical_sensor(path_to_data_dir, sensor_files, pump_files, epanet_file, selected_nodes, day):
+def analyse_data_and_find_critical_sensor(path_to_data_dir, sensor_files, pump_files, epanet_file, selected_nodes, date):
     """
-    TODO add documentation
-    :param path_to_data_dir:
-    :param sensor_files:
-    :param pump_files:
-    :param epanet_file:
-    :param selected_nodes:
-    :param day:
-    :return:
+    Reads the actual data from dump files and compares it to the simulated pressure values. It then returns the
+    sensor/node which has the biggest mean error.
+
+    :param path_to_data_dir: Path to the directory where the files are stored.
+    :param sensor_files: Array of strings containing data for the 4 normal sensors.
+    :param pump_files: Array of strings containg data for the 4 debitmeters/pumps.
+    :param epanet_file: Path to the epanet file.
+    :param selected_nodes: The nodes which we want to compare preferably the 8 nodes for which we have measurements.
+    :param date: The date for which we want to compare real values with the simulated ones.
+    :return: Returns the node with the highest mean error.
     """
     real_data_dict = load_and_prepare_sensor_data(path_to_data_dir, sensor_files, pump_files)
     epanet_simulated_df = create_epanet_pressure_df(epanet_file, selected_nodes=selected_nodes)
 
-    difference_df = compare_real_data_with_simulated(real_data_dict, epanet_simulated_df, day)
+    difference_df = compare_real_data_with_simulated(real_data_dict, epanet_simulated_df, date)
     error_df = generate_error_dataframe(difference_df)
 
     return find_most_critical_sensor(error_df)

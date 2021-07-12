@@ -132,14 +132,14 @@ class DivergenceMatrixProcessor:
         """
         Method creates a dataframe of nodes which have the same simulated amount. And only keeps the node affected by
         it that was passed in selected node. Method returns an array of nodes that effect the selected node the most
-        at time of 36 000 of 10:00.
-        TODO 36 000 -> only one hour should remain in dataframe no need to choose an hour
+        at time of 36000 or 10:00.
 
         :param leak_amount: Amount of leakage in LPS, this string will be compared to dataframe names to choose
         the right ones. Example: 16.0
         :param selected_node: The node which interest us. A single string with node name. Example: "763-B"
         :return: Returns an array of nodes which effect the selected nodes the most in terms of leakage.
         """
+        time = 36000
         df = self.extract_df_with_specific_leak_on_one_node(leak_amount, selected_node)
         column_name = "sorted_array"
 
@@ -148,7 +148,7 @@ class DivergenceMatrixProcessor:
             arr_of_sorted_nodes = list(df[timestamp].sort_values(ascending=False).index)[:round(len(df.index) * 0.1)]
             nodes_order_df.loc[timestamp] = [arr_of_sorted_nodes]
 
-        return nodes_order_df.loc[36000].array[0], df
+        return nodes_order_df.loc[time].array[0], df
 
     def get_affected_nodes_groups(self, leak_amount, selected_node, num_of_groups=4, method="jenks_natural_breaks"):
         """

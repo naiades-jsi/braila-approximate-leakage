@@ -1,7 +1,10 @@
 from src.divergence_matrix.DivergenceMatrixProcessor import DivergenceMatrixProcessor
 from src.state_comparator.comparator_functions import *
 
-from src.helper_functions import pretty_print, visualize_node_groups
+from kafka import KafkaConsumer, KafkaProducer
+from json import dumps, loads
+
+from src.helper_functions import visualize_node_groups
 import src.configfile as config
 
 
@@ -18,11 +21,49 @@ def main(date):
     node_groups_dict = instance.get_affected_nodes_groups(config.LEAK_AMOUNT, diverged_node, num_of_groups=4,
                                                           method="jenks_natural_breaks")
 
-    print("The nodes which influence this node the most are: ")
-    print(node_groups_dict)
+    # TODO set a stable threshold
+    max_pressure_drop = max(node_groups_dict["SEVERE_AFFECTED"].values())
+    if max_pressure_drop > 0.05:
+        print("The nodes which influence this node the most are: ")
+        print(node_groups_dict)
     # arr_of_nodes, df = instance.nodes_which_effect_the_sensors_most(16.0, diverged_node)
-    # print(pretty_print(arr_of_nodes))
     visualize_node_groups(diverged_node, node_groups_dict, config.EPANET_NETWORK_FILE, config.LEAK_AMOUNT)
+
+
+def service_main():
+    print("Started the application !")
+    instance = DivergenceMatrixProcessor(config.DIVERGENCE_MATRIX_FILE)
+    consumer = KafkaConsumer(bootstrap_servers=config.HOST_AND_PORT, auto_offset_reset='earliest',
+                             value_deserializer=lambda v: loads(v.decode('utf-8')))
+    producer = KafkaProducer(bootstrap_servers=config.HOST_AND_PORT,
+                             value_serializer=lambda v: dumps(v).encode('utf-8'))
+    consumer.subscribe(config.TOPICS)
+
+    print("Subscribed to topics: ", config.TOPICS)
+    for msg in consumer:
+        try:
+            values = msg.value
+            print("Topic", msg.topic, "Timestamp ", values["time"], " ", values["value"])
+
+            diverged_node = analyse_data_and_find_critical_sensor(config.SENSOR_DIR, config.SENSOR_FILES,
+                                                                  config.PUMP_FILES, config.EPANET_NETWORK_FILE,
+                                                                  config.SELECTED_NODES, "2021-04-12")
+
+            output_groups_dict = instance.get_affected_nodes_groups(config.LEAK_AMOUNT, diverged_node, num_of_groups=4,
+                                                                    method="jenks_natural_breaks")
+
+            if max(output_groups_dict.values) > 2:
+                output_topic = "predictions_{}".format("xy")
+                future = producer.send(output_topic, output_groups_dict)
+                print(output_topic + ": " + str(output_groups_dict))
+
+                try:
+                    record_metadata = future.get(timeout=10)
+                except Exception as e:
+                    print('Producer error: ' + str(e))
+
+        except Exception as e:
+            print('Consumer error: ' + str(e))
 
 
 if __name__ == "__main__":
