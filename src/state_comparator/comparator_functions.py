@@ -6,7 +6,7 @@ from src.state_comparator.sensor_data_preparator import load_and_prepare_sensor_
 
 def compare_real_data_with_simulated(real_data_dict, simulated_df, day_which_to_compare="2021-03-15"):
     """
-    TODO add documentation
+    Compares the real data with
     :param real_data_dict:
     :param simulated_df:
     :param day_which_to_compare:

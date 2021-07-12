@@ -8,9 +8,6 @@ from src.helper_functions import visualize_node_groups
 import src.configfile as config
 
 
-# TODO jenks natural breaks, find optimal number of groups
-
-
 def main(date):
     print("Starting analysis ... ... ")
     diverged_node = analyse_data_and_find_critical_sensor(config.SENSOR_DIR, config.SENSOR_FILES, config.PUMP_FILES,
@@ -19,11 +16,11 @@ def main(date):
 
     instance = DivergenceMatrixProcessor(config.DIVERGENCE_MATRIX_FILE)
     node_groups_dict = instance.get_affected_nodes_groups(config.LEAK_AMOUNT, diverged_node, num_of_groups=4,
-                                                          method="jenks_natural_breaks")
+                                                          method="jenks_natural_breaks+optimal_groups")
 
-    # TODO set a stable threshold
+    # TODO search by all dict keys ?
     max_pressure_drop = max(node_groups_dict["SEVERE_AFFECTED"].values())
-    if max_pressure_drop > 0.05:
+    if max_pressure_drop > config.PRESSURE_DIFF_THRESHOLD:
         print("The nodes which influence this node the most are: ")
         print(node_groups_dict)
     # arr_of_nodes, df = instance.nodes_which_effect_the_sensors_most(16.0, diverged_node)
@@ -52,7 +49,7 @@ def service_main():
             output_groups_dict = instance.get_affected_nodes_groups(config.LEAK_AMOUNT, diverged_node, num_of_groups=4,
                                                                     method="jenks_natural_breaks")
 
-            if max(output_groups_dict.values) > 2:
+            if max(output_groups_dict["SEVERE_AFFECTED"].values()) > 2:
                 output_topic = "predictions_{}".format("xy")
                 future = producer.send(output_topic, output_groups_dict)
                 print(output_topic + ": " + str(output_groups_dict))

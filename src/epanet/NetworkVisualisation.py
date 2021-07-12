@@ -24,7 +24,7 @@ def interactive_visualization(self, water_network_model=None, node_attribute_nam
     :return:
     """
     # TODO import your svg icons, integrate it with pressure/flow - aka take the already made code
-    # TODO more viz options, pressure wiz, flowrate viz, pressure + flowrate ?
+    # more viz options, pressure wiz, flowrate viz, pressure + flowrate ?
     # Junctions are the one with no base demand usage, nodes aka circles are the ones with usage
     if water_network_model is None:
         # if no water model is provided the default unmodified instance will be returned

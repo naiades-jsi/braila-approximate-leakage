@@ -1,6 +1,6 @@
 import pandas as pd
-import numpy as np
 from jenkspy import jenks_breaks
+from src.divergence_matrix.groups_helper_functions import optimal_number_of_groups
 
 from copy import deepcopy
 
@@ -16,7 +16,7 @@ class DivergenceMatrixProcessor:
     def retrieve_indexes_with_specified_leak(self, leak_amount):
         """
         Finds indexes of dataframes where the desired leak was simulated.
-        # TODO this can be done with mod (%) more efficiently, but only if the order is guaranteed
+        # this can be done with mod (%) more efficiently, but only if the order is guaranteed
 
         :param leak_amount: Float value of the leak that we want to find in Liters per Second.
         :return: Returns an array of int indexes which correspond to the location in array_of_divergence_dfs.
@@ -55,7 +55,6 @@ class DivergenceMatrixProcessor:
         for index in indexes_of_dfs:
             temp_df = copy_of_original_df[index][[selected_column]]
 
-            # new_column_name = "{}-{}".format(temp_df.axes[1].name, selected_column)   # TODO which is better
             new_column_name = "{}".format(temp_df.axes[1].name)
             temp_df.columns = [new_column_name]
 
@@ -175,6 +174,9 @@ class DivergenceMatrixProcessor:
         elif method == "jenks_natural_breaks":
             sorted_series = sorted_df_at_timestamp[time_stamp]
             groups_indexes = self.get_cutoff_indexes_by_jenks_natural_breaks(sorted_series, num_of_groups)
+        elif method == "jenks_natural_breaks+optimal_groups":
+            sorted_series = sorted_df_at_timestamp[time_stamp]
+            groups_indexes = self.get_cutoff_indexes_by_jenks_natural_breaks(sorted_series, None)
         elif method == "kde":
             print("Not implemented")
         else:
@@ -200,6 +202,8 @@ class DivergenceMatrixProcessor:
 
     def get_cutoff_indexes_by_jenks_natural_breaks(self, series, num_of_groups):
         values_array = series.to_numpy()
+        if num_of_groups is None:
+            num_of_groups = optimal_number_of_groups(values_array)
         group_break_values = jenks_breaks(values_array, nb_class=num_of_groups)
 
         cutoff_indexes = [0]

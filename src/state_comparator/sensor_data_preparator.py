@@ -1,6 +1,7 @@
 import pandas as pd
 
 from src.epanet.EPANETUtils import EPANETUtils
+import src.configfile as config
 
 
 def load_and_prepare_sensor_data(path_to_data_dir, sensor_files, pump_files):
@@ -57,47 +58,31 @@ def load_and_prepare_sensor_data(path_to_data_dir, sensor_files, pump_files):
     return sensors_pumps_dict
 
 
-def rename_dict_keys_and_merge(sensor_dict, pump_dict, sensor_names_dict=None, pump_names_dict=None):
+def rename_dict_keys_and_merge(sensor_dict, pump_dict):
     """
-    Function maps/renames file names which were used as dict keys to the actual name of the nodes. It also merges
-    the sensor_dict and pump_dict into one data_frame.
+    Function maps/renames file names which were used as dict keys to the actual name of the nodes (stored in configfile).
+    It also merges the sensor_dict and pump_dict into one data_frame.
 
     :param sensor_dict: Dictionary with key being the file name and values being a dataframe of
     timestamps and pressures for nodes.
     :param pump_dict: Dictionary with key being the file name and values being a dataframe of
     timestamps and pressures for nodes.
-    :param sensor_names_dict: Dict with filenames as key and values being the actual sensor names.
-    :param pump_names_dict: Dict with filenames as key and values being the actual pump names.
 
     :return: Returns a new dict which contains all the values of the previous two dicts (sensor_dict and pump_dict),
     with new keys that are the actual sensor/pump names instead of filenames.
     """
     sensor_pump_dict_new = dict()
 
-    # default values TODO move them to variable folder
-    if sensor_names_dict is None:
-        sensor_names_dict = dict()
-        sensor_names_dict["braila_pressure5770.csv"] = "SenzorComunarzi-NatVech"
-        sensor_names_dict["braila_pressure5771.csv"] = "SenzorComunarzi-castanului"
-        sensor_names_dict["braila_pressure5772.csv"] = "SenzorChisinau-Titulescu"
-        sensor_names_dict["braila_pressure5773.csv"] = "SenzorCernauti-Sebesului"
-    if pump_names_dict is None:
-        pump_names_dict = dict()
-        # almost correct but these were not provided by CUP Braila
-        # OUTDATED but needed for backwards compatibility
-        # pump_names_dict["braila_flow211206H360.csv"] = "748-B"      # ("Apollo", "748-B"), ,
-        # pump_names_dict["braila_flow211106H360.csv"] = "751-B"      # ("GA-Braila", "751-B")
-        # pump_names_dict["braila_flow211306H360.csv"] = "763-B"      # ("RaduNegruMare", "763-B")
-        # pump_names_dict["braila_flow318505H498.csv"] = "760-B"      # ("RaduNegru2", "760-B")
+    sensor_files_and_names_tuples = dict()
+    for file_name, sensor_name in config.SENSORS_TUPLES:
+        sensor_files_and_names_tuples[file_name] = sensor_name
 
-        # from mail (Marius)
-        pump_names_dict["braila_flow211206H360.csv"] = "Jonctiune-3974"     # ("Apollo", "Jonctiune-3974"), ,
-        pump_names_dict["braila_flow211106H360.csv"] = "Jonctiune-J-3"      # ("GA-Braila", "Jonctiune-J-3")
-        pump_names_dict["braila_flow318505H498.csv"] = "Jonctiune-J-19"     # ("RaduNegru2", "Jonctiune-J-19")
-        pump_names_dict["braila_flow211306H360.csv"] = "Jonctiune-2749"     # ("RaduNegruMare", "Jonctiune-2749")
+    pump_names_dict = dict()
+    for file_name, pump_name in config.PUMPS_TUPLES:
+        pump_names_dict[file_name] = pump_name
 
     for sensor in sensor_dict:
-        new_name = sensor_names_dict[sensor]
+        new_name = sensor_files_and_names_tuples[sensor]
         sensor_pump_dict_new[new_name] = sensor_dict[sensor]
 
     for pump in pump_dict:
