@@ -118,7 +118,7 @@ class DivergenceMatrixProcessor:
 
                     num_of_elements += 1
 
-                # TODO handle edge cases for values of 0
+                # no need to handle division by zero because it shouldn't happen,if it does it is an error with the data
                 order_correlation_res = (order_correlation / num_of_elements)
                 basic_correlation_res = (basic_correlation / num_of_elements)
 
@@ -219,11 +219,12 @@ class DivergenceMatrixProcessor:
         return cutoff_indexes
 
     def generate_groups_dict(self, cutoff_indexes, series_node_value, timestamp):
-        group_names = ["MINIMALLY_AFFECTED", "NORMAL_AFFECTED", "SEVERE_AFFECTED", "CRITICALLY_AFFECTED"]
+        # group_names = ["MINIMALLY_AFFECTED", "NORMAL_AFFECTED", "SEVERE_AFFECTED", "CRITICALLY_AFFECTED"]
         groups_dict = dict()
 
         for index in range(0, len(cutoff_indexes) - 1):
-            groups_dict[group_names[index]] = series_node_value[cutoff_indexes[index]:cutoff_indexes[index + 1]]\
+            group_name = "{}-AFFECTED-GROUP".format(index)
+            groups_dict[group_name] = series_node_value[cutoff_indexes[index]:cutoff_indexes[index + 1]]\
                 .set_index("index")[timestamp].to_dict()
 
         return groups_dict

@@ -57,34 +57,44 @@ def generate_error_dataframe(difference_df):
 
 def find_most_critical_sensor(error_dataframe, error_metric_column="Mean-error"):
     """
-    Function finds the node with the highest absolute value and returns its name.
+    Function finds the node with the highest absolute value (depending on the error_metric_column parameter)
+    and returns it along with its name.
 
     :param error_dataframe: Dataframe with error on which the search for the critical node.
     :param error_metric_column: The column of the dataframe on which to search on.
-    :return: Returns a string which contains the name of the node with the highest error/absolute value.
+    :return: Returns a string which contains the name of the node with the highest error/absolute value. It also returns
+    that absolute value belonging to the node.
     """
+    deviation_value = error_dataframe[error_metric_column].abs().max()
     most_critical_node = error_dataframe[error_metric_column].abs().idxmax()
-    return most_critical_node
+    return most_critical_node, deviation_value
 
 
 def analyse_data_and_find_critical_sensor(path_to_data_dir, sensor_files, pump_files, epanet_file, selected_nodes, date):
     """
     Reads the actual data from dump files and compares it to the simulated pressure values. It then returns the
-    sensor/node which has the biggest mean error.
+    sensor/node which has the biggest mean error and the actual error.
 
     :param path_to_data_dir: Path to the directory where the files are stored.
     :param sensor_files: Array of strings containing data for the 4 normal sensors.
-    :param pump_files: Array of strings containg data for the 4 debitmeters/pumps.
+    :param pump_files: Array of strings containing data for the 4 debitmeters/pumps.
     :param epanet_file: Path to the epanet file.
     :param selected_nodes: The nodes which we want to compare preferably the 8 nodes for which we have measurements.
     :param date: The date for which we want to compare real values with the simulated ones.
-    :return: Returns the node with the highest mean error.
+    :return: Returns the node with the highest mean error and the actual mean error value
     """
     real_data_dict = load_and_prepare_sensor_data(path_to_data_dir, sensor_files, pump_files)
     epanet_simulated_df = create_epanet_pressure_df(epanet_file, selected_nodes=selected_nodes)
 
     difference_df = compare_real_data_with_simulated(real_data_dict, epanet_simulated_df, date)
     error_df = generate_error_dataframe(difference_df)
+    critical_node, deviation = find_most_critical_sensor(error_df)
 
-    return find_most_critical_sensor(error_df)
+    return critical_node, deviation
+
+
+def analyse_kafka_topic_and_find_critical_sensor(kafka_array):
+    # TODO, make it ready, stick to the format discussed with matej č.
+    # TODO array of 8 arrays and a timestamp, first value in each array is at current timestamp all the others are one hour before each other
+    pass
 

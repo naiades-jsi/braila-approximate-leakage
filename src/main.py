@@ -10,21 +10,20 @@ import src.configfile as config
 
 def main(date):
     print("Starting analysis ... ... ")
-    diverged_node = analyse_data_and_find_critical_sensor(config.SENSOR_DIR, config.SENSOR_FILES, config.PUMP_FILES,
-                                                          config.EPANET_NETWORK_FILE, config.SELECTED_NODES, date)
-    print("Most diverged node is: " + diverged_node)
+    diverged_node, deviation = analyse_data_and_find_critical_sensor(config.SENSOR_DIR, config.SENSOR_FILES,
+                                                                     config.PUMP_FILES, config.EPANET_NETWORK_FILE,
+                                                                     config.SELECTED_NODES, date)
 
-    instance = DivergenceMatrixProcessor(config.DIVERGENCE_MATRIX_FILE)
-    node_groups_dict = instance.get_affected_nodes_groups(config.LEAK_AMOUNT, diverged_node, num_of_groups=4,
-                                                          method="jenks_natural_breaks+optimal_groups")
-
-    # TODO search by all dict keys ?
-    max_pressure_drop = max(node_groups_dict["SEVERE_AFFECTED"].values())
-    if max_pressure_drop > config.PRESSURE_DIFF_THRESHOLD:
+    print("Most diverged node is: " + diverged_node + ". Deviation is: " + str(deviation))
+    if deviation > config.PRESSURE_DIFF_THRESHOLD:
+        instance = DivergenceMatrixProcessor(config.DIVERGENCE_MATRIX_FILE)
+        node_groups_dict = instance.get_affected_nodes_groups(config.LEAK_AMOUNT, diverged_node, num_of_groups=4,
+                                                              method="jenks_natural_breaks")
         print("The nodes which influence this node the most are: ")
         print(node_groups_dict)
-    # arr_of_nodes, df = instance.nodes_which_effect_the_sensors_most(16.0, diverged_node)
-    visualize_node_groups(diverged_node, node_groups_dict, config.EPANET_NETWORK_FILE, config.LEAK_AMOUNT)
+
+        # arr_of_nodes, df = instance.nodes_which_effect_the_sensors_most(16.0, diverged_node)
+        visualize_node_groups(diverged_node, node_groups_dict, config.EPANET_NETWORK_FILE, config.LEAK_AMOUNT)
 
 
 def service_main():
@@ -42,14 +41,17 @@ def service_main():
             values = msg.value
             print("Topic", msg.topic, "Timestamp ", values["time"], " ", values["value"])
 
-            diverged_node = analyse_data_and_find_critical_sensor(config.SENSOR_DIR, config.SENSOR_FILES,
-                                                                  config.PUMP_FILES, config.EPANET_NETWORK_FILE,
-                                                                  config.SELECTED_NODES, "2021-04-12")
+            diverged_node, deviation = analyse_data_and_find_critical_sensor(config.SENSOR_DIR, config.SENSOR_FILES,
+                                                                             config.PUMP_FILES,
+                                                                             config.EPANET_NETWORK_FILE,
+                                                                             config.SELECTED_NODES, "2021-04-12")
 
-            output_groups_dict = instance.get_affected_nodes_groups(config.LEAK_AMOUNT, diverged_node, num_of_groups=4,
-                                                                    method="jenks_natural_breaks")
+            print("Most diverged node is: " + diverged_node + ". Deviation is: " + str(deviation))
+            if deviation > config.PRESSURE_DIFF_THRESHOLD:
+                output_groups_dict = instance.get_affected_nodes_groups(config.LEAK_AMOUNT, diverged_node,
+                                                                        num_of_groups=4,
+                                                                        method="jenks_natural_breaks+optimal_groups")
 
-            if max(output_groups_dict["SEVERE_AFFECTED"].values()) > 2:
                 output_topic = "predictions_{}".format("xy")
                 future = producer.send(output_topic, output_groups_dict)
                 print(output_topic + ": " + str(output_groups_dict))

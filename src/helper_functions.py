@@ -1,6 +1,7 @@
 import plotly
 
 import src.configfile
+import matplotlib.pyplot as plt
 from src.epanet.EPANETUtils import EPANETUtils
 
 
@@ -19,13 +20,19 @@ def visualize_node_groups(critical_node_name, node_groups_dict, epanet_file_path
                           auto_open=True):
     water_network_model = EPANETUtils(epanet_file_path, "PDD").get_original_water_network_model()
     network_graph = water_network_model.get_graph()    # Graph
-    colors = ["#9FE2BF", "#6495ED", "#FF7F50", "#DE3163"]
+
+    if len(node_groups_dict) > 10:
+        raise Exception("Visualization is currently supported for only 10 groups !")
+
+    # TODO make colors better when there are less groups
+    colors_arr = ["#52f247", "#84e100", "#a4cf00", "#bdbb00", "#d0a600",
+                  "#e09000", "#ea7800", "#f15e00", "#f24123", "#ef1b3a"]
 
     # create new dict without lps
     node_groups_dict_without_lps = dict()
     group_colors = dict()
     for index, group_name in enumerate(node_groups_dict):
-        group_colors[group_name] = colors[index]
+        group_colors[group_name] = colors_arr[index]
         node_groups_dict_without_lps[group_name] = dict()
 
         group = node_groups_dict[group_name]

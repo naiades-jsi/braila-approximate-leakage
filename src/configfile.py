@@ -1,6 +1,9 @@
 # Amount with which to run the simulation
 LEAK_AMOUNT = 4.0
 
+# If difference between simulated and actual data is bigger than this then alert
+PRESSURE_DIFF_THRESHOLD = 1.1
+
 # Data directories
 DATA_DIRECTORY = "./../data/"
 SENSOR_DIR = DATA_DIRECTORY + "sensor_data/"
@@ -38,7 +41,6 @@ PUMPS_TUPLES = [("braila_flow211206H360.csv", "Jonctiune-3974"),
 SELECTED_NODES = ["SenzorComunarzi-NatVech", "SenzorCernauti-Sebesului", "SenzorChisinau-Titulescu",
                   "SenzorComunarzi-castanului", "Jonctiune-3974", "Jonctiune-J-3", "Jonctiune-J-19", "Jonctiune-2749"]
 
-PRESSURE_DIFF_THRESHOLD = 0.05
 
 
 # KAFKA related
