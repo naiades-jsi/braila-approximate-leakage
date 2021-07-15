@@ -16,7 +16,7 @@ def pretty_print(node_arr):
 
 
 def visualize_node_groups(critical_node_name, node_groups_dict, epanet_file_path, leak_amount, node_size=8, link_width=1,
-                          figsize=[1920, 1080], round_ndigits=2, add_to_node_popup=None, filename='plotly_network.html',
+                          figsize=[950, 950], round_ndigits=2, add_to_node_popup=None, filename='plotly_network.html',
                           auto_open=True):
     water_network_model = EPANETUtils(epanet_file_path, "PDD").get_original_water_network_model()
     network_graph = water_network_model.get_graph()    # Graph
@@ -27,6 +27,7 @@ def visualize_node_groups(critical_node_name, node_groups_dict, epanet_file_path
     # TODO make colors better when there are less groups
     colors_arr = ["#52f247", "#84e100", "#a4cf00", "#bdbb00", "#d0a600",
                   "#e09000", "#ea7800", "#f15e00", "#f24123", "#ef1b3a"]
+    # colors_arr = ["#9FE2BF", "#6495ED", "#FF7F50", "#DE3163"]
 
     # create new dict without lps
     node_groups_dict_without_lps = dict()

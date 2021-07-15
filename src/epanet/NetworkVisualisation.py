@@ -5,8 +5,8 @@ import matplotlib
 import networkx as nx
 
 
-def interactive_visualization(self, water_network_model=None, node_attribute_name='Value', title=None, node_size=8, node_labels=True,
-                            link_width=1, figsize=[700, 450], round_ndigits=2, add_to_node_popup=None,
+def interactive_visualization(water_network_model=None, node_attribute_name='Value', title=None, node_size=8, node_labels=True,
+                            link_width=1, figsize=[950, 950], round_ndigits=2, add_to_node_popup=None,
                             filename='plotly_network.html', auto_open=True):
     """
     TODO
@@ -26,9 +26,6 @@ def interactive_visualization(self, water_network_model=None, node_attribute_nam
     # TODO import your svg icons, integrate it with pressure/flow - aka take the already made code
     # more viz options, pressure wiz, flowrate viz, pressure + flowrate ?
     # Junctions are the one with no base demand usage, nodes aka circles are the ones with usage
-    if water_network_model is None:
-        # if no water model is provided the default unmodified instance will be returned
-        water_network_model = self.get_original_water_network_model()
 
     network_graph = water_network_model.get_graph()
     # Create edge trace - connections
@@ -47,9 +44,9 @@ def interactive_visualization(self, water_network_model=None, node_attribute_nam
         )
     )
 
-    # Node trace for normal Junctions
-    node_junction = plotly.graph_objs.Scatter(
-        name="Junction",
+    # Node trace for valves
+    valve_node = plotly.graph_objs.Scatter(
+        name="Valve",
         x=[],
         y=[],
         text=[],
@@ -61,16 +58,16 @@ def interactive_visualization(self, water_network_model=None, node_attribute_nam
             opacity=1,
             line=dict(width=1),
             symbol='bowtie'))
-    # Node trace for terminal junctions (only one connection)
-    node_terminal_junction = plotly.graph_objs.Scatter(
-        name="Terminal Junction",
+    # Node trace for normal junctions
+    junction_node = plotly.graph_objs.Scatter(
+        name="Junction",
         x=[],
         y=[],
         text=[],
         hoverinfo='text',
         mode='markers',
         marker=dict(
-            color="#FC4E03",
+            color="#84e100",
             size=5,
             opacity=1,
             line=dict(width=1),
@@ -86,7 +83,7 @@ def interactive_visualization(self, water_network_model=None, node_attribute_nam
         mode='markers',
         marker=dict(
             color="#33B0FF",
-            size=node_size + 10,
+            size=node_size + 5,
             opacity=1,
             line=dict(width=1),
             symbol='square'
@@ -101,7 +98,7 @@ def interactive_visualization(self, water_network_model=None, node_attribute_nam
         hoverinfo='text',
         mode='markers',
         marker=dict(
-            color="#41BE51",
+            color="#FC4E03",
             size=node_size,
             opacity=1,
             line=dict(width=1),
@@ -123,12 +120,12 @@ def interactive_visualization(self, water_network_model=None, node_attribute_nam
         # G.nodes[node] has a property "type", this can be Junction, Reservoir
         if network_graph.nodes[node]["type"] == "Reservoir":
             curr_node = node_tank
-        elif node in terminal_nodes:
-            curr_node = node_terminal_junction
-        elif "Senzor" in node:
+        elif "Senzor" in str(node):
             curr_node = node_sensor
+        elif "Jonctiune" in str(node) and "Junction" not in str(node):
+            curr_node = junction_node
         else:
-            curr_node = node_junction
+            curr_node = valve_node
 
         curr_node['x'] += tuple([x])
         curr_node['y'] += tuple([y])
@@ -145,7 +142,7 @@ def interactive_visualization(self, water_network_model=None, node_attribute_nam
             curr_node['text'] += tuple([node_info])
 
     # Create figure
-    data = [edge_trace, node_terminal_junction, node_junction, node_tank, node_sensor]
+    data = [edge_trace, junction_node, valve_node, node_tank, node_sensor]
     layout = plotly.graph_objs.Layout(
         title=title,
         titlefont=dict(size=16),

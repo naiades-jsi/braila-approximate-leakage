@@ -1,3 +1,5 @@
+import math
+
 import pandas as pd
 import numpy as np
 
@@ -50,7 +52,6 @@ def generate_error_dataframe(difference_df):
         min_error = difference_df[sensor_name].min()
 
         error_dataframe.loc[sensor_name] = [mean_error, max_error, min_error]
-        # TODO handle abs values ?
 
     return error_dataframe
 
@@ -93,8 +94,26 @@ def analyse_data_and_find_critical_sensor(path_to_data_dir, sensor_files, pump_f
     return critical_node, deviation
 
 
-def analyse_kafka_topic_and_find_critical_sensor(kafka_array):
-    # TODO, make it ready, stick to the format discussed with matej č.
-    # TODO array of 8 arrays and a timestamp, first value in each array is at current timestamp all the others are one hour before each other
-    pass
+def analyse_kafka_topic_and_find_critical_sensor(timestamp, kafka_array, epanet_file, selected_nodes):
+    # TODO make it prettier and split code into logical parts
+    actual_values_df = pd.DataFrame()
+    diff_df = pd.DataFrame()
+    sensor_names = []
 
+    for index, value in enumerate(kafka_array):
+        sensor_index = math.floor(index / 24)   # TODO calculate this only 8 times ?
+        hour = (index % 24)
+        current_hour = timestamp + (hour * 60 * 60)
+
+        actual_values_df.at[sensor_names[sensor_index], current_hour] = value
+
+    # get simulated df
+    epanet_simulated_df = create_epanet_pressure_df(epanet_file, selected_nodes=selected_nodes)
+    for sensor_key in epanet_simulated_df:
+        diff_array = (epanet_simulated_df[sensor_key].to_numpy() - actual_values_df[sensor_key].to_numpy())
+
+        diff_df[sensor_key] = pd.Series(diff_array, index=epanet_simulated_df[sensor_key].index)
+
+    error_df = generate_error_dataframe(diff_df)
+    critical_node, deviation = find_most_critical_sensor(error_df)
+    return critical_node, deviation

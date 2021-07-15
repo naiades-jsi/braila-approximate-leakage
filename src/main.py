@@ -1,11 +1,12 @@
 from src.divergence_matrix.DivergenceMatrixProcessor import DivergenceMatrixProcessor
+from src.epanet.EPANETUtils import EPANETUtils
+from src.epanet.NetworkVisualisation import plot_interactive_network, interactive_visualization
 from src.state_comparator.comparator_functions import *
+from src.helper_functions import visualize_node_groups
+import src.configfile as config
 
 from kafka import KafkaConsumer, KafkaProducer
 from json import dumps, loads
-
-from src.helper_functions import visualize_node_groups
-import src.configfile as config
 
 
 def main(date):
@@ -68,3 +69,6 @@ def service_main():
 if __name__ == "__main__":
     # Day which to compare to the simulated data
     main("2021-04-12")
+    # water_model = EPANETUtils(config.EPANET_NETWORK_FILE, "PDD").get_original_water_network_model()
+    # print([i for i in water_model.valves()])
+    # interactive_visualization(water_network_model=water_model)

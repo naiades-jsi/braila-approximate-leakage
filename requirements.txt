@@ -6,3 +6,4 @@ numpy~=1.18.5
 ipython~=7.16.1
 matplotlib~=3.2.2
 jenkspy~=0.1.4
+kafka-python~=1.4.7
