@@ -71,10 +71,10 @@ def service_main():
 
 if __name__ == "__main__":
     # Kafka function
-    service_main()
+    # service_main()    # TODO if used without the correct topic replace feature array with fake data
 
     # Local testing
-    # main("2021-04-12")
+    main("2021-04-12")
 
     # Visualization
     # water_model = EPANETUtils(config.EPANET_NETWORK_FILE, "PDD").get_original_water_network_model()
