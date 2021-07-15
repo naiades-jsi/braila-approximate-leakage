@@ -29,23 +29,26 @@ def main(date):
 
 def service_main():
     print("Started the application !")
-    instance = DivergenceMatrixProcessor(config.DIVERGENCE_MATRIX_FILE)
+    # Data/objects that need to be calculated just one time
     consumer = KafkaConsumer(bootstrap_servers=config.HOST_AND_PORT, auto_offset_reset='earliest',
                              value_deserializer=lambda v: loads(v.decode('utf-8')))
     producer = KafkaProducer(bootstrap_servers=config.HOST_AND_PORT,
                              value_serializer=lambda v: dumps(v).encode('utf-8'))
     consumer.subscribe(config.TOPICS)
 
+    instance = DivergenceMatrixProcessor(config.DIVERGENCE_MATRIX_FILE)
+    epanet_simulated_df = create_epanet_pressure_df(config.EPANET_NETWORK_FILE, selected_nodes=config.SELECTED_NODES)
+
     print("Subscribed to topics: ", config.TOPICS)
     for msg in consumer:
         try:
             values = msg.value
-            print("Topic", msg.topic, "Timestamp ", values["time"], " ", values["value"])
-
-            diverged_node, deviation = analyse_data_and_find_critical_sensor(config.SENSOR_DIR, config.SENSOR_FILES,
-                                                                             config.PUMP_FILES,
-                                                                             config.EPANET_NETWORK_FILE,
-                                                                             config.SELECTED_NODES, "2021-04-12")
+            current_timestamp = values["time"]
+            feature_arr = values["value"]
+            print("Topic", msg.topic, "Timestamp ", current_timestamp, " ", feature_arr)
+            diverged_node, deviation = analyse_kafka_topic_and_find_critical_sensor(current_timestamp, feature_arr,
+                                                                                    epanet_simulated_df,
+                                                                                    config.SELECTED_NODES)
 
             print("Most diverged node is: " + diverged_node + ". Deviation is: " + str(deviation))
             if deviation > config.PRESSURE_DIFF_THRESHOLD:
@@ -67,8 +70,13 @@ def service_main():
 
 
 if __name__ == "__main__":
-    # Day which to compare to the simulated data
-    main("2021-04-12")
+    # Kafka function
+    service_main()
+
+    # Local testing
+    # main("2021-04-12")
+
+    # Visualization
     # water_model = EPANETUtils(config.EPANET_NETWORK_FILE, "PDD").get_original_water_network_model()
     # print([i for i in water_model.valves()])
     # interactive_visualization(water_network_model=water_model)

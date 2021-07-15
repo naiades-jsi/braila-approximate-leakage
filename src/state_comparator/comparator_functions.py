@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 import math
 
 import pandas as pd
@@ -94,26 +95,54 @@ def analyse_data_and_find_critical_sensor(path_to_data_dir, sensor_files, pump_f
     return critical_node, deviation
 
 
-def analyse_kafka_topic_and_find_critical_sensor(timestamp, kafka_array, epanet_file, selected_nodes):
-    # TODO make it prettier and split code into logical parts
-    actual_values_df = pd.DataFrame()
-    diff_df = pd.DataFrame()
-    sensor_names = []
+def analyse_kafka_topic_and_find_critical_sensor(timestamp, kafka_array, epanet_simulated_df, sensor_names):
+    """
+    Combines multiple functions to find the sensor which deviates the most and returns it along with the deviated value.
+    First is converts the kafka array to a DataFrame, then it calculates the difference between the epanet simulated
+    df and the actual values df. By looking at these difference the node with the highest mean error is returned.
 
-    for index, value in enumerate(kafka_array):
-        sensor_index = math.floor(index / 24)   # TODO calculate this only 8 times ?
-        hour = (index % 24)
-        current_hour = timestamp + (hour * 60 * 60)
+    :param timestamp: Epoch timestamp. Used for calculating hour of the day.
+    :param kafka_array: Array of floats. Values represent pressure values.
+    :param epanet_simulated_df: Dataframe which was produced with EPANET and servers as a benchmark.
+    :param sensor_names: Names of the sensors which will be compared.
+    :return: Returns the most critical sensor and the error (deviation) value.
+    """
+    actual_values_df = create_df_from_real_values(kafka_array, timestamp, sensor_names)
+    difference_df = epanet_simulated_df.sub(actual_values_df)
+    error_df = generate_error_dataframe(difference_df)
 
-        actual_values_df.at[sensor_names[sensor_index], current_hour] = value
-
-    # get simulated df
-    epanet_simulated_df = create_epanet_pressure_df(epanet_file, selected_nodes=selected_nodes)
-    for sensor_key in epanet_simulated_df:
-        diff_array = (epanet_simulated_df[sensor_key].to_numpy() - actual_values_df[sensor_key].to_numpy())
-
-        diff_df[sensor_key] = pd.Series(diff_array, index=epanet_simulated_df[sensor_key].index)
-
-    error_df = generate_error_dataframe(diff_df)
-    critical_node, deviation = find_most_critical_sensor(error_df)
+    critical_node, deviation = find_most_critical_sensor(error_df, error_metric_column="Mean-error")
     return critical_node, deviation
+
+
+def create_df_from_real_values(measurements_arr, epoch_timestamp, sensor_names):
+    """
+    Creates a Dataframe from array.
+
+    :param measurements_arr: Array of floats. Values represent pressure values.
+    :param epoch_timestamp: Epoch timestamp. Used for calculating hour of the day.
+    :param sensor_names: Names of the sensors which will be compared.
+    :return: Returns a dataframe containing the actual values mapped to sensors and hours.
+    """
+    hours_in_a_day = 24
+    num_of_sensors = len(sensor_names)
+    dt_time = datetime.fromtimestamp(epoch_timestamp)
+    actual_values_df = pd.DataFrame(columns=sensor_names,
+                                    index=[hour_of_day for hour_of_day in range(0, hours_in_a_day)])
+
+    print("Calculating for time: ", dt_time)
+    for sensor_index in range(0, num_of_sensors):
+        for hour_index in range(0, hours_in_a_day):
+            hour = (hour_index % hours_in_a_day)
+            current_time = dt_time - timedelta(hours=hour, minutes=0)
+
+            actual_values_df.at[current_time.hour, sensor_names[sensor_index]] = measurements_arr[(sensor_index * 24) + hour]
+
+    return actual_values_df
+
+
+# for sensor_key in epanet_simulated_df:
+#     diff_array = (epanet_simulated_df[sensor_key].sort_index().to_numpy() -
+#                   actual_values_df[sensor_key].sort_index().to_numpy())
+#
+#     diff_df[sensor_key] = pd.Series(diff_array, index=epanet_simulated_df[sensor_key].index)
