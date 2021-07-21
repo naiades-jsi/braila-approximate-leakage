@@ -1,3 +1,5 @@
+import warnings
+
 import numpy as np
 from jenkspy import jenks_breaks
 
@@ -53,8 +55,12 @@ def goodness_of_variance_fit(array, classes):
     sdam = np.sum((array - array.mean()) ** 2)
     # sorted polygon stats
     array_sort = [np.array([array[index] for index in zone]) for zone in zone_indices]
-    # sum of squared deviations of class means
-    sdcm = sum([np.sum((classified - classified.mean()) ** 2) for classified in array_sort])
+
+    # catching runtime warning
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", category=RuntimeWarning)
+        # sum of squared deviations of class means
+        sdcm = sum([np.sum((classified - classified.mean()) ** 2) for classified in array_sort])
     # goodness of variance fit
     gvf = (sdam - sdcm) / sdam
 

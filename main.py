@@ -7,9 +7,11 @@ import src.configfile as config
 
 from kafka import KafkaConsumer, KafkaProducer
 from json import dumps, loads
+import logging
 
 
 def main(date):
+    logging.info("Started the application !")
     print("Starting analysis ... ... ")
     diverged_node, deviation = analyse_data_and_find_critical_sensor(config.SENSOR_DIR, config.SENSOR_FILES,
                                                                      config.PUMP_FILES, config.EPANET_NETWORK_FILE,
@@ -29,6 +31,7 @@ def main(date):
 
 def service_main():
     print("Started the application !")
+
     # Data/objects that need to be calculated just one time
     consumer = KafkaConsumer(bootstrap_servers=config.HOST_AND_PORT, auto_offset_reset='earliest',
                              value_deserializer=lambda v: loads(v.decode('utf-8')))
@@ -43,13 +46,13 @@ def service_main():
     for msg in consumer:
         try:
             values = msg.value
-            current_timestamp = values["time"]
-            feature_arr = values["value"]
+            current_timestamp = values["timestamp"]
+            feature_arr = values["ftr_vector"]
             print("Topic", msg.topic, "Timestamp ", current_timestamp, " ", feature_arr)
+
             diverged_node, deviation = analyse_kafka_topic_and_find_critical_sensor(current_timestamp, feature_arr,
                                                                                     epanet_simulated_df,
                                                                                     config.SELECTED_NODES)
-
             print("Most diverged node is: " + diverged_node + ". Deviation is: " + str(deviation))
             if deviation > config.PRESSURE_DIFF_THRESHOLD:
                 output_groups_dict = instance.get_affected_nodes_groups(config.LEAK_AMOUNT, diverged_node,
@@ -70,13 +73,14 @@ def service_main():
 
 
 if __name__ == "__main__":
+    logging.basicConfig(filename=config.LOG_FILE, level=logging.DEBUG)
     # Kafka function
-    # service_main()    # TODO if used without the correct topic replace feature array with fake data
+    # service_main()    # if used without the correct topic replace feature array with fake data
 
     # Local testing
     main("2021-04-12")
 
     # Visualization
     # water_model = EPANETUtils(config.EPANET_NETWORK_FILE, "PDD").get_original_water_network_model()
-    # print([i for i in water_model.valves()])
+    # # print([i for i in water_model.valves()])
     # interactive_visualization(water_network_model=water_model)

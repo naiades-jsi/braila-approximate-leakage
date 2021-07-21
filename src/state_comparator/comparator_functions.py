@@ -120,13 +120,15 @@ def create_df_from_real_values(measurements_arr, epoch_timestamp, sensor_names):
     Creates a Dataframe from array.
 
     :param measurements_arr: Array of floats. Values represent pressure values.
-    :param epoch_timestamp: Epoch timestamp. Used for calculating hour of the day.
+    :param epoch_timestamp: Epoch timestamp In milliseconds. Used for calculating hour of the day.
     :param sensor_names: Names of the sensors which will be compared.
     :return: Returns a dataframe containing the actual values mapped to sensors and hours.
     """
     hours_in_a_day = 24
     num_of_sensors = len(sensor_names)
-    dt_time = datetime.fromtimestamp(epoch_timestamp)
+    epoch_seconds = epoch_timestamp / 1000
+    dt_time = datetime.fromtimestamp(epoch_seconds)
+
     actual_values_df = pd.DataFrame(columns=sensor_names,
                                     index=[hour_of_day for hour_of_day in range(0, hours_in_a_day)])
 
@@ -140,9 +142,3 @@ def create_df_from_real_values(measurements_arr, epoch_timestamp, sensor_names):
 
     return actual_values_df
 
-
-# for sensor_key in epanet_simulated_df:
-#     diff_array = (epanet_simulated_df[sensor_key].sort_index().to_numpy() -
-#                   actual_values_df[sensor_key].sort_index().to_numpy())
-#
-#     diff_df[sensor_key] = pd.Series(diff_array, index=epanet_simulated_df[sensor_key].index)

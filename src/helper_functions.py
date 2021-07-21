@@ -30,17 +30,15 @@ def visualize_node_groups(critical_node_name, node_groups_dict, epanet_file_path
     # colors_arr = ["#9FE2BF", "#6495ED", "#FF7F50", "#DE3163"]
 
     # create new dict without lps
-    node_groups_dict_without_lps = dict()
+    node_groups_dict_without_lps = node_groups_dict.copy()
     group_colors = dict()
     for index, group_name in enumerate(node_groups_dict):
         group_colors[group_name] = colors_arr[index]
-        node_groups_dict_without_lps[group_name] = dict()
 
         group = node_groups_dict[group_name]
-        for node_name in group:
-            new_name = node_name.replace(", " + str(leak_amount) + "LPS", "")
-            new_name = new_name.replace("Node_", "")
-            node_groups_dict_without_lps[group_name][new_name] = node_groups_dict[group_name][node_name]
+        for arr_index, node_name in enumerate(group):
+            new_name = node_name.replace("Node_", "")
+            node_groups_dict_without_lps[group_name][arr_index] = new_name
 
     # Create edge trace
     edge_trace = plotly.graph_objs.Scatter(

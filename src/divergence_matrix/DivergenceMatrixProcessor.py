@@ -2,6 +2,8 @@ import pandas as pd
 from jenkspy import jenks_breaks
 from src.divergence_matrix.groups_helper_functions import optimal_number_of_groups
 
+import src.configfile as config
+
 from copy import deepcopy
 
 
@@ -219,13 +221,29 @@ class DivergenceMatrixProcessor:
         return cutoff_indexes
 
     def generate_groups_dict(self, cutoff_indexes, series_node_value, timestamp):
+        """
+        TODO add documentation
+        :param cutoff_indexes:
+        :param series_node_value:
+        :param timestamp:
+        :return:
+        """
         # group_names = ["MINIMALLY_AFFECTED", "NORMAL_AFFECTED", "SEVERE_AFFECTED", "CRITICALLY_AFFECTED"]
         groups_dict = dict()
 
         for index in range(0, len(cutoff_indexes) - 1):
             group_name = "{}-AFFECTED-GROUP".format(index)
-            groups_dict[group_name] = series_node_value[cutoff_indexes[index]:cutoff_indexes[index + 1]]\
-                .set_index("index")[timestamp].to_dict()
+            replace_str = ", {:.1f}LPS".format(config.LEAK_AMOUNT)
+
+            nodes_list = list(series_node_value[cutoff_indexes[index]:cutoff_indexes[index + 1]]
+                              .set_index("index")[timestamp].index)
+            nodes_list = [node_name.replace(replace_str, "") for node_name in nodes_list]
+            groups_dict[group_name] = nodes_list
+
+            # # Previous code - it also included pressure difference
+            # group_name = "{}-AFFECTED-GROUP".format(index)
+            # groups_dict[group_name] = series_node_value[cutoff_indexes[index]:cutoff_indexes[index + 1]]\
+            #     .set_index("index")[timestamp].to_dict()
 
         return groups_dict
 
