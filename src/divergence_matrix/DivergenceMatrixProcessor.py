@@ -222,11 +222,18 @@ class DivergenceMatrixProcessor:
 
     def generate_groups_dict(self, cutoff_indexes, series_node_value, timestamp):
         """
-        TODO add documentation
-        :param cutoff_indexes:
-        :param series_node_value:
-        :param timestamp:
-        :return:
+        Method prepares the data (replaces strings) and generates groups of nodes which it stores in a dictionary.
+        The dictionary is then returned and used in other applications so the format shouldn't be changed.
+        Dictionary is of form:
+        {
+        "0-AFFECTED-GROUP": array_of_nodes,
+        "1-AFFECTED-GROUP": ['760-A', '763-A', '751-A', '748-A', 'Jonctiune-J-26', ...]
+        }
+
+        :param cutoff_indexes: Array of indexes. At each index a group either starts or ends.
+        :param series_node_value: Series/array from which the node names are taken.
+        :param timestamp: Time of the simulation at which the data should be extracted. Usually 10 am or 36000s.
+        :return: Returns the dictionary described above.
         """
         # group_names = ["MINIMALLY_AFFECTED", "NORMAL_AFFECTED", "SEVERE_AFFECTED", "CRITICALLY_AFFECTED"]
         groups_dict = dict()
@@ -238,6 +245,7 @@ class DivergenceMatrixProcessor:
             nodes_list = list(series_node_value[cutoff_indexes[index]:cutoff_indexes[index + 1]]
                               .set_index("index")[timestamp].index)
             nodes_list = [node_name.replace(replace_str, "") for node_name in nodes_list]
+            nodes_list = [node_name.replace("Node_", "") for node_name in nodes_list]   # TODO remove adding Node_ in the start ?
             groups_dict[group_name] = nodes_list
 
             # # Previous code - it also included pressure difference
