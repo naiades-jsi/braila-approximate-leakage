@@ -7,6 +7,8 @@ To run the project use Python3. Example command:
 If you wish to run the project on Atena as a service use the following:    
 ```pm2 start main.py --name braila_group_finder --interpreter python3```
 
+More secure command so that we ensure that the service doesn't consume more memory than it should:
+```pm2 start main.py --name braila_group_finder --interpreter python3 --max-memory-restart 7000M```
 
 ## Kafka related command
 Make sure that you are logged in as kafka user with proper permissions before running these commands.  
