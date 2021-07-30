@@ -235,11 +235,11 @@ class DivergenceMatrixProcessor:
         :param timestamp: Time of the simulation at which the data should be extracted. Usually 10 am or 36000s.
         :return: Returns the dictionary described above.
         """
-        # group_names = ["MINIMALLY_AFFECTED", "NORMAL_AFFECTED", "SEVERE_AFFECTED", "CRITICALLY_AFFECTED"]
         groups_dict = dict()
 
         for index in range(0, len(cutoff_indexes) - 1):
-            group_name = "{}-AFFECTED-GROUP".format(index)
+            group_name = "{}".format(index)
+            # removed this to be transferable "{}-AFFECTED-GROUP".format(index)
             replace_str = ", {:.1f}LPS".format(config.LEAK_AMOUNT)
 
             nodes_list = list(series_node_value[cutoff_indexes[index]:cutoff_indexes[index + 1]]

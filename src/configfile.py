@@ -38,20 +38,25 @@ PUMPS_TUPLES = [("braila_flow211206H360.csv", "Jonctiune-3974"),
 # "braila_flow211306H360.csv"] = "763-B"      # ("RaduNegruMare", "763-B")
 # "braila_flow318505H498.csv"] = "760-B"      # ("RaduNegru2", "760-B")
 
+# # Nodes which to keep in the dataframes
+# SELECTED_NODES = ["SenzorComunarzi-NatVech", "SenzorCernauti-Sebesului", "SenzorChisinau-Titulescu",
+#                   "SenzorComunarzi-castanului", "Jonctiune-3974", "Jonctiune-J-3", "Jonctiune-J-19", "Jonctiune-2749"]
 
-# Nodes which to keep in the dataframes
-SELECTED_NODES = ["SenzorComunarzi-NatVech", "SenzorCernauti-Sebesului", "SenzorChisinau-Titulescu",
-                  "SenzorComunarzi-castanului", "Jonctiune-3974", "Jonctiune-J-3", "Jonctiune-J-19", "Jonctiune-2749"]
 
+# order in array is important !!, since it is mapped by index
 KAFKA_NODES_ORDER = ["Jonctiune-J-3", "Jonctiune-3974", "Jonctiune-2749", "Jonctiune-J-19", "SenzorComunarzi-NatVech",
                      "SenzorComunarzi-castanului", "SenzorChisinau-Titulescu", "SenzorCernauti-Sebesului"]
 
 # KAFKA related
 HOST_AND_PORT = "194.249.231.11:9092"
 
+TOPIC = "features_braila_leakage_detection"
+OUTPUT_TOPIC = "braila_leakage"
+
+# TODO remove ?
 # Names of the topics that the Kafka consumer should consume
-TOPICS = ["measurements_node_braila_pressure5770", "measurements_node_braila_pressure5771",
-          "measurements_node_braila_pressure5772", "measurements_node_braila_pressure5773",
-          "anomalies_braila_flow_211106H360", "anomalies_braila_flow_211206H360",
-          "anomalies_braila_flow_211306H360", "anomalies_braila_flow_318505H498",
-          ]
+# TOPICS = ["measurements_node_braila_pressure5770", "measurements_node_braila_pressure5771",
+#           "measurements_node_braila_pressure5772", "measurements_node_braila_pressure5773",
+#           "anomalies_braila_flow_211106H360", "anomalies_braila_flow_211206H360",
+#           "anomalies_braila_flow_211306H360", "anomalies_braila_flow_318505H498",
+#           ]
