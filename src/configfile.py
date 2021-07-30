@@ -51,7 +51,7 @@ KAFKA_NODES_ORDER = ["Jonctiune-J-3", "Jonctiune-3974", "Jonctiune-2749", "Jonct
 HOST_AND_PORT = "194.249.231.11:9092"
 
 TOPIC = "features_braila_leakage_detection"
-OUTPUT_TOPIC = "braila_leakage"
+OUTPUT_TOPIC = "braila_leakage_groups"
 
 # TODO remove ?
 # Names of the topics that the Kafka consumer should consume
