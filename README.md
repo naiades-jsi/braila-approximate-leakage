@@ -21,3 +21,6 @@ Command to get latest messages (change the offset accordingly):
 
 Command to get all the messages since the beginning:   
 ```~/kafka/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic features_braila_leakage_detection --from-beginning```
+
+Start a simple http server with pm2 and python:   
+```pm2 start 'python3 -m http.server 8888' --name plotly_chart_serve```

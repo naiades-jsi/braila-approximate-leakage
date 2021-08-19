@@ -132,7 +132,7 @@ def create_df_from_real_values(measurements_arr, epoch_timestamp, sensor_names):
     actual_values_df = pd.DataFrame(columns=sensor_names,
                                     index=[hour_of_day for hour_of_day in range(0, hours_in_a_day)])
 
-    print("Calculating for time: ", dt_time)
+    # TODO remove print("Calculating for time: ", dt_time)
     for sensor_index in range(0, num_of_sensors):
         for hour_index in range(0, hours_in_a_day):
             hour = (hour_index % hours_in_a_day)
