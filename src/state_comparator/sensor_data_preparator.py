@@ -4,7 +4,7 @@ from src.epanet.EPANETUtils import EPANETUtils
 import src.configfile as config
 
 
-def load_and_prepare_sensor_data(path_to_data_dir, sensor_files, pump_files):
+def load_and_prepare_sensor_data(path_to_data_dir, sensor_files, pump_files, resampling_interval="1H"):
     """
     Function reads the data from all the files into two dictionaries of dataframes. For the pump files it also converts
     the analog_2 column to the meters unit and discards all the other columns. It then resamples all the data to 1 hour
@@ -14,6 +14,7 @@ def load_and_prepare_sensor_data(path_to_data_dir, sensor_files, pump_files):
     :param path_to_data_dir: Path to the directory in which the files for sensors/pumps are stored.
     :param sensor_files: Array of strings containing names of the csv sensors files.
     :param pump_files: Array of strings containing names of the csv pump files.
+    :param resampling_interval: TODO add documentation
     :return: Returns a dictionary of dataframe with timestamps and pressure in meters.
     """
     # Reads for all the 8 sensors and prepares it in a standard form for comparison
@@ -49,10 +50,10 @@ def load_and_prepare_sensor_data(path_to_data_dir, sensor_files, pump_files):
 
     # sampling data to one hour
     for sensor_name in sensors_dict:
-        sensors_dict[sensor_name] = sensors_dict[sensor_name].resample("1H").mean()
+        sensors_dict[sensor_name] = sensors_dict[sensor_name].resample(resampling_interval).mean()
 
     for pump_name in pumps_dict:
-        pumps_dict[pump_name] = pumps_dict[pump_name].resample("1H").mean()
+        pumps_dict[pump_name] = pumps_dict[pump_name].resample(resampling_interval).mean()
 
     sensors_pumps_dict = rename_dict_keys_and_merge(sensors_dict, pumps_dict)
     return sensors_pumps_dict

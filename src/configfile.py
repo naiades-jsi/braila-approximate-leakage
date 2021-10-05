@@ -4,6 +4,9 @@ LEAK_AMOUNT = 4.0
 # If difference between simulated and actual data is bigger than this then alert
 PRESSURE_DIFF_THRESHOLD = 1.1
 
+# official formula: 10^5 / /(1000 * 9,80655) = 10,197
+BARS_TO_METERS = 10.197
+
 # Data directories
 DATA_DIRECTORY = "./data/"
 SENSOR_DIR = DATA_DIRECTORY + "sensor_data/"
@@ -11,6 +14,7 @@ DIVERGENCE_DATA_DIR = DATA_DIRECTORY + "divergence_matrix/"
 EPANET_NETWORKS = DATA_DIRECTORY + "epanet_networks/"
 
 EPANET_NETWORK_FILE = EPANET_NETWORKS + "RaduNegru24May2021_2.2.inp"
+# EPANET_NETWORK_FILE = EPANET_NETWORKS + "RaduNegru23July2021_2.2.inp"
 DIVERGENCE_MATRIX_FILE = DIVERGENCE_DATA_DIR + "Divergence_M.pickle"
 
 LOG_FILE = "logs/service-log.log"

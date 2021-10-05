@@ -24,10 +24,10 @@ def visualize_node_groups(critical_node_name, node_groups_dict, epanet_file_path
     if len(node_groups_dict) > 10:
         raise Exception("Visualization is currently supported for only 10 groups !")
 
-    # TODO make colors better when there are less groups
-    colors_arr = ["#52f247", "#84e100", "#a4cf00", "#bdbb00", "#d0a600",
-                  "#e09000", "#ea7800", "#f15e00", "#f24123", "#ef1b3a"]
-    # colors_arr = ["#9FE2BF", "#6495ED", "#FF7F50", "#DE3163"]
+    # TODO make colors better when there are less groups. change when using more than 5 groups
+    # colors_arr = ["#52f247", "#84e100", "#a4cf00", "#bdbb00", "#d0a600",
+    #               "#e09000", "#ea7800", "#f15e00", "#f24123", "#ef1b3a"]
+    colors_arr = ["#9FE2BF", "#6495ED", "#FF7F50", "#DE3163"]
 
     # create new dict without lps
     node_groups_dict_without_lps = node_groups_dict.copy()
