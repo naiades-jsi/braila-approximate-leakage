@@ -26,7 +26,7 @@ def main(date):
         print(node_groups_dict)
 
         # arr_of_nodes, df = instance.nodes_which_effect_the_sensors_most(16.0, diverged_node)
-        # visualize_node_groups(diverged_node, node_groups_dict, config.EPANET_NETWORK_FILE, config.LEAK_AMOUNT)
+        visualize_node_groups(diverged_node, node_groups_dict[config.OUTPUT_JSON_NODES_KEY], config.EPANET_NETWORK_FILE, config.LEAK_AMOUNT)
 
 
 def service_main():
@@ -51,7 +51,10 @@ def service_main():
             diverged_node, deviation = analyse_kafka_topic_and_find_critical_sensor(current_timestamp, feature_arr,
                                                                                     epanet_simulated_df,
                                                                                     config.KAFKA_NODES_ORDER)
-            diverged_str = "Most diverged node is: {}. Deviation is: {:.2f}".format(diverged_node, deviation)
+            # TODO temp time
+            dt_time = datetime.fromtimestamp(current_timestamp / 1000)
+            diverged_str = "Most diverged node is: {}. Deviation is: {:.2f}. At datetime "\
+                .format(diverged_node, deviation, dt_time)
             logging.info(diverged_str)
 
             if deviation > config.PRESSURE_DIFF_THRESHOLD:
@@ -60,7 +63,10 @@ def service_main():
                                                                         method="jenks_natural_breaks+optimal_groups")
 
                 future = producer.send(config.OUTPUT_TOPIC, output_groups_dict)
-                # print(output_topic + ": " + str(output_groups_dict))
+                visualize_node_groups(diverged_node, output_groups_dict[config.OUTPUT_JSON_NODES_KEY],
+                                      config.EPANET_NETWORK_FILE, config.LEAK_AMOUNT,
+                                      filename="../grafana-files/braila_network.html")
+                print("Alert !!")
 
                 try:
                     record_metadata = future.get(timeout=10)

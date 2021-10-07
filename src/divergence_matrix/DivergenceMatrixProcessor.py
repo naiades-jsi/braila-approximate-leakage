@@ -1,3 +1,5 @@
+from datetime import datetime, timezone
+
 import pandas as pd
 from jenkspy import jenks_breaks
 from src.divergence_matrix.groups_helper_functions import optimal_number_of_groups
@@ -164,9 +166,9 @@ class DivergenceMatrixProcessor:
         :param selected_node: The node which interest us. A single string with node name. Example: "763-B"
         :return: Returns an array of nodes which effect the selected nodes the most in terms of leakage.
         """
-        time_stamp = 36000
+        simulation_time_stamp = 36000
         groups_indexes = None
-        series_at_timestamp = self.extract_df_with_specific_leak_on_one_node(leak_amount, selected_node)[time_stamp]
+        series_at_timestamp = self.extract_df_with_specific_leak_on_one_node(leak_amount, selected_node)[simulation_time_stamp]
 
         # Series must be sorted for all the following steps
         sorted_df_at_timestamp = series_at_timestamp.sort_values(ascending=True).reset_index()
@@ -174,10 +176,10 @@ class DivergenceMatrixProcessor:
         if method == "descending_values":
             groups_indexes = self.get_cutoff_indexes_by_descending_values(series_len, num_of_groups)
         elif method == "jenks_natural_breaks":
-            sorted_series = sorted_df_at_timestamp[time_stamp]
+            sorted_series = sorted_df_at_timestamp[simulation_time_stamp]
             groups_indexes = self.get_cutoff_indexes_by_jenks_natural_breaks(sorted_series, num_of_groups)
         elif method == "jenks_natural_breaks+optimal_groups":
-            sorted_series = sorted_df_at_timestamp[time_stamp]
+            sorted_series = sorted_df_at_timestamp[simulation_time_stamp]
             groups_indexes = self.get_cutoff_indexes_by_jenks_natural_breaks(sorted_series, None)
         elif method == "kde":
             print("Not implemented")
@@ -185,7 +187,14 @@ class DivergenceMatrixProcessor:
             print("Not implemented")
 
         # print(groups_indexes)
-        return self.generate_groups_dict(groups_indexes, sorted_df_at_timestamp, time_stamp)
+        groups_dict = self.generate_groups_dict(groups_indexes, sorted_df_at_timestamp, simulation_time_stamp)
+        # TODO make timestamp bullet proof, hardcode timezone
+        current_timestamp = int(datetime.now().timestamp())
+        output_json = {
+            config.OUTPUT_JSON_TIME_KEY: current_timestamp,
+            config.OUTPUT_JSON_NODES_KEY: groups_dict
+        }
+        return output_json
 
     def get_cutoff_indexes_by_descending_values(self, series_len, num_of_groups):
         group_size = round(series_len / num_of_groups)

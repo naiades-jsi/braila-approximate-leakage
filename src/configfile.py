@@ -57,10 +57,5 @@ HOST_AND_PORT = "194.249.231.11:9092"
 TOPIC = "features_braila_leakage_detection"
 OUTPUT_TOPIC = "braila_leakage_groups"
 
-# TODO remove ?
-# Names of the topics that the Kafka consumer should consume
-# TOPICS = ["measurements_node_braila_pressure5770", "measurements_node_braila_pressure5771",
-#           "measurements_node_braila_pressure5772", "measurements_node_braila_pressure5773",
-#           "anomalies_braila_flow_211106H360", "anomalies_braila_flow_211206H360",
-#           "anomalies_braila_flow_211306H360", "anomalies_braila_flow_318505H498",
-#           ]
+OUTPUT_JSON_NODES_KEY = "data"
+OUTPUT_JSON_TIME_KEY = "timestamp"
