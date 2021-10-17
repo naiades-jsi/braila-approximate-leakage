@@ -35,6 +35,7 @@ PUMPS_TUPLES = [("braila_flow211206H360.csv", "Jonctiune-3974"),
                 ("braila_flow318505H498.csv", "Jonctiune-J-19"),
                 ("braila_flow211306H360.csv", "Jonctiune-2749")
                 ]
+
 # The current tuples are made from the mail (Marius)
 # almost correct but these were not provided by CUP Braila
 # "braila_flow211206H360.csv"] = "748-B"      # ("Apollo", "748-B"), ,
@@ -50,6 +51,9 @@ PUMPS_TUPLES = [("braila_flow211206H360.csv", "Jonctiune-3974"),
 # order in array is important !!, since it is mapped by index
 KAFKA_NODES_ORDER = ["Jonctiune-J-3", "Jonctiune-3974", "Jonctiune-2749", "Jonctiune-J-19", "SenzorComunarzi-NatVech",
                      "SenzorComunarzi-castanului", "SenzorChisinau-Titulescu", "SenzorCernauti-Sebesului"]
+# # TODO newest order - uncomment and replace
+# KAFKA_NODES_ORDER = ["Jonctiune-3974", "Jonctiune-2749", "Jonctiune-J-19", "SenzorComunarzi-NatVech",
+#                      "SenzorComunarzi-castanului", "SenzorChisinau-Titulescu", "SenzorCernauti-Sebesului"]
 
 # KAFKA related
 HOST_AND_PORT = "194.249.231.11:9092"
