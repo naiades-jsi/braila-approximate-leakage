@@ -24,3 +24,6 @@ Command to get all the messages since the beginning:
 
 Start a simple http server with pm2 and python:   
 ```pm2 start 'python3 -m http.server 8888' --name plotly_chart_serve```
+
+Check for messages from this app:    
+```~/kafka/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic braila_leakage_groups --from-beginning```

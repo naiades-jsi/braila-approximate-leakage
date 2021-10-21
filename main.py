@@ -33,6 +33,7 @@ def service_main():
     logging.info("Started the application !")
 
     # Data/objects that need to be created just one time
+    # TODO add group_id to Consumer for autocommit of messages
     consumer = KafkaConsumer(bootstrap_servers=config.HOST_AND_PORT, auto_offset_reset='earliest',
                              value_deserializer=lambda v: loads(v.decode('utf-8')))
     producer = KafkaProducer(bootstrap_servers=config.HOST_AND_PORT,
@@ -53,7 +54,7 @@ def service_main():
                                                                                     config.KAFKA_NODES_ORDER)
             # TODO temp time
             dt_time = datetime.fromtimestamp(current_timestamp / 1000)
-            diverged_str = "Most diverged node is: {}. Deviation is: {:.2f}. At datetime "\
+            diverged_str = "Most diverged node is: {}. Deviation is: {:.2f}. For values at datetime: {}"\
                 .format(diverged_node, deviation, dt_time)
             logging.info(diverged_str)
 
@@ -66,8 +67,8 @@ def service_main():
                 visualize_node_groups(diverged_node, output_groups_dict[config.OUTPUT_JSON_NODES_KEY],
                                       config.EPANET_NETWORK_FILE, config.LEAK_AMOUNT,
                                       filename="../grafana-files/braila_network.html")
-                print("Alert !!")
-
+                logging.info("Alert !!")
+                logging.info("")
                 try:
                     record_metadata = future.get(timeout=10)
                 except Exception as e:
