@@ -1,9 +1,10 @@
 from datetime import datetime, timedelta
 import math
-
+import src.configfile as conf
 import pandas as pd
 import numpy as np
 
+from src.state_comparator.NaNSensorsException import NaNSensorsException
 from src.state_comparator.sensor_data_preparator import load_and_prepare_sensor_data, create_epanet_pressure_df
 
 
@@ -57,6 +58,29 @@ def generate_error_dataframe(difference_df):
     return error_dataframe
 
 
+def missing_values_check(df, minimum_present_values):
+    """
+    Function checks if there are any missing values in the dataframe.
+
+    :param df: Dataframe which is checked for missing values.
+    :param minimum_present_values: TODO
+    :return: Returns None if all sensors are OK else return all of the sensors where conditions are not met.
+    """
+    sensors_with_missing_values = []
+    for column in df.columns:
+        not_nan_values = len(df[column].dropna(inplace=False))
+
+        if not_nan_values <= minimum_present_values:
+            sensors_with_missing_values.append(column)
+            print("naaa", column, not_nan_values)
+
+    if len(sensors_with_missing_values) < 1:
+        # If all sensors are OK return None
+        return None
+    else:
+        raise NaNSensorsException(sensors_with_missing_values)
+
+
 def find_most_critical_sensor(error_dataframe, error_metric_column="Mean-error"):
     """
     Function finds the node with the highest absolute value (depending on the error_metric_column parameter)
@@ -95,7 +119,8 @@ def analyse_data_and_find_critical_sensor(path_to_data_dir, sensor_files, pump_f
     return critical_node, deviation
 
 
-def analyse_kafka_topic_and_find_critical_sensor(timestamp, kafka_array, epanet_simulated_df, sensor_names):
+def analyse_kafka_topic_and_find_critical_sensor(timestamp, kafka_array, epanet_simulated_df, sensor_names,
+                                                 minimum_present_values=conf.MINIMUM_PRESENT_VALUES_THRESHOLD):
     """
     Combines multiple functions to find the sensor which deviates the most and returns it along with the deviated value.
     First is converts the kafka array to a DataFrame, then it calculates the difference between the epanet simulated
@@ -105,14 +130,20 @@ def analyse_kafka_topic_and_find_critical_sensor(timestamp, kafka_array, epanet_
     :param kafka_array: Array of floats. Values represent pressure values.
     :param epanet_simulated_df: Dataframe which was produced with EPANET and servers as a benchmark.
     :param sensor_names: Names of the sensors which will be compared.
+    :param minimum_present_values: TODO
     :return: Returns the most critical sensor and the error (deviation) value.
     """
     actual_values_df = create_df_from_real_values(kafka_array, timestamp, sensor_names)
+    # created dataframe above is ok !
+    # TODO introduce advanced error handling
+    missing_values_check(actual_values_df, minimum_present_values)
+
     difference_df = epanet_simulated_df.sub(actual_values_df)
     error_df = generate_error_dataframe(difference_df)
 
     critical_node, deviation = find_most_critical_sensor(error_df, error_metric_column="Mean-error")
     return critical_node, deviation
+
 
 
 def create_df_from_real_values(measurements_arr, epoch_timestamp, sensor_names):
@@ -126,6 +157,7 @@ def create_df_from_real_values(measurements_arr, epoch_timestamp, sensor_names):
     """
     hours_in_a_day = 24
     num_of_sensors = len(sensor_names)
+    # TODO add a check that this are really milliseconds not seconds
     epoch_seconds = epoch_timestamp / 1000
     dt_time = datetime.fromtimestamp(epoch_seconds)
 

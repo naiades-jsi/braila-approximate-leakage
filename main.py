@@ -13,9 +13,10 @@ import logging
 def main(date):
     # logging.info("Started the application !")
     print("Starting analysis ... ... ")
+    # Change nodes order if epanet file changes
     diverged_node, deviation = analyse_data_and_find_critical_sensor(config.SENSOR_DIR, config.SENSOR_FILES,
                                                                      config.PUMP_FILES, config.EPANET_NETWORK_FILE,
-                                                                     config.KAFKA_NODES_ORDER, date)
+                                                                     config.LOCAL_TESTING_NODES_ORDER, date)
 
     print("Most diverged node is: " + diverged_node + ". Deviation is: " + str(deviation))
     if deviation > config.PRESSURE_DIFF_THRESHOLD:
@@ -59,6 +60,7 @@ def service_main():
             logging.info(diverged_str)
 
             if deviation > config.PRESSURE_DIFF_THRESHOLD:
+                # TODO replace config.LEAK_AMOUNT with deviation / 24 round and set upper limit
                 output_groups_dict = instance.get_affected_nodes_groups(config.LEAK_AMOUNT, diverged_node,
                                                                         num_of_groups=4,
                                                                         method="jenks_natural_breaks+optimal_groups")
@@ -74,6 +76,14 @@ def service_main():
                 except Exception as e:
                     logging.info("Producer error: " + str(e))
 
+        except NaNSensorsException as e:
+            logging.info("Sensor input data missing: " + str(e))
+            output_json = {
+                config.OUTPUT_JSON_TIME_KEY: int(datetime.now().timestamp()),
+                config.OUTPUT_JSON_NODES_KEY: {"0": "Sensors reporting missing data: {}".format(e.sensors_list)},
+            }
+            producer.send(config.OUTPUT_TOPIC, output_json)
+
         except Exception as e:
             logging.info("Consumer error: " + str(e))
 
@@ -81,6 +91,7 @@ def service_main():
 if __name__ == "__main__":
     logging.basicConfig(filename=config.LOG_FILE, level=logging.INFO, format="%(asctime)s %(levelname)-8s %(message)s",
                         datefmt='%Y-%m-%d %H:%M:%S')
+
     # Kafka function
     service_main()    # if used without the correct topic replace feature array with fake data
 

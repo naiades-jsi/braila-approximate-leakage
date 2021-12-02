@@ -1,3 +1,6 @@
+# Minimum count of values that need to be present to process data
+MINIMUM_PRESENT_VALUES_THRESHOLD = 21
+
 # Amount with which to run the simulation
 LEAK_AMOUNT = 4.0
 
@@ -41,6 +44,9 @@ PUMPS_TUPLES = [("braila_flow211206H360.csv", "Jonctiune-3974"),
 #                 ("braila_flow211306H360.csv", "RaduNegruMare")
 #                 ]
 
+LOCAL_TESTING_NODES_ORDER = ["Jonctiune-3974", "Jonctiune-J-3", "Jonctiune-2749", "Jonctiune-J-19",
+                             "SenzorComunarzi-NatVech", "SenzorComunarzi-castanului", "SenzorChisinau-Titulescu",
+                             "SenzorCernauti-Sebesului"]
 
 # # KAFKA
 # order in array is important !!, since it is mapped by index
@@ -55,7 +61,6 @@ OUTPUT_TOPIC = "braila_leakage_groups"
 
 OUTPUT_JSON_NODES_KEY = "data"
 OUTPUT_JSON_TIME_KEY = "timestamp"
-
 
 # OUTDATED
 # The current tuples are made from the mail (Marius)
