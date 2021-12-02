@@ -74,7 +74,6 @@ def missing_values_check(df, minimum_present_values):
 
         if not_nan_values <= minimum_present_values:
             sensors_with_missing_values.append(column)
-            print("naaa", column, not_nan_values)
 
     if len(sensors_with_missing_values) < 1:
         # If all sensors are OK return None
