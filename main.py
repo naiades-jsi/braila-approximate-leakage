@@ -69,7 +69,8 @@ def service_main():
                 visualize_node_groups(diverged_node, output_groups_dict[config.OUTPUT_JSON_NODES_KEY],
                                       config.EPANET_NETWORK_FILE, config.LEAK_AMOUNT,
                                       filename="../grafana-files/braila_network.html")
-                logging.info("Alert !!")
+                logging.info("Alert !! Deviation reached over threshold -Sensor: {} -Time: {}".format(
+                    diverged_node, dt_time))
                 logging.info("")
                 try:
                     record_metadata = future.get(timeout=10)
