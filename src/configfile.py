@@ -1,5 +1,5 @@
 # Minimum count of values that need to be present to process data
-MINIMUM_PRESENT_VALUES_THRESHOLD = 21
+MINIMUM_PRESENT_VALUES_THRESHOLD = 14
 
 # Amount with which to run the simulation
 LEAK_AMOUNT = 4.0
