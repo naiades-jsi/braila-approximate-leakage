@@ -254,13 +254,8 @@ class DivergenceMatrixProcessor:
             nodes_list = list(series_node_value[cutoff_indexes[index]:cutoff_indexes[index + 1]]
                               .set_index("index")[timestamp].index)
             nodes_list = [node_name.replace(replace_str, "") for node_name in nodes_list]
-            nodes_list = [node_name.replace("Node_", "") for node_name in nodes_list]   # TODO remove adding Node_ in the start ?
+            nodes_list = [node_name.replace("Node_", "") for node_name in nodes_list]
             groups_dict[group_name] = nodes_list
-
-            # # Previous code - it also included pressure difference
-            # group_name = "{}-AFFECTED-GROUP".format(index)
-            # groups_dict[group_name] = series_node_value[cutoff_indexes[index]:cutoff_indexes[index + 1]]\
-            #     .set_index("index")[timestamp].to_dict()
 
         return groups_dict
 

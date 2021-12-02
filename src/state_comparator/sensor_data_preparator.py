@@ -14,7 +14,7 @@ def load_and_prepare_sensor_data(path_to_data_dir, sensor_files, pump_files, res
     :param path_to_data_dir: Path to the directory in which the files for sensors/pumps are stored.
     :param sensor_files: Array of strings containing names of the csv sensors files.
     :param pump_files: Array of strings containing names of the csv pump files.
-    :param resampling_interval: TODO add documentation
+    :param resampling_interval: String. Interval to which the data should be resampled, checkout pandas resample.
     :return: Returns a dictionary of dataframe with timestamps and pressure in meters.
     """
     # Reads for all the 8 sensors and prepares it in a standard form for comparison

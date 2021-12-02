@@ -63,9 +63,11 @@ def missing_values_check(df, minimum_present_values):
     Function checks if there are any missing values in the dataframe.
 
     :param df: Dataframe which is checked for missing values.
-    :param minimum_present_values: TODO
+    :param minimum_present_values: Int, minimum number of values that should be present in each column of the real
+    dataframe.
     :return: Returns None if all sensors are OK else return all of the sensors where conditions are not met.
     """
+    # TODO extra error handling can be added here
     sensors_with_missing_values = []
     for column in df.columns:
         not_nan_values = len(df[column].dropna(inplace=False))
@@ -130,12 +132,11 @@ def analyse_kafka_topic_and_find_critical_sensor(timestamp, kafka_array, epanet_
     :param kafka_array: Array of floats. Values represent pressure values.
     :param epanet_simulated_df: Dataframe which was produced with EPANET and servers as a benchmark.
     :param sensor_names: Names of the sensors which will be compared.
-    :param minimum_present_values: TODO
+    :param minimum_present_values: Int, minimum number of values that should be present in each column of the real
+    dataframe.
     :return: Returns the most critical sensor and the error (deviation) value.
     """
     actual_values_df = create_df_from_real_values(kafka_array, timestamp, sensor_names)
-    # created dataframe above is ok !
-    # TODO introduce advanced error handling
     missing_values_check(actual_values_df, minimum_present_values)
 
     difference_df = epanet_simulated_df.sub(actual_values_df)
@@ -143,7 +144,6 @@ def analyse_kafka_topic_and_find_critical_sensor(timestamp, kafka_array, epanet_
 
     critical_node, deviation = find_most_critical_sensor(error_df, error_metric_column="Mean-error")
     return critical_node, deviation
-
 
 
 def create_df_from_real_values(measurements_arr, epoch_timestamp, sensor_names):
@@ -157,14 +157,20 @@ def create_df_from_real_values(measurements_arr, epoch_timestamp, sensor_names):
     """
     hours_in_a_day = 24
     num_of_sensors = len(sensor_names)
-    # TODO add a check that this are really milliseconds not seconds
-    epoch_seconds = epoch_timestamp / 1000
-    dt_time = datetime.fromtimestamp(epoch_seconds)
 
+    # Comparision if the timestamp is in milliseconds or seconds
+    timestamp_digits = len(str(epoch_timestamp))
+    if timestamp_digits == 10:
+        epoch_seconds = epoch_timestamp
+    elif timestamp_digits == 13:
+        epoch_seconds = epoch_timestamp / 1000
+    else:
+        raise Exception("Timestamp is not in Unix milliseconds or seconds !")
+
+    dt_time = datetime.fromtimestamp(epoch_seconds)
     actual_values_df = pd.DataFrame(columns=sensor_names,
                                     index=[hour_of_day for hour_of_day in range(0, hours_in_a_day)])
 
-    # TODO remove print("Calculating for time: ", dt_time)
     for sensor_index in range(0, num_of_sensors):
         for hour_index in range(0, hours_in_a_day):
             hour = (hour_index % hours_in_a_day)

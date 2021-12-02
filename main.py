@@ -34,11 +34,11 @@ def service_main():
     logging.info("Started the application !")
 
     # Data/objects that need to be created just one time
-    # TODO add group_id to Consumer for autocommit of messages
-    consumer = KafkaConsumer(bootstrap_servers=config.HOST_AND_PORT, auto_offset_reset='earliest',
-                             value_deserializer=lambda v: loads(v.decode('utf-8')))
+    # if you want to read msgs from start use: auto_offset_reset="earliest", group_id makes sure msgs are commited
+    consumer = KafkaConsumer(bootstrap_servers=config.HOST_AND_PORT, group_id="braila_sensor_group",
+                             value_deserializer=lambda v: loads(v.decode("utf-8")))
     producer = KafkaProducer(bootstrap_servers=config.HOST_AND_PORT,
-                             value_serializer=lambda v: dumps(v).encode('utf-8'))
+                             value_serializer=lambda v: dumps(v).encode("utf-8"))
     consumer.subscribe(config.TOPIC)
     logging.info("Subscribed to topic: " + config.TOPIC)
 
@@ -53,7 +53,7 @@ def service_main():
             diverged_node, deviation = analyse_kafka_topic_and_find_critical_sensor(current_timestamp, feature_arr,
                                                                                     epanet_simulated_df,
                                                                                     config.KAFKA_NODES_ORDER)
-            # TODO temp time
+            # extra logging
             dt_time = datetime.fromtimestamp(current_timestamp / 1000)
             diverged_str = "Most diverged node is: {}. Deviation is: {:.2f}. For values at datetime: {}"\
                 .format(diverged_node, deviation, dt_time)
@@ -90,7 +90,7 @@ def service_main():
 
 if __name__ == "__main__":
     logging.basicConfig(filename=config.LOG_FILE, level=logging.INFO, format="%(asctime)s %(levelname)-8s %(message)s",
-                        datefmt='%Y-%m-%d %H:%M:%S')
+                        datefmt="%Y-%m-%d %H:%M:%S")
 
     # Kafka function
     service_main()    # if used without the correct topic replace feature array with fake data
