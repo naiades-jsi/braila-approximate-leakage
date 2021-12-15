@@ -3,6 +3,7 @@ import json
 import networkx as nx
 import wntr
 import pandas as pd
+from pyproj import Transformer
 
 
 class EPANETUtils:
@@ -160,6 +161,54 @@ class EPANETUtils:
                         # Break because there is usually just one connection between two nodes
                         # TODO check if this works if two nodes are connected with more than one pipe
                         break
+
+        # Writing to the file
+        with open(self.add_json_ending_if_not_in_file_name(file_name), 'w', encoding='utf-8') as outfile:
+            json.dump(node_dict, outfile, indent=4)
+
+    def generate_network_json_in_wgs84(self, water_network_model=None, file_name="water_network.json"):
+        """
+        Generates all real coordinates for nodes from EPANET/WNTR network.
+        Data is then written in the format like this:
+        node_name: {
+            "x": 730350.55,
+            "y": 420432.79
+        },
+        {...},
+        {...}
+
+        The method by default uses the network model which was provided in the constructor of the class but it can also
+        use any other model if specified.
+
+        If no file name is provided the method will use the default file name which is "water_network.json".
+        :param water_network_model: WNTR water network model to use, if none is provided the default model is used.
+        :param file_name:   Name of the file we want to store the data in.
+        """
+        if water_network_model is None:
+            water_network_model = self.get_original_water_network_model()
+
+        networkx_graph = water_network_model.get_graph()
+        dict_of_connections = nx.to_dict_of_lists(nx.Graph(networkx_graph))
+
+        # Filling the list of links, pipe name is key and the value is an array of the two nodes connected by it
+        dict_of_links = dict()
+        for node in dict_of_connections:
+            list_of_links = water_network_model.get_links_for_node(node)
+            for link in list_of_links:
+                if link not in dict_of_links:
+                    dict_of_links[link] = []
+                dict_of_links[link].append(node)
+
+        # The main dict which will be returned in the specified format
+        node_dict = dict()
+        transformer = Transformer.from_crs("epsg:3844", "WGS84")
+        for node in networkx_graph.nodes():
+            x, y = networkx_graph.nodes[node]['pos']
+            node_dict[node] = dict()
+
+            lat, lon = transformer.transform(y, x)
+            node_dict[node]["latitude"] = lat
+            node_dict[node]["longitude"] = lon
 
         # Writing to the file
         with open(self.add_json_ending_if_not_in_file_name(file_name), 'w', encoding='utf-8') as outfile:
