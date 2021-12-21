@@ -27,3 +27,48 @@ Start a simple http server with pm2 and python:
 
 Check for messages from this app:    
 ```~/kafka/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic braila_leakage_groups --from-beginning```
+
+## Service output description
+
+Below you see a sample output of the service.
+```
+{
+    "timestamp": 1637239315,        
+    "timestamp-proccessed-at": 1637239315,
+    "critical-sensor": "SenzorComunarzi-NatVech",
+    "deviation": 29.32,
+    "method": "JNB",
+    "epanet-file": "RaduNegru24May2021",
+    "data": [
+          {
+            "node-name": "760-A",
+            "latitude": 23.323,
+            "longitude": 47.232,
+            "group": 0,
+            "deviation": 2.2 
+          },
+          {
+            "node-name": "Jonctiune-J-26",
+            "latitude": 23.323,
+            "longitude": 47.232,
+            "group": 0,
+            "deviation": 2.2 
+          },
+          ...
+    ]
+}
+```
+
+Json keys above correspond to the following:
+- `"timestamp"`: UNIX timestamp of when the data was captured on the sensor.
+- `"timestamp-proccessed-at"`: UNIX timestamp of when the message was processed on the server.
+- `"critical-sensor"`: Name of the sensor on which the leak was detected.
+- `"deviation"`: Deviation from the simulated value.
+- `"method"`: Method used to perform grouping of the nodes.
+- `"epanet-file"`: Name/version of the EPANET file which was used to simulate the leak and generate node names.
+- `"data"`: List of all nodes.
+  - `"node-name"`: Name of the node corresponding to its name in EPANET.
+  - `"latitude"`: Latitude of the node.
+  - `"longitude"`: Longitude of the node.
+  - `"group"`: Severity group of the node (0 being most severe).
+  - `"deviation"`: Difference from the simulated value.
