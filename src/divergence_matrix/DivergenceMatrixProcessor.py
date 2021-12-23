@@ -19,6 +19,25 @@ class DivergenceMatrixProcessor:
         self.file_name = file_name
         self.array_of_divergence_dfs = pd.read_pickle(self.file_name)
 
+    def print_divergence_matrix_description(self):
+        """
+        Method provides a description of the divergence matrix that the class contains.
+        """
+        leak_step = round(abs(float(self.array_of_divergence_dfs[0].columns.name.split(",")[1].replace("LPS", "")) - \
+                              float(self.array_of_divergence_dfs[1].columns.name.split(",")[1].replace("LPS", ""))), 3)
+
+        description_string = \
+            f"""Divergence Matrix Description:
+        File: {self.file_name},
+        Number of leakage scenarios: {len(self.array_of_divergence_dfs)},
+        Number of nodes: {len(self.array_of_divergence_dfs[1].columns)},
+        Scenario simulation seconds duration: {max(self.array_of_divergence_dfs[0].index)},
+        Minimum placed leak: {self.array_of_divergence_dfs[0].columns.name.split(",")[1]},
+        Maximum placed leak: {self.array_of_divergence_dfs[-1].columns.name.split(",")[1]},
+        Placed leak step: {leak_step}LPS,      
+        """
+        print(description_string)
+
     def retrieve_indexes_with_specified_leak(self, leak_amount):
         """
         Finds indexes of dataframes where the desired leak was simulated.
@@ -170,7 +189,8 @@ class DivergenceMatrixProcessor:
         """
         simulation_time_stamp = 36000
         groups_indexes = None
-        series_at_timestamp = self.extract_df_with_specific_leak_on_one_node(leak_amount, selected_node)[simulation_time_stamp]
+        series_at_timestamp = self.extract_df_with_specific_leak_on_one_node(leak_amount, selected_node)[
+            simulation_time_stamp]
 
         # Series must be sorted for all the following steps
         sorted_df_at_timestamp = series_at_timestamp.sort_values(ascending=True).reset_index()
@@ -299,4 +319,3 @@ class DivergenceMatrixProcessor:
             groups_dict[group_name] = nodes_list
 
         return groups_dict
-
