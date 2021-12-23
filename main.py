@@ -27,7 +27,8 @@ def main(date):
         print(node_groups_dict)
 
         # arr_of_nodes, df = instance.nodes_which_effect_the_sensors_most(16.0, diverged_node)
-        visualize_node_groups(diverged_node, node_groups_dict[config.OUTPUT_JSON_NODES_KEY], config.EPANET_NETWORK_FILE, config.LEAK_AMOUNT)
+        visualize_node_groups(diverged_node, node_groups_dict[config.OUTPUT_JSON_NODES_KEY], config.EPANET_NETWORK_FILE,
+                              config.LEAK_AMOUNT)
 
 
 def service_main():
@@ -55,22 +56,30 @@ def service_main():
                                                                                     config.KAFKA_NODES_ORDER)
             # extra logging
             dt_time = datetime.fromtimestamp(current_timestamp / 1000)
-            diverged_str = "Most diverged node is: {}. Deviation is: {:.2f}. For values at datetime: {}"\
+            diverged_str = "Most diverged node is: {}. Deviation is: {:.2f}. For values at datetime: {}" \
                 .format(diverged_node, deviation, dt_time)
             logging.info(diverged_str)
 
             if deviation > config.PRESSURE_DIFF_THRESHOLD:
-                # TODO replace config.LEAK_AMOUNT with deviation / 24 round and set upper limit
-                output_groups_dict = instance.get_affected_nodes_groups(config.LEAK_AMOUNT, diverged_node,
-                                                                        num_of_groups=4,
-                                                                        method="jenks_natural_breaks+optimal_groups")
+                method = "jenks_natural_breaks"
+                groups_dict = instance.get_affected_nodes_groups(config.LEAK_AMOUNT, diverged_node,
+                                                                   num_of_groups=4,
+                                                                   method=method)
+                output_json = instance.prepare_output_json_meta_data(timestamp=current_timestamp,
+                                                                     sensor_with_leak=diverged_node,
+                                                                     sensor_deviation=deviation,
+                                                                     groups_dict=groups_dict,
+                                                                     method=method)
 
-                future = producer.send(config.OUTPUT_TOPIC, output_groups_dict)
-                visualize_node_groups(diverged_node, output_groups_dict[config.OUTPUT_JSON_NODES_KEY],
+                future = producer.send(config.OUTPUT_TOPIC, output_json)
+                # TODO adjust visualization ?
+                visualize_node_groups(diverged_node, groups_dict[config.OUTPUT_JSON_NODES_KEY],
                                       config.EPANET_NETWORK_FILE, config.LEAK_AMOUNT,
                                       filename="../grafana-files/braila_network.html")
-                logging.info("Alert !! Deviation reached over threshold -Sensor: {} -Time: {}".format(
-                    diverged_node, dt_time))
+
+                log_msg = "Alert !! Deviation reached over threshold -Sensor: {} -Time: {}"\
+                    .format(diverged_node, dt_time)
+                logging.info(log_msg)
                 logging.info("")
                 try:
                     record_metadata = future.get(timeout=10)
@@ -94,7 +103,7 @@ if __name__ == "__main__":
                         datefmt="%Y-%m-%d %H:%M:%S")
 
     # Kafka function
-    service_main()    # if used without the correct topic replace feature array with fake data
+    service_main()  # if used without the correct topic replace feature array with fake data
 
     # # Local testing
     # main("2021-04-12")

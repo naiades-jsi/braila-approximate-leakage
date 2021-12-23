@@ -8,6 +8,8 @@ import src.configfile as config
 
 from copy import deepcopy
 
+from src.epanet.EPANETUtils import EPANETUtils
+
 
 class DivergenceMatrixProcessor:
     def __init__(self, file_name):
@@ -188,12 +190,51 @@ class DivergenceMatrixProcessor:
 
         # print(groups_indexes)
         groups_dict = self.generate_groups_dict(groups_indexes, sorted_df_at_timestamp, simulation_time_stamp)
-        # TODO make timestamp bullet proof, hardcode timezone
+        return groups_dict
+
+    def prepare_output_json_raw(self, groups_dict):
+        """
+        Method prepares the output json for service in the most basic data format.
+        :param groups_dict: Dictionary of groups, each group (key) contains a list of nodes.
+        :return: Dictionaary of timestamp and groups with nodes.
+        """
         current_timestamp = int(datetime.now().timestamp())
         output_json = {
             config.OUTPUT_JSON_TIME_KEY: current_timestamp,
             config.OUTPUT_JSON_NODES_KEY: groups_dict
         }
+        return output_json
+
+    def prepare_output_json_meta_data(self, timestamp, sensor_with_leak, sensor_deviation, groups_dict, method,
+                                      epanet_file=config.EPANET_NETWORK_FILE):
+        # Get current EPANET file version
+        epanet_file_version = epanet_file.split("/")[-1].replace("_2.2.1.inp", "")
+
+        # Get current timestamp
+        timestamp_digits = len(str(timestamp))
+        if timestamp_digits == 10:
+            epoch_seconds = int(timestamp)
+        elif timestamp_digits == 13:
+            epoch_seconds = int(timestamp) / 1000
+        else:
+            raise Exception("Timestamp is not in Unix milliseconds or seconds !")
+
+        # Get meta data for nodes
+        epanet_instance = EPANETUtils(epanet_file, "PDD")
+        groups_arr = epanet_instance.generate_node_array_with_meta_data(groups_dict)
+
+        # TODO make timestamp bullet proof, hardcode timezone
+        current_timestamp = int(datetime.now().timestamp())
+        output_json = {
+            config.OUTPUT_JSON_TIME_KEY: epoch_seconds,
+            config.OUTPUT_JSON_TIME_PROCESSED_KEY: current_timestamp,
+            config.OUTPUT_JSON_CRITICAL_SENSOR_KEY: sensor_with_leak,
+            config.OUTPUT_JSON_DEVIATION_KEY: sensor_deviation,
+            config.OUTPUT_JSON_METHOD_KEY: method,
+            config.OUTPUT_JSON_EPANET_F_KEY: epanet_file_version,
+            config.OUTPUT_JSON_NODES_KEY: groups_arr
+        }
+
         return output_json
 
     def get_cutoff_indexes_by_descending_values(self, series_len, num_of_groups):

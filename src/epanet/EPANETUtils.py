@@ -3,6 +3,7 @@ import json
 import networkx as nx
 import wntr
 import pandas as pd
+import src.configfile as config
 from pyproj import Transformer
 
 
@@ -440,3 +441,29 @@ class EPANETUtils:
 
         return water_network_model.get_node(node_name).base_demand
 
+    def generate_node_array_with_meta_data(self, groups_dict):
+        """
+        TODO
+        :param groups_dict:
+        :return:
+        """
+        transformer = Transformer.from_crs("epsg:3844", "WGS84")
+        networkx_graph = self.water_network_model.get_graph()
+        groups_arr = []
+
+        for group_num in groups_dict.keys():
+            for node_name in groups_dict[group_num]:
+                if node_name not in networkx_graph.nodes:
+                    raise Exception("Node name {} is not in the network!".format(node_name))
+
+                x, y = networkx_graph.nodes[node_name]['pos']
+                lat, lon = transformer.transform(y, x)
+
+                current_node_json = {
+                    config.OUTPUT_JSON_NODE_NAME_KEY: node_name,
+                    config.OUTPUT_JSON_NODE_LAT_KEY: lat,
+                    config.OUTPUT_JSON_NODE_LONG_KEY: lon,
+                    config.OUTPUT_JSON_NODE_GROUP_KEY: int(group_num)
+                }
+                groups_arr.append(current_node_json)
+        return groups_arr

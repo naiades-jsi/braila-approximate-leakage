@@ -8,7 +8,7 @@ from src.state_comparator.comparator_functions import analyse_kafka_topic_and_fi
 from src.state_comparator.sensor_data_preparator import create_epanet_pressure_df
 
 
-class MyTestCase(unittest.TestCase):
+class MissingKafkaDataTest(unittest.TestCase):
     EPANET_INPUT_FILE = "./../../data/epanet_networks/RaduNegru24May2021_2.2.inp"
 
     def test_missing_values(self):
