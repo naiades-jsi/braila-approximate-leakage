@@ -228,14 +228,14 @@ class DivergenceMatrixProcessor:
     def prepare_output_json_meta_data(self, timestamp, sensor_with_leak, sensor_deviation, groups_dict, method,
                                       epanet_file=config.EPANET_NETWORK_FILE):
         # Get current EPANET file version
-        epanet_file_version = epanet_file.split("/")[-1].replace("_2.2.1.inp", "")
+        epanet_file_version = epanet_file.split("/")[-1].replace("_2.2.inp", "")
 
         # Get current timestamp
         timestamp_digits = len(str(timestamp))
         if timestamp_digits == 10:
-            epoch_seconds = int(timestamp)
+            epoch_seconds = timestamp
         elif timestamp_digits == 13:
-            epoch_seconds = int(timestamp) / 1000
+            epoch_seconds = timestamp // 1000
         else:
             raise Exception("Timestamp is not in Unix milliseconds or seconds !")
 
@@ -246,7 +246,7 @@ class DivergenceMatrixProcessor:
         # TODO make timestamp bullet proof, hardcode timezone
         current_timestamp = int(datetime.now().timestamp())
         output_json = {
-            config.OUTPUT_JSON_TIME_KEY: epoch_seconds,
+            config.OUTPUT_JSON_TIME_KEY: int(epoch_seconds),
             config.OUTPUT_JSON_TIME_PROCESSED_KEY: current_timestamp,
             config.OUTPUT_JSON_CRITICAL_SENSOR_KEY: sensor_with_leak,
             config.OUTPUT_JSON_DEVIATION_KEY: sensor_deviation,
