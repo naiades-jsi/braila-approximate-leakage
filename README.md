@@ -44,15 +44,13 @@ Below you see a sample output of the service.
             "node-name": "760-A",
             "latitude": 23.323,
             "longitude": 47.232,
-            "group": 0,
-            "deviation": 2.2 
+            "group": 0
           },
           {
             "node-name": "Jonctiune-J-26",
             "latitude": 23.323,
             "longitude": 47.232,
-            "group": 0,
-            "deviation": 2.2 
+            "group": 0
           },
           ...
     ]
@@ -71,4 +69,3 @@ Json keys above correspond to the following:
   - `"latitude"`: Latitude of the node.
   - `"longitude"`: Longitude of the node.
   - `"group"`: Severity group of the node (0 being most severe).
-  - `"deviation"`: Difference from the simulated value.
