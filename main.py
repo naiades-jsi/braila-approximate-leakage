@@ -9,6 +9,10 @@ from kafka import KafkaConsumer, KafkaProducer
 from json import dumps, loads
 import logging
 
+# TODO: fix paths in all of the files
+# TODO: test new json output and deploy to atena
+# TODO: refactor code where possible
+
 
 def main(date):
     # logging.info("Started the application !")

@@ -215,7 +215,8 @@ class EPANETUtils:
         with open(self.add_json_ending_if_not_in_file_name(file_name), 'w', encoding='utf-8') as outfile:
             json.dump(node_dict, outfile, indent=4)
 
-    def generate_pressures_at_nodes(self, water_network_model=None, selected_nodes=None, file_name=None, to_hours_round=False, to_bars=False):
+    def generate_pressures_at_nodes(self, water_network_model=None, selected_nodes=None, file_name=None,
+                                    to_hours_round=False, to_bars=False):
         """
         Method takes in only optional parameters.
 
@@ -227,9 +228,11 @@ class EPANETUtils:
         :param water_network_model: WNTR model - If none is provided the model of the class will be used.
         :param selected_nodes: Array of string - If this is provided the DataFrame/file will contain only the data about
         the provided nodes.
-        :param file_name:   String - Name of the file can be with a JSON ending or not.
-        :param to_hours:    Boolean - By default is False, if provided the index of the DataFrame will be converted to hours.
-        :param to_bars:     Boolean - By default is False, if provided all the pressure data values will be converted from m to bars.
+        :param file_name: String - Name of the file can be with a JSON ending or not.
+        :param to_hours_round: Boolean - By default is False, if provided the index of the DataFrame will be converted to
+        hours.
+        :param to_bars: Boolean - By default is False, if provided all the pressure data values will be converted from
+        m to bars.
         :return: DataFrame of the simulation results. Indexes are seconds or hours depending on the parameters, column
         is the node name and the values are pressures either in meter or bars is so specified.
         """
@@ -336,7 +339,7 @@ class EPANETUtils:
     def run_leakage_scenario(self, leaks_arr=None, generate_diff_dict=False, retrieve_specific_nodes_arr=None):
         """
         Methods simulates leaks on every node in the network
-        # TODO add documentation
+        # TODO add documentation - this is won't be used since we get this data from DELFT
         Generate a JSON with structure:
         1 LiterPerSecond is 0.001 m^3/s
             Leakednode:
@@ -394,12 +397,13 @@ class EPANETUtils:
         """
         Generates a dictionary which contains the difference between real values and the simulated ones.
 
-        :param leak_data_dict:
+        :param leak_data_dict: TODO add documentation - this is won't be used since we get this data from DELFT
         :param leak_names:
         :return:
         """
         original_df = self.generate_pressures_at_nodes()
-        all_node_names = leak_data_dict.keys()      # TODO get this from DataFrame columns ?
+        all_node_names = leak_data_dict.keys()
+        # TODO get this from DataFrame columns ? - this is won't be used since we get this data from DELFT
         leaks_df = pd.DataFrame.from_dict(leak_data_dict)
 
         node_leaks_diff_dict = dict()
@@ -414,11 +418,13 @@ class EPANETUtils:
 
     def generate_difference_between_two_dataframes(self, leak_data, leak_data_is_dict=True, original_df=None):
         """
-        TODO add documentation
-        :param leak_data:
-        :param leak_data_is_dict:
-        :param original_df:
-        :return:
+        Subtracts a dataframe (or dictionary) from the given dataframe or generates a dataframe with no leaks from
+        generate_pressures_at_nodes method(). Dataframes are then subtracted.
+
+        :param leak_data: Dataframe or dictionary with indexes as time and a single column
+        :param leak_data_is_dict: Boolean, True if the leak_data is a dictionary.
+        :param original_df: Dataframe, which we want to subtract from leak data.
+        :return: Dataframe.
         """
         if original_df is None:
             original_df = self.generate_pressures_at_nodes()
@@ -443,9 +449,13 @@ class EPANETUtils:
 
     def generate_node_array_with_meta_data(self, groups_dict):
         """
-        TODO
-        :param groups_dict:
-        :return:
+        Method generates an array of dictionaries (json), each dictionary contains data about the specific node.
+        Meta data (longitude, latitude) is retrieved from the wntr-epanet water network model.
+
+        :param groups_dict: Dictionary which contains groups as main keys and an array of nodes as values. Can be
+        acquired from DivergenceMatrixProcessor.get_affected_nodes_groups() and the data format can be found in
+        generate_groups_dict method.
+        :return: Returns an array of dictionaries (json), each dictionary contains data about the specific node.
         """
         transformer = Transformer.from_crs("epsg:3844", "WGS84")
         networkx_graph = self.water_network_model.get_graph()
