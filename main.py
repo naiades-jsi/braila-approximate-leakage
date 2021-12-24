@@ -76,9 +76,8 @@ def service_main():
                                                                      method=method)
 
                 future = producer.send(config.OUTPUT_TOPIC, output_json)
-                # TODO adjust visualization ?
-                visualize_node_groups(diverged_node, groups_dict[config.OUTPUT_JSON_NODES_KEY],
-                                      config.EPANET_NETWORK_FILE, config.LEAK_AMOUNT,
+                # TODO adjust visualization ? - fix graphs
+                visualize_node_groups(diverged_node, groups_dict, config.EPANET_NETWORK_FILE, config.LEAK_AMOUNT,
                                       filename="../grafana-files/braila_network.html")
 
                 log_msg = "Alert !! Deviation reached over threshold -Sensor: {} -Time: {}"\
