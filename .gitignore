@@ -5,7 +5,7 @@
 *.html
 
 # Delf data
-*.pickle
+data/divergence_matrix/*.pickle
 
 # EPANET produced files
 *.bin
