@@ -37,9 +37,9 @@ def main(date):
 def service_main():
     logging.info("Started the application !")
 
-    # Data/objects that need to be created just one time
-    # if you want to read msgs from start use: auto_offset_reset="earliest", group_id makes sure msgs are commited
-    consumer = KafkaConsumer(bootstrap_servers=config.HOST_AND_PORT, group_id="braila_sensor_group",
+    # if you want to read msgs from start use: auto_offset_reset="earliest".
+    # group_id="braila_sensor_group" makes sure msgs are committed
+    consumer = KafkaConsumer(bootstrap_servers=config.HOST_AND_PORT, auto_offset_reset="earliest",
                              value_deserializer=lambda v: loads(v.decode("utf-8")))
     producer = KafkaProducer(bootstrap_servers=config.HOST_AND_PORT,
                              value_serializer=lambda v: dumps(v).encode("utf-8"))
