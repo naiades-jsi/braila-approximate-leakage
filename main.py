@@ -10,7 +10,6 @@ from json import dumps, loads
 import logging
 
 # TODO: fix paths in all of the files
-# TODO: test new json output and deploy to atena
 # TODO: refactor code where possible
 
 
@@ -76,7 +75,6 @@ def service_main():
                                                                      method=method)
 
                 future = producer.send(config.OUTPUT_TOPIC, output_json)
-                # TODO adjust visualization ? - fix graphs
                 visualize_node_groups(diverged_node, groups_dict, config.EPANET_NETWORK_FILE, config.LEAK_AMOUNT,
                                       filename="../grafana-files/braila_network.html")
 

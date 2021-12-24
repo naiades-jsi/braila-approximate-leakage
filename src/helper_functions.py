@@ -99,6 +99,7 @@ def visualize_node_groups(critical_node_name, node_groups_dict, epanet_file_path
                                         key + ': ' + '{:.{prec}f}'.format(val, prec=round_ndigits)
 
                 node_trace['text'] += tuple([node_info])
+            # TODO implement an else that makes sense - since nodes can be in one group not two so you have duplicates
         data.append(node_trace)
 
     # Create figure

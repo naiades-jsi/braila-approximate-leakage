@@ -209,7 +209,8 @@ class DivergenceMatrixProcessor:
             print("Not implemented")
 
         # print(groups_indexes)
-        groups_dict = self.generate_groups_dict(groups_indexes, sorted_df_at_timestamp, simulation_time_stamp)
+        groups_dict = self.generate_groups_dict(groups_indexes, sorted_df_at_timestamp, simulation_time_stamp,
+                                                leak_amount)
         return groups_dict
 
     def prepare_output_json_raw(self, groups_dict):
@@ -290,7 +291,7 @@ class DivergenceMatrixProcessor:
         cutoff_indexes.sort()
         return cutoff_indexes
 
-    def generate_groups_dict(self, cutoff_indexes, series_node_value, timestamp):
+    def generate_groups_dict(self, cutoff_indexes, series_node_value, timestamp, leak_amount):
         """
         Method prepares the data (replaces strings) and generates groups of nodes which it stores in a dictionary.
         The dictionary is then returned and used in other applications so the format shouldn't be changed.
@@ -309,8 +310,7 @@ class DivergenceMatrixProcessor:
 
         for index in range(0, len(cutoff_indexes) - 1):
             group_name = "{}".format(index)
-            # removed this to be transferable "{}-AFFECTED-GROUP".format(index)
-            replace_str = ", {:.1f}LPS".format(config.LEAK_AMOUNT)
+            replace_str = ", {:.1f}LPS".format(leak_amount)
 
             nodes_list = list(series_node_value[cutoff_indexes[index]:cutoff_indexes[index + 1]]
                               .set_index("index")[timestamp].index)
