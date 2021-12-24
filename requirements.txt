@@ -7,4 +7,4 @@ ipython~=7.16.1
 matplotlib==3.5.0
 jenkspy~=0.1.4
 kafka-python~=1.4.7
-pyproj
+pyproj==3.3.0
