@@ -250,7 +250,7 @@ class DivergenceMatrixProcessor:
             config.OUTPUT_JSON_TIME_KEY: int(epoch_seconds),
             config.OUTPUT_JSON_TIME_PROCESSED_KEY: current_timestamp,
             config.OUTPUT_JSON_CRITICAL_SENSOR_KEY: sensor_with_leak,
-            config.OUTPUT_JSON_DEVIATION_KEY: sensor_deviation,
+            config.OUTPUT_JSON_DEVIATION_KEY: round(sensor_deviation, 4),
             config.OUTPUT_JSON_METHOD_KEY: method,
             config.OUTPUT_JSON_EPANET_F_KEY: epanet_file_version,
             config.OUTPUT_JSON_NODES_KEY: groups_arr
