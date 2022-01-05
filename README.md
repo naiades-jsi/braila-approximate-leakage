@@ -1,16 +1,26 @@
 # Instructions
 
 ## Running the project
+Dependencies needed to run the project:
+- all packages in requirements.txt must be installed
+- in directory ```data/divergence_matrix``` a pickle file 
+  (named "Divergence_M.pickle" if you don't want to change the configuration) 
+  must be present containing difference in pressure between values with no 
+  leak and with leak
+- kafka server must be running on the specified IP address and port
+
+
 To run the project use Python3. Example command:    
 ```python3 main.py```
 
-If you wish to run the project on Atena as a service use the following:    
+## Running as service on server
+If you wish to run the project on the server as a service use the following:    
 ```pm2 start main.py --name braila_group_finder --interpreter python3```
 
 More secure command so that we ensure that the service doesn't consume more memory than it should:
 ```pm2 start main.py --name braila_group_finder --interpreter python3 --max-memory-restart 7000M```
 
-## Kafka related command
+## Kafka related commands
 Make sure that you are logged in as kafka user with proper permissions before running these commands.  
 
 Command to get the list of all available topics:   
