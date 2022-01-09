@@ -193,7 +193,7 @@ class DivergenceMatrixProcessor:
             simulation_time_stamp]
 
         # Series must be sorted for all the following steps
-        sorted_df_at_timestamp = series_at_timestamp.sort_values(ascending=True).reset_index()
+        sorted_df_at_timestamp = series_at_timestamp.sort_values(ascending=False).reset_index()
         series_len = len(sorted_df_at_timestamp)
         if method == "descending_values":
             groups_indexes = self.get_cutoff_indexes_by_descending_values(series_len, num_of_groups)

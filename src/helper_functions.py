@@ -27,7 +27,7 @@ def visualize_node_groups(critical_node_name, node_groups_dict, epanet_file_path
     # TODO make colors better when there are less groups. change when using more than 5 groups
     # colors_arr = ["#52f247", "#84e100", "#a4cf00", "#bdbb00", "#d0a600",
     #               "#e09000", "#ea7800", "#f15e00", "#f24123", "#ef1b3a"]
-    colors_arr = ["#9FE2BF", "#6495ED", "#FF7F50", "#DE3163"]
+    colors_arr = ["#DE3163", "#FF7F50", "#6495ED", "#9FE2BF"]
 
     # create new dict without lps
     node_groups_dict_without_lps = node_groups_dict.copy()
@@ -45,6 +45,7 @@ def visualize_node_groups(critical_node_name, node_groups_dict, epanet_file_path
         x=[],
         y=[],
         text=[],
+        name="Pipes",
         hoverinfo='text',
         mode='lines',
         line=dict(
@@ -65,7 +66,7 @@ def visualize_node_groups(critical_node_name, node_groups_dict, epanet_file_path
             x=[],
             y=[],
             text=[],
-            name=group,
+            name=f"Group {group}",
             hoverinfo='text',
             mode='markers',
             marker=dict(
