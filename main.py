@@ -30,7 +30,7 @@ def main(date):
         print(node_groups_dict)
 
         # arr_of_nodes, df = instance.nodes_which_effect_the_sensors_most(16.0, diverged_node)
-        visualize_node_groups(diverged_node, node_groups_dict[config.OUTPUT_JSON_NODES_KEY], config.EPANET_NETWORK_FILE,
+        visualize_node_groups(diverged_node, node_groups_dict, config.EPANET_NETWORK_FILE,
                               config.LEAK_AMOUNT)
 
 
