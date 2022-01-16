@@ -226,37 +226,37 @@ class DivergenceMatrixProcessor:
         }
         return output_json
 
-    def prepare_output_json_meta_data(self, timestamp, sensor_with_leak, sensor_deviation, groups_dict, method,
-                                      epanet_file=config.EPANET_NETWORK_FILE):
-        # Get current EPANET file version
-        epanet_file_version = epanet_file.split("/")[-1].replace("_2.2.inp", "")
-
-        # Get current timestamp
-        timestamp_digits = len(str(timestamp))
-        if timestamp_digits == 10:
-            epoch_seconds = timestamp
-        elif timestamp_digits == 13:
-            epoch_seconds = timestamp // 1000
-        else:
-            raise Exception("Timestamp is not in Unix milliseconds or seconds !")
-
-        # Get meta data for nodes
-        epanet_instance = EPANETUtils(epanet_file, "PDD")
-        groups_arr = epanet_instance.generate_node_array_with_meta_data(groups_dict)
-
-        # TODO make timestamp bullet proof, hardcode timezone
-        current_timestamp = int(datetime.now().timestamp())
-        output_json = {
-            config.OUTPUT_JSON_TIME_KEY: int(epoch_seconds),
-            config.OUTPUT_JSON_TIME_PROCESSED_KEY: current_timestamp,
-            config.OUTPUT_JSON_CRITICAL_SENSOR_KEY: sensor_with_leak,
-            config.OUTPUT_JSON_DEVIATION_KEY: round(sensor_deviation, 4),
-            config.OUTPUT_JSON_METHOD_KEY: method,
-            config.OUTPUT_JSON_EPANET_F_KEY: epanet_file_version,
-            config.OUTPUT_JSON_NODES_KEY: groups_arr
-        }
-
-        return output_json
+    # TODO remove
+    # def prepare_output_json_meta_data(self, timestamp, sensor_with_leak, sensor_deviation, groups_dict, method,
+    #                                   epanet_file=config.EPANET_NETWORK_FILE):
+    #     # Get current EPANET file version
+    #     epanet_file_version = epanet_file.split("/")[-1].replace("_2.2.inp", "")
+    #
+    #     # Get current timestamp
+    #     timestamp_digits = len(str(timestamp))
+    #     if timestamp_digits == 10:
+    #         epoch_seconds = timestamp
+    #     elif timestamp_digits == 13:
+    #         epoch_seconds = timestamp // 1000
+    #     else:
+    #         raise Exception("Timestamp is not in Unix milliseconds or seconds !")
+    #
+    #     # Get meta data for nodes
+    #     epanet_instance = EPANETUtils(epanet_file, "PDD")
+    #     groups_arr = epanet_instance.generate_node_array_with_meta_data(groups_dict)
+    #
+    #     current_timestamp = int(datetime.now().timestamp())
+    #     output_json = {
+    #         config.OUTPUT_JSON_TIME_KEY: int(epoch_seconds),
+    #         config.OUTPUT_JSON_TIME_PROCESSED_KEY: current_timestamp,
+    #         config.OUTPUT_JSON_CRITICAL_SENSOR_KEY: sensor_with_leak,
+    #         config.OUTPUT_JSON_DEVIATION_KEY: round(sensor_deviation, 4),
+    #         config.OUTPUT_JSON_METHOD_KEY: method,
+    #         config.OUTPUT_JSON_EPANET_F_KEY: epanet_file_version,
+    #         config.OUTPUT_JSON_NODES_KEY: groups_arr
+    #     }
+    #
+    #     return output_json
 
     def get_cutoff_indexes_by_descending_values(self, series_len, num_of_groups):
         group_size = round(series_len / num_of_groups)

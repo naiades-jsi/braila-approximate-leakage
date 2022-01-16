@@ -2,6 +2,7 @@ import unittest
 
 import src.configfile as config
 from src.divergence_matrix.DivergenceMatrixProcessor import DivergenceMatrixProcessor
+# TODO update tests to new format
 
 
 class OutputJsonTest(unittest.TestCase):

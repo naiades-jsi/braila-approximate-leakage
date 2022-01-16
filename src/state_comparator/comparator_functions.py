@@ -58,13 +58,14 @@ def generate_error_dataframe(difference_df):
     return error_dataframe
 
 
-def missing_values_check(df, minimum_present_values):
+def missing_values_check(df, minimum_present_values, timestamp):
     """
     Function checks if there are any missing values in the dataframe.
 
     :param df: Dataframe which is checked for missing values.
     :param minimum_present_values: Int, minimum number of values that should be present in each column of the real
     dataframe.
+    :param timestamp: Epoch timestamp.
     :return: Returns None if all sensors are OK else return all of the sensors where conditions are not met.
     """
     # TODO extra error handling can be added here
@@ -79,7 +80,7 @@ def missing_values_check(df, minimum_present_values):
         # If all sensors are OK return None
         return None
     else:
-        raise NaNSensorsException(sensors_with_missing_values)
+        raise NaNSensorsException(sensors_with_missing_values, timestamp)
 
 
 def find_most_critical_sensor(error_dataframe, error_metric_column="Mean-error"):
@@ -136,7 +137,7 @@ def analyse_kafka_topic_and_find_critical_sensor(timestamp, kafka_array, epanet_
     :return: Returns the most critical sensor and the error (deviation) value.
     """
     actual_values_df = create_df_from_real_values(kafka_array, timestamp, sensor_names)
-    missing_values_check(actual_values_df, minimum_present_values)
+    missing_values_check(actual_values_df, minimum_present_values, timestamp)
 
     difference_df = epanet_simulated_df.sub(actual_values_df)
     error_df = generate_error_dataframe(difference_df)
@@ -150,14 +151,14 @@ def create_df_from_real_values(measurements_arr, epoch_timestamp, sensor_names):
     Creates a Dataframe from array.
 
     :param measurements_arr: Array of floats. Values represent pressure values.
-    :param epoch_timestamp: Epoch timestamp In milliseconds. Used for calculating hour of the day.
+    :param epoch_timestamp: Epoch timestamp in seconds. Used for calculating hour of the day.
     :param sensor_names: Names of the sensors which will be compared.
     :return: Returns a dataframe containing the actual values mapped to sensors and hours.
     """
     hours_in_a_day = 24
     num_of_sensors = len(sensor_names)
 
-    # Comparision if the timestamp is in milliseconds or seconds
+    # Comparison if the timestamp is in milliseconds or seconds
     timestamp_digits = len(str(epoch_timestamp))
     if timestamp_digits == 10:
         epoch_seconds = epoch_timestamp

@@ -57,6 +57,7 @@ OUTPUT_TOPIC = "braila_leakage_groups"
 # Service output json keys
 OUTPUT_JSON_TIME_KEY = "timestamp"
 OUTPUT_JSON_TIME_PROCESSED_KEY = "timestamp-processed-at"
+OUTPUT_JSON_STATUS_KEY = "status"
 OUTPUT_JSON_CRITICAL_SENSOR_KEY = "critical-sensor"
 OUTPUT_JSON_DEVIATION_KEY = "deviation"
 OUTPUT_JSON_METHOD_KEY = "method"

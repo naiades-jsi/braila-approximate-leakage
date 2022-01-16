@@ -466,7 +466,7 @@ class EPANETUtils:
                 if node_name not in networkx_graph.nodes:
                     raise Exception("Node name {} is not in the network!".format(node_name))
 
-                x, y = networkx_graph.nodes[node_name]['pos']
+                x, y = networkx_graph.nodes[node_name]["pos"]
                 lat, lon = transformer.transform(y, x)
 
                 current_node_json = {
@@ -476,4 +476,30 @@ class EPANETUtils:
                     config.OUTPUT_JSON_NODE_GROUP_KEY: int(group_num)
                 }
                 groups_arr.append(current_node_json)
+        return groups_arr
+
+    def generate_nan_sensors_meta_data(self, nan_sensors):
+        """
+        Method finds meta data about the sensors and returns an array of dictionaries (json) containg this data.
+
+        :param nan_sensors: Array of strings, each string is the name of a sensor.
+        :return: Returns an array of dictionaries (json), each dictionary contains data about the specific sensor.
+        """
+        transformer = Transformer.from_crs("epsg:3844", "WGS84")
+        networkx_graph = self.water_network_model.get_graph()
+        groups_arr = []
+
+        for sensor_name in nan_sensors:
+            if sensor_name not in networkx_graph.nodes:
+                raise Exception("Sensor name {} is not in the network!".format(sensor_name))
+
+            x, y = networkx_graph.nodes[sensor_name]["pos"]
+            lat, lon = transformer.transform(y, x)
+
+            current_node_json = {
+                config.OUTPUT_JSON_NODE_NAME_KEY: sensor_name,
+                config.OUTPUT_JSON_NODE_LAT_KEY: lat,
+                config.OUTPUT_JSON_NODE_LONG_KEY: lon
+            }
+            groups_arr.append(current_node_json)
         return groups_arr

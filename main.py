@@ -1,3 +1,4 @@
+from output_json_functions import error_response, prepare_output_json_meta_data
 from src.divergence_matrix.DivergenceMatrixProcessor import DivergenceMatrixProcessor
 from src.epanet.EPANETUtils import EPANETUtils
 from src.epanet.NetworkVisualisation import plot_interactive_network, interactive_visualization
@@ -10,7 +11,6 @@ from json import dumps, loads
 import logging
 
 # TODO: fix paths in all of the files
-# TODO: refactor code where possible
 
 
 def main(date):
@@ -66,19 +66,25 @@ def service_main():
             if deviation > config.PRESSURE_DIFF_THRESHOLD:
                 method = "jenks_natural_breaks"
                 groups_dict = instance.get_affected_nodes_groups(config.LEAK_AMOUNT, diverged_node,
-                                                                   num_of_groups=4,
-                                                                   method=method)
-                output_json = instance.prepare_output_json_meta_data(timestamp=current_timestamp,
-                                                                     sensor_with_leak=diverged_node,
-                                                                     sensor_deviation=deviation,
-                                                                     groups_dict=groups_dict,
-                                                                     method=method)
+                                                                 num_of_groups=4,
+                                                                 method=method)
+                # output_json = instance.prepare_output_json_meta_data(timestamp=current_timestamp,
+                #                                                      sensor_with_leak=diverged_node,
+                #                                                      sensor_deviation=deviation,
+                #                                                      groups_dict=groups_dict,
+                #                                                      method=method)
+                output_json = prepare_output_json_meta_data(timestamp=current_timestamp,
+                                                            sensor_with_leak=diverged_node,
+                                                            sensor_deviation=deviation,
+                                                            groups_dict=groups_dict,
+                                                            method=method,
+                                                            epanet_file=config.EPANET_NETWORK_FILE)
 
                 future = producer.send(config.OUTPUT_TOPIC, output_json)
                 visualize_node_groups(diverged_node, groups_dict, config.EPANET_NETWORK_FILE, config.LEAK_AMOUNT,
                                       filename="../grafana-files/braila_network.html")
 
-                log_msg = "Alert !! Deviation reached over threshold -Sensor: {} -Time: {}"\
+                log_msg = "Alert !! Deviation reached over threshold -Sensor: {} -Time: {}" \
                     .format(diverged_node, dt_time)
                 logging.info(log_msg)
                 logging.info("")
@@ -89,11 +95,9 @@ def service_main():
 
         except NaNSensorsException as e:
             logging.info("Sensor input data missing: " + str(e))
-            output_json = {
-                config.OUTPUT_JSON_TIME_KEY: int(datetime.now().timestamp()),
-                config.OUTPUT_JSON_NODES_KEY: {"0": "Sensors reporting missing data: {}".format(e.sensors_list)},
-            }
-            producer.send(config.OUTPUT_TOPIC, output_json)
+            error_output = error_response(e.epoch_timestamp, e.sensors_list, config.EPANET_NETWORK_FILE)
+
+            producer.send(config.OUTPUT_TOPIC, error_output)
 
         except Exception as e:
             logging.info("Consumer error: " + str(e))
