@@ -119,8 +119,9 @@ class DivergenceMatrixProcessor:
 
         nodes_order_df = pd.DataFrame(columns=[column_name])
         for timestamp in df.columns:
-            arr_of_sorted_nodes = list(df[timestamp].sort_values(ascending=False).index)[:round(len(df.index) * 0.1)]
+            arr_of_sorted_nodes = list(df[timestamp].sort_values(ascending=False).index)[:30]   # round(len(df.index) * 0.1)
             nodes_order_df.loc[timestamp] = [arr_of_sorted_nodes]
+            # TODO this correlation should be tested with newer methods
 
         timestamp_indexes = list(nodes_order_df.index)
         order_correlation_df = pd.DataFrame(columns=timestamp_indexes, index=timestamp_indexes)

@@ -44,7 +44,7 @@ Below you see a sample output of the service.
 ```
 {
     "timestamp": 1637239315,        
-    "timestamp-proccessed-at": 1637239315,
+    "timestamp-processed-at": 1637239315,
     "critical-sensor": "SenzorComunarzi-NatVech",
     "deviation": 29.32,
     "method": "JNB",
@@ -69,7 +69,7 @@ Below you see a sample output of the service.
 
 Json keys above correspond to the following:
 - `"timestamp"`: UNIX timestamp of when the data was captured on the sensor.
-- `"timestamp-proccessed-at"`: UNIX timestamp of when the message was processed on the server.
+- `"timestamp-processed-at"`: UNIX timestamp of when the message was processed on the server.
 - `"critical-sensor"`: Name of the sensor on which the leak was detected.
 - `"deviation"`: Deviation from the simulated value.
 - `"method"`: Method used to perform grouping of the nodes.

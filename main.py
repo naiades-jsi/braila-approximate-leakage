@@ -11,6 +11,7 @@ from json import dumps, loads
 import logging
 
 # TODO: fix paths in all of the files
+# TODO change timestamp processed at in the correct spelling
 
 
 def main(date):
@@ -68,11 +69,6 @@ def service_main():
                 groups_dict = instance.get_affected_nodes_groups(config.LEAK_AMOUNT, diverged_node,
                                                                  num_of_groups=4,
                                                                  method=method)
-                # output_json = instance.prepare_output_json_meta_data(timestamp=current_timestamp,
-                #                                                      sensor_with_leak=diverged_node,
-                #                                                      sensor_deviation=deviation,
-                #                                                      groups_dict=groups_dict,
-                #                                                      method=method)
                 output_json = prepare_output_json_meta_data(timestamp=current_timestamp,
                                                             sensor_with_leak=diverged_node,
                                                             sensor_deviation=deviation,
