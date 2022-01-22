@@ -1,4 +1,4 @@
-from output_json_functions import error_response, prepare_output_json_meta_data
+from src.output_json_functions import error_response, prepare_output_json_meta_data
 from src.divergence_matrix.DivergenceMatrixProcessor import DivergenceMatrixProcessor
 from src.epanet.EPANETUtils import EPANETUtils
 from src.epanet.NetworkVisualisation import plot_interactive_network, interactive_visualization
