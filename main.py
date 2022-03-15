@@ -13,6 +13,8 @@ import logging
 # TODO: fix paths in all of the files
 # TODO change timestamp processed at in the correct spelling
 
+# TODO limit cpu usage ?
+
 
 def main(date):
     # logging.info("Started the application !")
@@ -97,6 +99,12 @@ def service_main():
 
         except Exception as e:
             logging.info("Consumer error: " + str(e))
+
+
+def main_extraction():
+    """Used for generating a map of the network"""
+    epanet_instance = EPANETUtils(conf.EPANET_NETWORK_FILE, "PDD")
+    epanet_instance.generate_network_json_in_wgs84()
 
 
 if __name__ == "__main__":
