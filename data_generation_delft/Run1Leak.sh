@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=NAIADES2
+#SBATCH --job-name=NAIADES_JOB_ZAN_1
 #SBATCH -N 4 --ntasks=25
 #SBATCH --time  1:00:00
 #SBATCH --output=outGA/NAIDES_%A_%a.out
