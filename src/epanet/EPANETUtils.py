@@ -464,7 +464,9 @@ class EPANETUtils:
         for group_num in groups_dict.keys():
             for node_name in groups_dict[group_num]:
                 if node_name not in networkx_graph.nodes:
-                    raise Exception("Node name {} is not in the network!".format(node_name))
+                    # TODO better way to handle this, custom EPANET file everytime?
+                    continue
+                    # raise Exception("Node name {} is not in the network!".format(node_name))
 
                 x, y = networkx_graph.nodes[node_name]["pos"]
                 lat, lon = transformer.transform(y, x)
