@@ -1,6 +1,8 @@
 import pickle
 from datetime import datetime
 from json import loads, dumps
+
+import numpy as np
 from kafka import KafkaConsumer, KafkaProducer
 import logging
 
@@ -43,12 +45,12 @@ def main_multiple_sensors():
                          "SenzorComunarzi-castanului", "SenzorChisinau-Titulescu", "SenzorCernauti-Sebesului"]
             prepared_df = actual_values_df[keep_cols]
             latest_data_row = prepared_df.iloc[0]
-            latest_prepared_arr = [latest_data_row.values]
+            latest_prepared_arr = [np.array(latest_data_row.values, dtype=np.double)]
             # TODO, hard-coding could be done until fixed
             # latest_prepared_arr[0][0] = 16.039
 
             groups_dict = predict_groups_gmm(gmm_model, latest_prepared_arr)
-            # TODO check if this is really the best choice
+            # TODO check if this is really the best choice, diverged node is the first node in the first group
             diverged_node = groups_dict["0"][0]
 
             # extra logging
