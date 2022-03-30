@@ -136,14 +136,25 @@ def analyse_kafka_topic_and_find_critical_sensor(timestamp, kafka_array, epanet_
     dataframe.
     :return: Returns the most critical sensor and the error (deviation) value.
     """
-    actual_values_df = create_df_from_real_values(kafka_array, timestamp, sensor_names)
-    missing_values_check(actual_values_df, minimum_present_values, timestamp)
-
+    actual_values_df = analyse_kafka_topic_and_check_for_missing_values(timestamp, kafka_array, sensor_names,
+                                                                        minimum_present_values)
     difference_df = epanet_simulated_df.sub(actual_values_df)
     error_df = generate_error_dataframe(difference_df)
 
     critical_node, deviation = find_most_critical_sensor(error_df, error_metric_column="Mean-error")
     return critical_node, deviation
+
+
+def analyse_kafka_topic_and_check_for_missing_values(timestamp, kafka_array, sensor_names, minimum_present_values):
+    """
+    TODO better documentation
+    Checks if there are any missing values in the kafka topic.
+
+    :return: Returns True if there are missing values and False if there are not.
+    """
+    actual_values_df = create_df_from_real_values(kafka_array, timestamp, sensor_names)
+    missing_values_check(actual_values_df, minimum_present_values, timestamp)
+    return actual_values_df
 
 
 def create_df_from_real_values(measurements_arr, epoch_timestamp, sensor_names):
