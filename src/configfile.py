@@ -21,6 +21,7 @@ EPANET_NETWORK_FILE = EPANET_NETWORKS + "RaduNegru24May2021_2.2.inp"
 DIVERGENCE_MATRIX_FILE = DIVERGENCE_DATA_DIR + "Divergence_M.pickle"
 
 LOG_FILE = "logs/service-log.log"
+LOG_FILE_PRETRAINED = "logs/service-log-pretrained.log"
 
 # Sensor and pump file names arrays
 SENSOR_FILES = ["braila_pressure5770.csv", "braila_pressure5771.csv", "braila_pressure5772.csv",
@@ -47,6 +48,17 @@ LOCAL_TESTING_NODES_ORDER = ["Jonctiune-3974", "Jonctiune-J-3", "Jonctiune-2749"
 # order in array is important !!, since it is mapped by index
 KAFKA_NODES_ORDER = ["Jonctiune-3974", "Jonctiune-2749", "Jonctiune-J-19", "SenzorComunarzi-NatVech",
                      "SenzorComunarzi-castanului", "SenzorChisinau-Titulescu", "SenzorCernauti-Sebesului"]
+
+# KAFKA NODES false order, but used for parsing
+KAFKA_NODES_ORDER_FALSE_USE_FOR_PARSING_ONLY = ["nan_sensor", "Jonctiune-3974",
+                                                "Jonctiune-2749", "Jonctiune-J-19",
+                                                "SenzorComunarzi-NatVech", "SenzorComunarzi-castanului",
+                                                "SenzorChisinau-Titulescu", "SenzorCernauti-Sebesului"]
+
+
+# order for the new approach, order in array is important!!
+KAFKA_NODES_ORDER_LATEST = ["J-Apollo", "J-RN1", "J-RN2", "Sensor1", "Sensor3", "Sensor4", "Sensor2"]
+KAFKA_NODES_ORDER_LATEST_WRONG = ["nan_sensor", "J-Apollo", "J-RN1", "J-RN2", "Sensor1", "Sensor3", "Sensor4", "Sensor2"]
 
 # KAFKA related
 HOST_AND_PORT = "194.249.231.11:9092"

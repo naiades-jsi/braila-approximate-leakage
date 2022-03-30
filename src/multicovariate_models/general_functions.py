@@ -4,7 +4,7 @@ from jenkspy import jenks_breaks
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OrdinalEncoder
 
-from divergence_matrix.groups_helper_functions import optimal_number_of_groups
+from src.divergence_matrix.groups_helper_functions import optimal_number_of_groups
 
 
 def docs_v1():
@@ -74,7 +74,7 @@ def get_cutoff_indexes_by_jenks_natural_breaks(values_array, num_of_groups):
     :return:
     """
     if num_of_groups is None:
-        num_of_groups = optimal_number_of_groups(values_array)
+        num_of_groups = 5 # optimal_number_of_groups(values_array)
     group_break_values = jenks_breaks(values_array, nb_class=num_of_groups)
 
     cutoff_indexes = []

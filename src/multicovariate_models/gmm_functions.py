@@ -1,9 +1,10 @@
 import pickle
 from operator import itemgetter
 
+import numpy as np
 from sklearn.mixture import GaussianMixture
 
-from multicovariate_models.general_functions import prepare_training_and_test_data, \
+from src.multicovariate_models.general_functions import prepare_training_and_test_data, \
     get_cutoff_indexes_by_jenks_natural_breaks, generate_groups_dict
 
 
@@ -71,7 +72,8 @@ def predict_groups_gmm(model, data_arr):
 
     # sort by values
     sorted_val_index_arr = sorted(value_group_index_arr, key=itemgetter(0), reverse=True)
+    values_only_arr = np.array([value for value, index in sorted_val_index_arr])
 
     # split into groups
-    groups_indexes = get_cutoff_indexes_by_jenks_natural_breaks(sorted_val_index_arr, None)
-    return generate_groups_dict(groups_indexes, value_group_index_arr, static_dict)
+    groups_indexes = get_cutoff_indexes_by_jenks_natural_breaks(values_only_arr, None)
+    return generate_groups_dict(groups_indexes, sorted_val_index_arr, static_dict)
