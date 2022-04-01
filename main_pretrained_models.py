@@ -64,7 +64,7 @@ def main_multiple_sensors():
                 sensor_deviation=0.0,  # "Information not available, when using this method"
                 groups_dict=groups_dict,
                 method="gmm+jenks_natural_breaks",
-                epanet_file=config.EPANET_NETWORK_FILE
+                epanet_file=config.EPANET_NETWORK_FILE_V2
             )
 
             future = producer.send(config.OUTPUT_TOPIC, output_json)

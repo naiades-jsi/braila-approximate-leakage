@@ -18,6 +18,7 @@ def prepare_output_json_meta_data(timestamp, sensor_with_leak, sensor_deviation,
     """
     # Get meta data for nodes
     epanet_instance = EPANETUtils(epanet_file, "PDD")
+    # Convert to flat structure from group dictionary
     groups_arr = epanet_instance.generate_node_array_with_meta_data(groups_dict)
 
     output_json = {
