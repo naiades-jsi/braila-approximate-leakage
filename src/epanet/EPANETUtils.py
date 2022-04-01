@@ -467,7 +467,7 @@ class EPANETUtils:
                     # TODO better way to handle this, custom EPANET file everytime?
                     continue
                     # raise Exception("Node name {} is not in the network!".format(node_name))
-
+                # TODO add logic that if the node is not found its name will be still be included in the output
                 x, y = networkx_graph.nodes[node_name]["pos"]
                 lat, lon = transformer.transform(y, x)
 
