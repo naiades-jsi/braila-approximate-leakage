@@ -28,7 +28,7 @@ Mod='CalGA'
 #--------------------------
 echo 'Running WDN - ' ${NetworkRuns[$Mod]}
 
-DataDirectory="/scratch-shared/NAIADES/$Mod"
+DataDirectory="/scratch-shared/NAIADES/ijs_simulations_v1/$Mod"
 
 
 #cp  $HOME/NAIADES/Start/Networks/Cal_A_RN1_GA.inp "$TMPDIR"

@@ -19,7 +19,13 @@ Command in script where it is used:
 
 ## Execution
 1. Use SLURM
-2. Command:
+2. Preload installed packages 
+> load 2021
+3. Load correct Python version
+> load Python/3.9.5-GCCcore-10.3.0
+4. Install necessary python packages:   
+> pip install wntr plotly 
+5. Command to submit job to sbatch:
 > sbatch Run1Leak.sh  
 
 
@@ -34,8 +40,7 @@ Cancel a job:
 
 Cancel all jobs from user:
 > scancel -u <user>
-5. Install neccessary python packages:   
-`pip3 install wntr `
+
 
 
 
