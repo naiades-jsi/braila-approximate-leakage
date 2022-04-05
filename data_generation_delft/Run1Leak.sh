@@ -20,20 +20,20 @@ NetworkRuns["CalGA"]="Cal_A_RN1_GA.inp"
 NetworkRuns["CalRN2"]="Cal_A_RN1_RN2.inp"
 NetworkRuns["CalAll"]="CalAll.inp"
 
-#Mod='Braila'
-Mod='CalGA'
-#Mod='CalRN2'
+Mod='Braila'
+# Mod='CalGA'
+# Mod='CalRN2'
 #--------------------------
-#Mod='CalAll'
+# Mod='CalAll'
 #--------------------------
 echo 'Running WDN - ' ${NetworkRuns[$Mod]}
 
 DataDirectory="/scratch-shared/NAIADES/ijs_simulations_v1/$Mod"
 
 
-#cp  $HOME/NAIADES/Start/Networks/Cal_A_RN1_GA.inp "$TMPDIR"
-#cp  $HOME/NAIADES/Start/Networks/Braila_V2022.inp "$TMPDIR"
-#cp  $HOME/NAIADES/Start/Networks/Cal_All.inp "$TMPDIR"
+#cp  $HOME/NAIADES/Start/Networks/Cal_A_RN1_GA.inp '$TMPDIR'
+#cp  $HOME/NAIADES/Start/Networks/Braila_V2022.inp '$TMPDIR'
+#cp  $HOME/NAIADES/Start/Networks/Cal_All.inp '$TMPDIR'
 #-------------------------------------------------
 cp $HOME/NAIADES/Start/Networks/${NetworkRuns[$Mod]} "$TMPDIR"
 

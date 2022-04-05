@@ -23,8 +23,8 @@ Command in script where it is used:
 > load 2021
 3. Load correct Python version
 > load Python/3.9.5-GCCcore-10.3.0
-4. Install necessary python packages:   
-> pip install wntr plotly 
+4. Install necessary python packages (file tools, a local package):   
+> pip install wntr plotly
 5. Command to submit job to sbatch:
 > sbatch Run1Leak.sh  
 
