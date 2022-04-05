@@ -430,8 +430,8 @@ def RunCycle_v2(Run=1, Threshold=0.5, DirPath='test', Lnz='', ModName='NotSent')
     R['WLM'] = WLM
 
     # Better way to save the data
-    with open("/scratch-shared/NAIADES/" + ModName + '/1Leak_' + str(Run) + '_' + ModName + '_' + str(Leakmin) + '.pkl',
-              'wb') as end_file:
+    # TODO reformulate string
+    with open(DirPath + ModName + '/1Leak_' + str(Run) + '_' + ModName + '_' + str(Leakmin) + '.pkl', 'wb') as end_file:
         pickle.dump(R, end_file)
 
     return "success"
@@ -560,7 +560,7 @@ def RunCycle2_v2(Run=1, Threshold=0.5, DirPath='test', Lnz='', ModName='NoNameSe
 
     # f=open("/scratch-shared/NAIADES/CalAll/"+'DF_'+str(Run)+'_'+str(i)+'.pkl','wb')
     # f=open("/scratch-shared/NAIADES/CalGA/"+'DF_'+str(Run)+'_'+str(i)+'.pkl','wb')
-    # TODO replace static string in all functions
+    # TODO reformulate
     with open(DirPath + ModName + '/2Nodes_' + str(Run) + '_' + ModName + '_' + str(Leakmin) + '.pkl', 'wb') as f:
         pickle.dump(R, f)
 
