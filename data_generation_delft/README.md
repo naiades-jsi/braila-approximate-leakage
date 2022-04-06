@@ -26,7 +26,9 @@ Command in script where it is used:
 4. Install necessary python packages (file tools, a local package):   
 > pip install wntr plotly
 5. Command to submit job to sbatch:
-> sbatch Run1Leak.sh  
+> sbatch Run1Leak_Braila.sh  
+> sbatch Run1Leak_CalAll.sh  
+> sbatch Run1Leak_CalGA.sh
 
 
 ## Helpful SLURM command
