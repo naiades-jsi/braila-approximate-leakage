@@ -28,6 +28,7 @@ Mod='Braila'
 #--------------------------
 echo 'Running WDN - ' ${NetworkRuns[$Mod]}
 
+# Change this in EPanettools also
 DataDirectory="/scratch-shared/NAIADES/ijs_simulations_v1/$Mod"
 
 
