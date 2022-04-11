@@ -8,12 +8,12 @@
 Command in script where it is used:
 >  cp $HOME/NAIADES/Start/Networks/${NetworkRuns[$Mod]}
   
-2. Create a folder named "outGA" in the directory where the script was started.    
-Command in script where it is used:
-> SBATCH --output=outGA and SBATCH --error=outGA
+2. Create output folders named "outBraila" etc. in the directory where the script was started.    
+Command in script where it is used (sixt of these folders need to be created):
+> SBATCH --output=outBraila and SBATCH --error=outGA
 
 3. Create a folder on root "/scratch-shared/NAIADES/<folder_name>"
-> mkdir /scratch-shared/NAIADES/ijs_simulations_v1 or any other folder name
+> mkdir /scratch-shared/NAIADES/ijs_simulations_v1 or any other folder name but code has to be changed then
 4. -ntask should never be lower than 25
 
 
@@ -25,10 +25,14 @@ Command in script where it is used:
 > load Python/3.9.5-GCCcore-10.3.0
 4. Install necessary python packages (file tools, a local package):   
 > pip install wntr plotly
-5. Command to submit job to sbatch:
+5. Commands to submit jobs for one leak to sbatch:
 > sbatch Run1Leak_Braila.sh  
 > sbatch Run1Leak_CalAll.sh  
 > sbatch Run1Leak_CalGA.sh
+6. Commands to submit jobs for two leaks to sbatch:
+> sbatch Run2Leak_Braila.sh  
+> sbatch Run2Leak_CalAll.sh  
+> sbatch Run2Leak_CalGA.sh
 
 
 ## Helpful SLURM command
