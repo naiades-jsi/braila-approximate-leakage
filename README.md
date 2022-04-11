@@ -79,3 +79,5 @@ Json keys above correspond to the following:
   - `"latitude"`: Latitude of the node.
   - `"longitude"`: Longitude of the node.
   - `"group"`: Severity group of the node (0 being most severe).
+
+TODO add information about error output and status code meanings
