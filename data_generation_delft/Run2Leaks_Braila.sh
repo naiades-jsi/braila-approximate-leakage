@@ -16,9 +16,6 @@ module load Python/3.9.5-GCCcore-10.3.0
 #NameoftheSystem
 declare -A NetworkRuns
 NetworkRuns["Braila"]="Braila_V2022.inp"
-#NetworkRuns["CalGA"]="Cal_A_RN1_GA.inp"
-#NetworkRuns["CalRN2"]="Cal_A_RN1_RN2.inp"
-#NetworkRuns["CalAll"]="CalAll.inp"
 
 Mod='Braila'
 
