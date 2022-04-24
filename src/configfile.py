@@ -65,7 +65,10 @@ KAFKA_NODES_ORDER_LATEST_WRONG = ["nan_sensor", "J-Apollo", "J-RN1", "J-RN2", "S
 # KAFKA related
 HOST_AND_PORT = "194.249.231.11:9092"
 
+# Topic used in version 1 and 2, left in for backwards compatibility
 TOPIC = "features_braila_leakage_detection"
+
+TOPIC_V3 = "features_braila_leakage_detection_updated"
 OUTPUT_TOPIC = "braila_leakage_groups"
 
 # Service output json keys

@@ -157,7 +157,7 @@ def analyse_kafka_topic_and_check_for_missing_values(timestamp, kafka_array, sen
     return actual_values_df
 
 
-def analyse_1d_arr_and_check_for_missing_values(timestamp, kafka_array):
+def prepare_input_kafka_1d_array(timestamp, kafka_array):
     """
     Updated function to process new kafka topic currently named "features_braila_leakage_detection_updated". Function
     check for errors in the data and returns correctly sorted array if the data is correct.
@@ -176,7 +176,7 @@ def analyse_1d_arr_and_check_for_missing_values(timestamp, kafka_array):
         8. pressure5773
     It is important because these values will be passed to the model which can produce the wrong result if the order
     is not correct.
-    :return: Array. The input array sorted in the correct order.
+    :return: tuple of the input array sorted in the correct order and timestamp.
     """
     if len(kafka_array) != 8:
         raise Exception("The kafka array should have 8 values !")
@@ -217,7 +217,7 @@ def analyse_1d_arr_and_check_for_missing_values(timestamp, kafka_array):
     if len(sensors_with_missing_values) > 0:
         raise NaNSensorsException(sensors_with_missing_values, epoch_seconds)
 
-    return ordered_value_arr
+    return ordered_value_arr, epoch_seconds
 
 
 def create_df_from_real_values(measurements_arr, epoch_timestamp, sensor_names):
