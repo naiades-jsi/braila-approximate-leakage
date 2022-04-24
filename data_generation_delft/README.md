@@ -55,11 +55,11 @@ Cancel all jobs from user:
 
 ### Rsync
 Use rync since it is faster and more robust to errors.
-> rsync -a -v -z -r <username>@<server_adress>:/scratch-shared/NAIADES/ijs_simulations_v1/ \simulations\
+> rsync -avzr <username>@<server_adress>:/scratch-shared/NAIADES/ijs_simulations_v1/ \simulation & disown
 
 ### Scp
 Fastest method should be to use rsync, but if the server doesn't have it installed, we can use scp.
-> scp -r <username>@<server_adress>:/scratch-shared/NAIADES/ijs_simulations_v1/ \simulations\
+> scp -r <username>@<server_adress>:/scratch-shared/NAIADES/ijs_simulations_v1/ \simulations\ & disown
 
 Where the first path is the path on the linux server from which we are copying from and the second is the 
 path on the windows machine where we want to copy to.
