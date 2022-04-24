@@ -52,12 +52,12 @@ that the flow on that section of pipe was shut down for that period.
 The flow meters (demand sensors)map to the following names/coordinates/junctions:
   
 
-| Name  | Coordinates  | ID  | Node  |  
-|---|---|---|---|
-| Apollo  | 45.25273362, 27.93552109  | 211206H360 |  Jonctiune-3974   | 
-| GA-Braila  | 45.25228252, 27.94718523  |  477105H429 (formally 211106H360) | Jonctiune-J-3  | 
-| RaduNegru 2 | 45.24572269, 27.94187308  | 318505H498  | Jonctiune-J-19   | 
-| RaduNegruMare  | 45.23905319, 27.93228389  | 211306H360  | Jonctiune-2749  | 
+| Name  | Coordinates  | ID  | old epanet Node  | new epanet node |
+|---|---|---|---|---|
+| Apollo  | 45.25273362, 27.93552109  | 211206H360 |  Jonctiune-3974   | Apollo |
+| GA-Braila  | 45.25228252, 27.94718523  |  477105H429 (formally 211106H360) | Jonctiune-J-3  | GA |
+| RaduNegru 2 | 45.24572269, 27.94187308  | 318505H498  | Jonctiune-J-19   | RN2 |
+| RaduNegruMare  | 45.23905319, 27.93228389  | 211306H360  | Jonctiune-2749  | RN1 |
 
 
 The reservoirs and pumps present in the model do not exist in real life.
@@ -65,3 +65,16 @@ They are there to simulate the water coming into the network through the junctio
 Our actual network has three main pumping stations located far away from this DMA, and feed the entire city.
 The data used for the virtual pumps that are in the model, connected to the junctions from the table above, is taken from the flow meter data and tweaked a bit so that the model will run.
 The reservoirs are just there so that there would be something for the system to draw water from.
+
+## Pressure sensors and debit meters mappings 
+| New EPANET name | Kafka input name |  Old EPANET name |
+|---|---|---|
+| Sensor1   | pressure5770  | SenzorComunarzi-NatVech | 
+| Sensor2   | pressure5773  | SenzorCernauti-Sebesului |
+| Sensor3   | pressure5771  | SenzorComunarzi-castanului  |
+| Sensor4   | pressure5772  | SenzorChisinau-Titulescu  |
+|---|---|---|
+| J-GA        | MAG8000_477105H429 (or 11106H360)  | Jonctiune-J-3 | 
+| J-Apollo    | MAG8000_211206H360  | Jonctiune-3974 |
+| J-RN1       | MAG8000_211306H360  | Jonctiune-2749 |
+| J-RN2       | MAG8000_318505H498  | Jonctiune-J-19 |

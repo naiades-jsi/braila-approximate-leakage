@@ -157,28 +157,83 @@ def analyse_kafka_topic_and_check_for_missing_values(timestamp, kafka_array, sen
     return actual_values_df
 
 
+def analyse_1d_arr_and_check_for_missing_values(timestamp, kafka_array):
+    """
+    Updated function to process new kafka topic currently named "features_braila_leakage_detection_updated". Function
+    check for errors in the data and returns correctly sorted array if the data is correct.
+
+    :param timestamp: Timestamp. Of the kafka message, either in milliseconds or seconds.
+    :param kafka_array: Array. The input array which should contain 8 floats which represent the pressure values
+    of the sensors.
+    The order of sensor values in the kafka array is:
+        1. flow211106H360 (which is zero all the time)
+        2. flow211206H360,
+        3. flow211306H360,
+        4. flow318505H498
+        5. pressure5770,
+        6. pressure5771,
+        7. pressure5772,
+        8. pressure5773
+    It is important because these values will be passed to the model which can produce the wrong result if the order
+    is not correct.
+    :return: Array. The input array sorted in the correct order.
+    """
+    if len(kafka_array) != 8:
+        raise Exception("The kafka array should have 8 values !")
+
+    epoch_seconds = convert_timestamp_to_epoch_seconds(timestamp)
+    # Map array values from kafka topic to correct sensors
+    sensor_to_values_dict = {
+        ("flow211106H360", "J-GA"): kafka_array[0],
+        ("flow211206H360", "J-Apollo"): kafka_array[1],
+        ("flow211306H360", "J-RN1"): kafka_array[2],
+        ("flow318505H498", "J-RN2"): kafka_array[3],
+        ("pressure5770", "Sensor1"): kafka_array[4],
+        ("pressure5771", "Sensor3"): kafka_array[5],
+        ("pressure5772", "Sensor4"): kafka_array[6],
+        ("pressure5773", "Sensor2"): kafka_array[7]
+    }
+
+    # Correct order for model (7 sensors): Sensor1, Sensor2, Sensor3,	Sensor4, J-Apollo, J-RN2, J-RN1
+    # J-GA is discarded since it is broken and is always zero
+    ordered_array_val_sensor = [
+        [sensor_to_values_dict[("pressure5770", "Sensor1")], ("pressure5770", "Sensor1")],
+        [sensor_to_values_dict[("pressure5773", "Sensor2")], ("pressure5773", "Sensor2")],
+        [sensor_to_values_dict[("pressure5771", "Sensor3")], ("pressure5771", "Sensor3")],
+        [sensor_to_values_dict[("pressure5772", "Sensor4")], ("pressure5772", "Sensor4")],
+        [sensor_to_values_dict[("flow211206H360", "J-Apollo")], ("flow211206H360", "J-Apollo")],
+        [sensor_to_values_dict[("flow318505H498", "J-RN2")], ("flow318505H498", "J-RN2")],
+        [sensor_to_values_dict[("flow211306H360", "J-RN1")], ("flow211306H360", "J-RN1")]
+     ]
+
+    # Check for missing values in input
+    sensors_with_missing_values = []
+    ordered_value_arr = []
+    for value, name_tuple in ordered_array_val_sensor:
+        if value <= 0 or value == np.nan:
+            sensors_with_missing_values.append(f"{name_tuple[1]}-({name_tuple[0]})")
+        ordered_value_arr.append(value)
+
+    if len(sensors_with_missing_values) > 0:
+        raise NaNSensorsException(sensors_with_missing_values, epoch_seconds)
+
+    return ordered_value_arr
+
+
 def create_df_from_real_values(measurements_arr, epoch_timestamp, sensor_names):
     """
-    Creates a Dataframe from array.
+    Creates a Dataframe from array (size: sensor_count * 24).
 
     :param measurements_arr: Array of floats. Values represent pressure values.
-    :param epoch_timestamp: Epoch timestamp in seconds. Used for calculating hour of the day.
+    :param epoch_timestamp: Epoch timestamp ideally in seconds. Used for calculating hour of the day.
     :param sensor_names: Names of the sensors which will be compared.
     :return: Returns a dataframe containing the actual values mapped to sensors and hours.
     """
     hours_in_a_day = 24
     num_of_sensors = len(sensor_names)
-
-    # Comparison if the timestamp is in milliseconds or seconds
-    timestamp_digits = len(str(epoch_timestamp))
-    if timestamp_digits == 10:
-        epoch_seconds = epoch_timestamp
-    elif timestamp_digits == 13:
-        epoch_seconds = epoch_timestamp / 1000
-    else:
-        raise Exception("Timestamp is not in Unix milliseconds or seconds !")
-
+    epoch_seconds = convert_timestamp_to_epoch_seconds(epoch_timestamp)
     dt_time = datetime.fromtimestamp(epoch_seconds)
+
     actual_values_df = pd.DataFrame(columns=sensor_names,
                                     index=[hour_of_day for hour_of_day in range(0, hours_in_a_day)])
 
@@ -191,3 +246,22 @@ def create_df_from_real_values(measurements_arr, epoch_timestamp, sensor_names):
 
     return actual_values_df
 
+
+def convert_timestamp_to_epoch_seconds(timestamp):
+    """
+    Converts a timestamp from milliseconds to seconds or returns the original timestamp if already in seconds.
+
+    :param timestamp: Timestamp in milliseconds or seconds.
+    :return: Timestamp in seconds.
+    """
+    timestamp_digits = len(str(timestamp))
+
+    # Comparison if the timestamp is in milliseconds or seconds
+    if timestamp_digits == 10:
+        epoch_seconds = timestamp
+    elif timestamp_digits == 13:
+        epoch_seconds = timestamp / 1000
+    else:
+        raise Exception("Timestamp is not in Unix milliseconds or seconds !")
+
+    return epoch_seconds
