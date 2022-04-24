@@ -4,44 +4,10 @@ from jenkspy import jenks_breaks
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OrdinalEncoder
 
-from src.divergence_matrix.groups_helper_functions import optimal_number_of_groups
-
-
-def docs_v1():
-    # TODO Moves this to doc
-    """
-    TODO function 2:
-        - Machine learning approach: generate feature vector X and feature vector Y:
-        - Feature vectors X contains:
-            - 1. real sensor data for all 8 sensors
-            - 2. another 8 features (one for each sensor) which means if the sensor was flagged as anomalous or not
-            with other approaches before (matic anomaly detection), add this later, first just 8 features
-            - 3. timestamp? optional, first just the 16 features
-        - Feature vector Y contains:
-            - amount of leak
-            - nodes that were in that group
-
-    # TODO try clustering approach that only keeps centroid and discard other data
-    #   X: | timestamp | s1 | s2 | ... | s8 |
-    #   Y: | (node, leak), (node, leak), .... |
-
-    # TODO read data from disk and generate feature vectors
-    # read_dfs_and_generate_feature_vectors("./data/", "mini_batch_kmeans")
-
-    # TODO plot the data
-
-    # TODO train the model: either k-means, gaussian mixture, dbscan, or anything that precomputes centroids
-    #   - Suitable implementations in sklearn:
-    #       - sklearn.cluster.MiniBatchKMeans
-    #       - sklearn.cluster.Birch
-    #       - ? ELKI's DBSCAN
-    """
-    pass
-
 
 def prepare_training_and_test_data(df):
     """
-
+    TODO add documentation
     :param df:
     :return:
     """

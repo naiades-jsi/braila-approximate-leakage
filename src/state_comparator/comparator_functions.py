@@ -147,10 +147,10 @@ def analyse_kafka_topic_and_find_critical_sensor(timestamp, kafka_array, epanet_
 
 def analyse_kafka_topic_and_check_for_missing_values(timestamp, kafka_array, sensor_names, minimum_present_values):
     """
-    TODO better documentation
-    Checks if there are any missing values in the kafka topic.
+    Function processes the kafka array of [[]*24] * 8 values and check for wrong or missing data. If enough data is
+    missing it raises an exception.
 
-    :return: Returns True if there are missing values and False if there are not.
+    :return: Dataframe, with times as index and sensor names as columns, and with pressure as values.
     """
     actual_values_df = create_df_from_real_values(kafka_array, timestamp, sensor_names)
     missing_values_check(actual_values_df, minimum_present_values, timestamp)

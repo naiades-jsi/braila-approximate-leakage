@@ -7,14 +7,22 @@ from datetime import datetime
 
 def prepare_output_json_meta_data(timestamp, sensor_with_leak, sensor_deviation, groups_dict, method, epanet_file):
     """
-    TODO add documentation
-    :param timestamp:
-    :param sensor_with_leak:
-    :param sensor_deviation:
-    :param groups_dict:
-    :param method:
-    :param epanet_file:
-    :return:
+    Function prepares the dictionary (JSON) which will be outputted by the application to the output kafka topic.
+    It contains all the meta data that is seen below, the most important part is the groups_arr which contains the data
+    about the nodes which are the most likely to have caused the leak.
+
+    :param timestamp: Timestamp, in epoch seconds from when the data was collected.
+    :param sensor_with_leak: String, of the sensor which is the most probable to have caused the leak.
+    :param sensor_deviation: Float, the amount by which the sensor deviates from its simulated values. This value is not
+    always provided since it doesn't provide enough meaningful information in some use cases
+    (there you can set it to 0.0).
+    :param groups_dict: Dictionary, with keys from 0...n which represent the group number and values which are lists of
+    nodes in that group.
+    :param method: String, method which was used to generate the groups and find the leaks.
+    Methods: TODO add a list of all possible methods
+    :param epanet_file: String, name of the EPANET file which was used to find the meta data about the sensors in the
+    groups.
+    :return: Dictionary, containing all the data to find the leak. Example of the output can be seen in the README.md
     """
     # Get meta data for nodes
     epanet_instance = EPANETUtils(epanet_file, "PDD")
@@ -35,13 +43,18 @@ def prepare_output_json_meta_data(timestamp, sensor_with_leak, sensor_deviation,
     return output_json
 
 
-def error_response(timestamp, nan_sensors_list, epanet_file):
+def generate_error_response_json(timestamp, nan_sensors_list, epanet_file):
     """
-    # TODO add documentation
-    :param timestamp:
-    :param nan_sensors_list:
-    :param epanet_file:
-    :return:
+    Function produces a dictionary which is meant as an error response from the main application. The dictionary
+    contains all the meta data that is available at the moment, timestamp of data collection, timestamp of when the
+    data was processed in this function, status code 412 which means that incorrect data was sent to the server, and
+    the list of sensors that didn't provide meaningful data.
+
+    :param timestamp: Timestamp, in epoch seconds from when the data was collected.
+    :param nan_sensors_list: List, of sensors that did contain zero or nan values.
+    :param epanet_file: String, name of the EPANET file which was used to find the meta data about the sensors which
+    contained wrong data.
+    :return: Dictionary, containing all the meta data that is available at the moment.
     """
     # Get meta data for sensors with nan
     epanet_instance = EPANETUtils(epanet_file, "PDD")

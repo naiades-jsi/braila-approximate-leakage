@@ -1,4 +1,4 @@
-from src.output_json_functions import error_response, prepare_output_json_meta_data
+from src.output_json_functions import generate_error_response_json, prepare_output_json_meta_data
 from src.divergence_matrix.DivergenceMatrixProcessor import DivergenceMatrixProcessor
 from src.epanet.EPANETUtils import EPANETUtils
 from src.epanet.NetworkVisualisation import plot_interactive_network, interactive_visualization
@@ -11,9 +11,6 @@ from json import dumps, loads
 import logging
 
 # TODO: fix paths in all of the files
-# TODO change timestamp processed at in the correct spelling
-
-# TODO limit cpu usage ?
 
 
 def main(date):
@@ -93,7 +90,7 @@ def service_main():
 
         except NaNSensorsException as e:
             logging.info("Sensor input data missing: " + str(e))
-            error_output = error_response(e.epoch_timestamp, e.sensors_list, config.EPANET_NETWORK_FILE)
+            error_output = generate_error_response_json(e.epoch_timestamp, e.sensors_list, config.EPANET_NETWORK_FILE)
 
             producer.send(config.OUTPUT_TOPIC, error_output)
 
