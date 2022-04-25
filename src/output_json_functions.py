@@ -70,24 +70,6 @@ def generate_error_response_json(timestamp, nan_sensors_list, epanet_file):
     return output_json
 
 
-# def retrieve_unix_seconds_from_timestamp(timestamp):
-#     """
-#     Formats UNIX timestamp to UNIX timestamp in seconds or returns the original timestamp if already in seconds.
-#
-#     :param timestamp: UNIX timestamp in seconds or UNIX timestamp in milliseconds.
-#     :return: Returns UNIX timestamp in int seconds.
-#     """
-#     timestamp_digits = len(str(timestamp))
-#     if timestamp_digits == 10:
-#         epoch_seconds = timestamp
-#     elif timestamp_digits == 13:
-#         epoch_seconds = timestamp // 1000
-#     else:
-#         raise Exception(f"Timestamp '{timestamp}' is not in Unix milliseconds or seconds !")
-#
-#     return int(epoch_seconds)
-
-
 def get_epanet_file_version(epanet_file_name):
     return epanet_file_name.split("/")[-1].replace("_2.2.inp", "")
 
