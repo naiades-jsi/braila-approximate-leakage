@@ -10,8 +10,7 @@ from src.helper_functions import visualize_node_groups
 from src.multicovariate_models.gmm_functions import predict_groups_gmm
 from src.output_json_functions import generate_error_response_json, prepare_output_json_meta_data
 from src.state_comparator.NaNSensorsException import NaNSensorsException
-from src.state_comparator.comparator_functions import analyse_kafka_topic_and_check_for_missing_values, \
-    prepare_input_kafka_1d_array
+from src.state_comparator.comparator_functions import prepare_input_kafka_1d_array
 
 
 def main_multiple_sensors_new_topic(path_to_model_pkl):

@@ -1,17 +1,25 @@
 # Instructions
 
 ## Running the project
+
+
 Dependencies needed to run the project:
 - all packages in requirements.txt must be installed
+- kafka server must be running on the specified IP address and port
+
+**Version 1. - Before March 2022**
 - in directory ```data/divergence_matrix``` a pickle file 
   (named "Divergence_M.pickle" if you don't want to change the configuration) 
   must be present containing difference in pressure between values with no 
   leak and with leak
-- kafka server must be running on the specified IP address and port
+- `main.py` should be run for this version
 
+**Version 2. - After March 2022**
+- a pickle file of a ML model must be present in the path specified in the main_pretrained_model.py
+- `main_pretrained_model.py` should be run for this version
 
 To run the project use Python3. Example command:    
-```python3 main.py```
+```python3 main_pretrained_model.py```
 
 ## Running as service on server
 If you wish to run the project on the server as a service use the following:    
@@ -38,13 +46,16 @@ Start a simple http server with pm2 and python:
 Check for messages from this app:    
 ```~/kafka/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic braila_leakage_groups --from-beginning```
 
-## Service output description
+# Service output description
 
-Below you see a sample output of the service.
+## Correct output example
+
+Below you see an example output when the service processes the data correctly.
 ```
 {
     "timestamp": 1637239315,        
     "timestamp-processed-at": 1637239315,
+    "status": 200,
     "critical-sensor": "SenzorComunarzi-NatVech",
     "deviation": 29.32,
     "method": "JNB",
@@ -70,6 +81,8 @@ Below you see a sample output of the service.
 Json keys above correspond to the following:
 - `"timestamp"`: UNIX timestamp of when the data was captured on the sensor.
 - `"timestamp-processed-at"`: UNIX timestamp of when the message was processed on the server.
+- `"status"`: Status code (HTTP mimic). 200 if the data was processed correctly, 412 if the data contained
+   missing values (NaN or values equal or lower to 0).
 - `"critical-sensor"`: Name of the sensor on which the leak was detected.
 - `"deviation"`: Deviation from the simulated value.
 - `"method"`: Method used to perform grouping of the nodes.
@@ -80,4 +93,28 @@ Json keys above correspond to the following:
   - `"longitude"`: Longitude of the node.
   - `"group"`: Severity group of the node (0 being most severe).
 
-TODO add information about error output and status code meanings
+
+## Incorrect (error) output example
+Below you see an example output of the service would return an error response.
+
+```
+{
+    "timestamp": 1637239315,        
+    "timestamp-processed-at": 1637239315,
+    "status": 412,
+    "epanet-file": "RaduNegru24May2021",
+    "data": [
+          {
+            "node-name": "760-A",
+            "latitude": 23.323,
+            "longitude": 47.232
+          },
+          {
+            "node-name": "Jonctiune-J-26",
+            "latitude": 23.323,
+            "longitude": 47.232
+          },
+          ...
+    ]
+}
+```

@@ -1,5 +1,3 @@
-import http
-
 import src.configfile as config
 from src.epanet.EPANETUtils import EPANETUtils
 from datetime import datetime
@@ -38,7 +36,7 @@ def prepare_output_json_meta_data(timestamp, sensor_with_leak, sensor_deviation,
         config.OUTPUT_JSON_CRITICAL_SENSOR_KEY: sensor_with_leak,
         config.OUTPUT_JSON_DEVIATION_KEY: round(sensor_deviation, 4),
         config.OUTPUT_JSON_METHOD_KEY: method,
-        config.OUTPUT_JSON_EPANET_F_KEY: get_epanet_file_version(epanet_file),
+        config.OUTPUT_JSON_EPANET_F_KEY: get_epanet_file_name_version(epanet_file),
         config.OUTPUT_JSON_NODES_KEY: groups_arr
     }
 
@@ -65,12 +63,13 @@ def generate_error_response_json(timestamp, nan_sensors_list, epanet_file):
         config.OUTPUT_JSON_TIME_KEY: convert_timestamp_to_epoch_seconds(timestamp),
         config.OUTPUT_JSON_TIME_PROCESSED_KEY: get_current_timestamp(),
         config.OUTPUT_JSON_STATUS_KEY: 412,
+        config.OUTPUT_JSON_EPANET_F_KEY: get_epanet_file_name_version(epanet_file),
         config.OUTPUT_JSON_NODES_KEY: epanet_instance.generate_nan_sensors_meta_data(nan_sensors_list)
     }
     return output_json
 
 
-def get_epanet_file_version(epanet_file_name):
+def get_epanet_file_name_version(epanet_file_name):
     return epanet_file_name.split("/")[-1].replace("_2.2.inp", "")
 
 
