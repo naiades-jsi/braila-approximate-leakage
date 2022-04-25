@@ -35,7 +35,7 @@ class MissingKafkaDataTest(unittest.TestCase):
                                                                          config.KAFKA_NODES_ORDER,
                                                                          minimum_present_values=21)
 
-        self.assertEqual("Missing values in the following sensors" in e.exception.message, True)
+        self.assertEqual("Missing values in the following sensors" in e.exception.error_msg, True)
 
     def test_correct_values(self):
         feature_arr = [20] * len(config.KAFKA_NODES_ORDER) * 24

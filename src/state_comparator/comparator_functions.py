@@ -68,19 +68,19 @@ def missing_values_check(df, minimum_present_values, timestamp):
     :param timestamp: Epoch timestamp.
     :return: Returns None if all sensors are OK else return all of the sensors where conditions are not met.
     """
-    # TODO extra error handling can be added here
-    sensors_with_missing_values = []
+    # TODO extra error handling can be added here, add checking if values are below zero or DEPRECATE function
+    sensors_with_nan_vals_tup_arr = []
     for column in df.columns:
         not_nan_values = len(df[column].dropna(inplace=False))
 
         if not_nan_values <= minimum_present_values:
-            sensors_with_missing_values.append(column)
+            sensors_with_nan_vals_tup_arr.append((column, None, np.nan))
 
-    if len(sensors_with_missing_values) < 1:
+    if len(sensors_with_nan_vals_tup_arr) < 1:
         # If all sensors are OK return None
         return None
     else:
-        raise NaNSensorsException(sensors_with_missing_values, timestamp)
+        raise NaNSensorsException(sensors_with_nan_vals_tup_arr, timestamp)
 
 
 def find_most_critical_sensor(error_dataframe, error_metric_column="Mean-error"):
@@ -207,15 +207,15 @@ def prepare_input_kafka_1d_array(timestamp, kafka_array):
      ]
 
     # Check for missing values in input
-    sensors_with_missing_values = []
+    missing_val_info_arr = []
     ordered_value_arr = []
     for value, name_tuple in ordered_array_val_sensor:
         if value <= 0 or value == np.nan:
-            sensors_with_missing_values.append(f"{name_tuple[1]}-({name_tuple[0]})")
+            missing_val_info_arr.append((name_tuple[1], name_tuple[0], value))
         ordered_value_arr.append(value)
 
-    if len(sensors_with_missing_values) > 0:
-        raise NaNSensorsException(sensors_with_missing_values, epoch_seconds)
+    if len(missing_val_info_arr) > 0:
+        raise NaNSensorsException(missing_val_info_arr, epoch_seconds)
 
     return ordered_value_arr, epoch_seconds
 
@@ -249,19 +249,18 @@ def create_df_from_real_values(measurements_arr, epoch_timestamp, sensor_names):
 
 def convert_timestamp_to_epoch_seconds(timestamp):
     """
-    Converts a timestamp from milliseconds to seconds or returns the original timestamp if already in seconds.
+    Formats UNIX timestamp to UNIX timestamp in seconds or returns the original timestamp if already in seconds.
 
-    :param timestamp: Timestamp in milliseconds or seconds.
-    :return: Timestamp in seconds.
+    :param timestamp: UNIX timestamp in seconds or UNIX timestamp in milliseconds.
+    :return: Returns UNIX timestamp in int seconds.
     """
     timestamp_digits = len(str(timestamp))
-
-    # Comparison if the timestamp is in milliseconds or seconds
     if timestamp_digits == 10:
         epoch_seconds = timestamp
     elif timestamp_digits == 13:
-        epoch_seconds = timestamp / 1000
+        # full division (could be replaced by round)
+        epoch_seconds = timestamp // 1000
     else:
-        raise Exception("Timestamp is not in Unix milliseconds or seconds !")
+        raise Exception(f"Timestamp '{timestamp}' is not in Unix milliseconds or seconds !")
 
-    return epoch_seconds
+    return int(epoch_seconds)

@@ -44,6 +44,9 @@ Website https://docs.rc.fas.harvard.edu/kb/convenient-slurm-commands/
 List all jobs from user:
 >squeue -u <user>
 
+Display more information about jobs:
+> squeue --format="%.18i %.9P %.30j %.8u %.8T %.10M %.9l %.6D %R" --me
+
 Cancel a job:
 >scancel <process id>
 
@@ -56,6 +59,9 @@ Cancel all jobs from user:
 ### Rsync
 Use rync since it is faster and more robust to errors.
 > rsync -avzr <username>@<server_adress>:/scratch-shared/NAIADES/ijs_simulations_v1/ \simulation & disown
+
+To reroute the output to a file and put the process in the background execution:
+> rsync -avzr stanonik@snellius.surf.nl:/scratch-shared/NAIADES/ijs_simulations_v1/ \simulations_one_leak_4_25_2022 > logs_25_4.txt 2>&1 &
 
 ### Scp
 Fastest method should be to use rsync, but if the server doesn't have it installed, we can use scp.

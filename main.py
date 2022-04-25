@@ -90,7 +90,7 @@ def service_main():
 
         except NaNSensorsException as e:
             logging.info("Sensor input data missing: " + str(e))
-            error_output = generate_error_response_json(e.epoch_timestamp, e.sensors_list, config.EPANET_NETWORK_FILE)
+            error_output = generate_error_response_json(e.epoch_timestamp, e.sensor_list, config.EPANET_NETWORK_FILE)
 
             producer.send(config.OUTPUT_TOPIC, error_output)
 

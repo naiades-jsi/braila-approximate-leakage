@@ -4,6 +4,8 @@ import src.configfile as config
 from src.epanet.EPANETUtils import EPANETUtils
 from datetime import datetime
 
+from src.state_comparator.comparator_functions import convert_timestamp_to_epoch_seconds
+
 
 def prepare_output_json_meta_data(timestamp, sensor_with_leak, sensor_deviation, groups_dict, method, epanet_file):
     """
@@ -30,7 +32,7 @@ def prepare_output_json_meta_data(timestamp, sensor_with_leak, sensor_deviation,
     groups_arr = epanet_instance.generate_node_array_with_meta_data(groups_dict)
 
     output_json = {
-        config.OUTPUT_JSON_TIME_KEY: retrieve_unix_seconds_from_timestamp(timestamp),
+        config.OUTPUT_JSON_TIME_KEY: convert_timestamp_to_epoch_seconds(timestamp),
         config.OUTPUT_JSON_TIME_PROCESSED_KEY: get_current_timestamp(),
         config.OUTPUT_JSON_STATUS_KEY: 200,
         config.OUTPUT_JSON_CRITICAL_SENSOR_KEY: sensor_with_leak,
@@ -60,7 +62,7 @@ def generate_error_response_json(timestamp, nan_sensors_list, epanet_file):
     epanet_instance = EPANETUtils(epanet_file, "PDD")
 
     output_json = {
-        config.OUTPUT_JSON_TIME_KEY: retrieve_unix_seconds_from_timestamp(timestamp),
+        config.OUTPUT_JSON_TIME_KEY: convert_timestamp_to_epoch_seconds(timestamp),
         config.OUTPUT_JSON_TIME_PROCESSED_KEY: get_current_timestamp(),
         config.OUTPUT_JSON_STATUS_KEY: 412,
         config.OUTPUT_JSON_NODES_KEY: epanet_instance.generate_nan_sensors_meta_data(nan_sensors_list)
@@ -68,22 +70,22 @@ def generate_error_response_json(timestamp, nan_sensors_list, epanet_file):
     return output_json
 
 
-def retrieve_unix_seconds_from_timestamp(timestamp):
-    """
-    Formats UNIX timestamp to UNIX timestamp in seconds.
-
-    :param timestamp: UNIX timestamp in seconds or UNIX timestamp in milliseconds.
-    :return: Returns UNIX timestamp in int seconds.
-    """
-    timestamp_digits = len(str(timestamp))
-    if timestamp_digits == 10:
-        epoch_seconds = timestamp
-    elif timestamp_digits == 13:
-        epoch_seconds = timestamp // 1000
-    else:
-        raise Exception("Timestamp is not in Unix milliseconds or seconds !")
-
-    return int(epoch_seconds)
+# def retrieve_unix_seconds_from_timestamp(timestamp):
+#     """
+#     Formats UNIX timestamp to UNIX timestamp in seconds or returns the original timestamp if already in seconds.
+#
+#     :param timestamp: UNIX timestamp in seconds or UNIX timestamp in milliseconds.
+#     :return: Returns UNIX timestamp in int seconds.
+#     """
+#     timestamp_digits = len(str(timestamp))
+#     if timestamp_digits == 10:
+#         epoch_seconds = timestamp
+#     elif timestamp_digits == 13:
+#         epoch_seconds = timestamp // 1000
+#     else:
+#         raise Exception(f"Timestamp '{timestamp}' is not in Unix milliseconds or seconds !")
+#
+#     return int(epoch_seconds)
 
 
 def get_epanet_file_version(epanet_file_name):
