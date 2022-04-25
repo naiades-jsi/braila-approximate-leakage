@@ -1,3 +1,5 @@
+from datetime import datetime
+
 
 class NaNSensorsException(Exception):
     def __init__(self, sensors_name_alt_value_list, epoch_timestamp):
@@ -12,8 +14,9 @@ class NaNSensorsException(Exception):
         self.sensor_list = [i[0] for i in sensors_name_alt_value_list]
         self.sensors_name_alt_value_list = sensors_name_alt_value_list
         self.epoch_timestamp = epoch_timestamp
+        dt_time = datetime.fromtimestamp(self.epoch_timestamp)
 
-        self.error_msg = f"Missing values in the following sensors at time {self.epoch_timestamp}:"
+        self.error_msg = f"Missing values in the following sensors at time {dt_time} (UNIX: {self.epoch_timestamp}):"
         for sensor_name, alternative_name, value in self.sensors_name_alt_value_list:
             self.error_msg += f" - name: {sensor_name}, alternative name: {alternative_name}, value: {value}"
 
