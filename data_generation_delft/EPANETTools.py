@@ -253,7 +253,6 @@ def RunCycle2_v2(Run=1, Threshold=0.5, DirPath='test', Lnz='', ModName='NoNameSe
                 Net.get_node(NN2).add_demand(base=1, pattern_name='New')  # Add leakflow
 
                 Net.get_node(NN).add_demand(base=1, pattern_name='New')  # Add leakflow
-                print(f"the node is {NN}")
                 # print(f'before run leak node no={i}, leak flow{k}')
                 Net_New = RunNet(Net, DirPath)  # Run new model
                 # __________________________________________

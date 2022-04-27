@@ -23,11 +23,9 @@ echo 'Running WDN - ' ${NetworkRuns[$Mod]}
 # TODO merge files and make this all modular
 # Change this in EPanettools also
 DataDirectory="/scratch-shared/NAIADES/ijs_simulations_v1/$Mod"
-
-#-------------------------------------------------
 cp $HOME/NAIADES/Start/Networks/${NetworkRuns[$Mod]} "$TMPDIR"
 
-
+echo "Parameters: $SLURM_ARRAY_TASK_ID $TMPDIR $DataDirectory ${NetworkRuns[$Mod]} $Mod"
 python Main.py $SLURM_ARRAY_TASK_ID $TMPDIR $DataDirectory ${NetworkRuns[$Mod]} $Mod
 
 echo "Finished Braila"

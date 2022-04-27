@@ -6,7 +6,7 @@
 #SBATCH --error=outGA/NAIADES_%A_%a.err
 #SBATCH --partition thin
 #SBATCH --cpus-per-task 1
-#SBATCH --mem=4G
+#SBATCH --mem=32G
 #SBATCH --mail-user=stanonik
 #SBATCH --array=1-201
 module load 2021
@@ -28,4 +28,6 @@ echo "$SLURM_ARRAY_TASK_ID"
 
 cp  $HOME/NAIADES/Start/Networks/${NetworkRuns[$Mod]} "$TMPDIR"
 DataDirectory="/scratch-shared/NAIADES/$Mod"
+echo "Parameters: $SLURM_ARRAY_TASK_ID $TMPDIR $DataDirectory ${NetworkRuns[$Mod]} $Mod"
+
 python Main2.py $SLURM_ARRAY_TASK_ID $TMPDIR $DataDirectory ${NetworkRuns[$Mod]} $Mod

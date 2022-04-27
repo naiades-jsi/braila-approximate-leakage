@@ -50,8 +50,11 @@ Display more information about jobs:
 Cancel a job:
 >scancel <process id>
 
+Cancel all jobs with name:
+> scancel --name < job_name >
+
 Cancel all jobs from user:
-> scancel -u <user>
+> scancel -u < user >
 
 
 ## Data transferring
@@ -65,11 +68,9 @@ To reroute the output to a file and put the process in the background execution:
 
 ### Scp
 Fastest method should be to use rsync, but if the server doesn't have it installed, we can use scp.
-> scp -r <username>@<server_adress>:/scratch-shared/NAIADES/ijs_simulations_v1/ \simulations\ & disown
+> scp -r  < username >@<server_adress>:/scratch-shared/NAIADES/ijs_simulations_v1/ \simulations\ & disown
 
 Where the first path is the path on the linux server from which we are copying from and the second is the 
 path on the windows machine where we want to copy to.
-
-
 
 
