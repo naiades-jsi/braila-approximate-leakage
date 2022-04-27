@@ -102,7 +102,7 @@ def RunCycle_v2(Run=1, Threshold=0.5, DirPath='test', Lnz='', ModName='NotSent')
     LPM = []  # Leak pressure matrix
     LM = []  # Leakage Matrix
     DM = []  # Divergence matrix
-    R = {}
+    main_data_dict = {}
 
     Leak_Nodes = Lnz  # (Net.junction_name_list
     Sensor_Nodes = Lnz
@@ -146,9 +146,9 @@ def RunCycle_v2(Run=1, Threshold=0.5, DirPath='test', Lnz='', ModName='NotSent')
         print('____**____')
         print(f'All leaks nodes {i} Time= {time.time() - start2}')
 
-    R['LPM'] = LPM
-    R['DM'] = DM
-    R['LM'] = LM
+    main_data_dict['LPM'] = LPM
+    main_data_dict['DM'] = DM
+    main_data_dict['LM'] = LM
 
     print(f'Finish Time 1= {time.time() - start_time}')
     TM_ = []  # time when the leak was identified
@@ -173,18 +173,17 @@ def RunCycle_v2(Run=1, Threshold=0.5, DirPath='test', Lnz='', ModName='NotSent')
         WLM.append(list(WLMtemp))
     print(f'Finish Time 2= {time.time() - start_3}')
 
-    R['LPM'] = LPM
-    R['DM'] = DM
-    R['LM'] = LM
-    R['Meta'] = {'Leakmin': Leakmin, 'Leakmax': Leakmax, 'Run': Run, 'Run Time': time.time() - start_time}
-    R['TM_l'] = TM_
-    R['WLM'] = WLM
+    main_data_dict['LPM'] = LPM
+    main_data_dict['DM'] = DM
+    main_data_dict['LM'] = LM
+    main_data_dict['Meta'] = {'Leakmin': Leakmin, 'Leakmax': Leakmax, 'Run': Run, 'Run Time': time.time() - start_time}
+    main_data_dict['TM_l'] = TM_
+    main_data_dict['WLM'] = WLM
 
     # Better way to save the data
-    # TODO reformulate string
-    with open("/scratch-shared/NAIADES/ijs_simulations_v1/" + ModName + '/1Leak_' + str(Run) + '_' + ModName + '_'
-              + str(Leakmin) + '.pkl', 'wb') as end_file:
-        pickle.dump(R, end_file)
+    out_f_name = f"/scratch-shared/NAIADES/ijs_simulations_v1/{ModName}/1Leak_{str(Run)}_{ModName}_{str(Leakmin)}.pkl"
+    with open(out_f_name, 'wb') as end_file:
+        pickle.dump(main_data_dict, end_file)
 
     return "success"
 
@@ -221,7 +220,7 @@ def RunCycle2_v2(Run=1, Threshold=0.5, DirPath='test', Lnz='', ModName='NoNameSe
     LPM = []  # Leak pressure matrix
     LM = []  # Leakage Matrix
     DM = []  # Divergence matrix
-    R = {}
+    main_data_dict = {}
 
     Leak_Nodes = Lnz  # (Net.junction_name_list
     Sensor_Nodes = Lnz
@@ -231,7 +230,6 @@ def RunCycle2_v2(Run=1, Threshold=0.5, DirPath='test', Lnz='', ModName='NoNameSe
     Leakmax = (Run + 1) / 10
     # dl=(Leakmax-Leakmin)/10
     LeakFlows = np.arange(Leakmin, Leakmax, 0.001)
-    # TempLeak = Leak_Nodes   # TODO removed this, gets rewritten instantly
     to_row = St * 3600
     round_leak_to = 4
     for i, NN in enumerate(Leak_Nodes):
@@ -301,18 +299,16 @@ def RunCycle2_v2(Run=1, Threshold=0.5, DirPath='test', Lnz='', ModName='NoNameSe
         WLM.append(WLMtemp)
     print(f'Finish Time 2= {time.time() - start2}')
 
-    R['LPM'] = LPM
-    R['DM'] = DM
-    R['LM'] = LM
-    R['Meta'] = {'Leakmin': Leakmin, 'Leakmax': Leakmax, 'Run': Run, 'Run Time': time.time() - start2,
+    main_data_dict['LPM'] = LPM
+    main_data_dict['DM'] = DM
+    main_data_dict['LM'] = LM
+    main_data_dict['Meta'] = {'Leakmin': Leakmin, 'Leakmax': Leakmax, 'Run': Run, 'Run Time': time.time() - start2,
                  'Two Nodes': "Yes"}
-    R['TM_l'] = TM_
-    R['WLM'] = WLM
+    main_data_dict['TM_l'] = TM_
+    main_data_dict['WLM'] = WLM
 
-    # f=open("/scratch-shared/NAIADES/CalAll/"+'DF_'+str(Run)+'_'+str(i)+'.pkl','wb')
-    # f=open("/scratch-shared/NAIADES/CalGA/"+'DF_'+str(Run)+'_'+str(i)+'.pkl','wb')
-    # TODO reformulate -> move string to global var
-    with open("/scratch-shared/NAIADES/ijs_simulations_v1/" + ModName + '/2Nodes_' + str(Run) + '_' + ModName + '_' + str(Leakmin) + '.pkl', 'wb') as f:
-        pickle.dump(R, f)
+    out_f_name = f"/scratch-shared/NAIADES/ijs_simulations_v1/{ModName}/2Nodes_{str(Run)}_{ModName}_{str(Leakmin)}.pkl"
+    with open(out_f_name, 'wb') as f:
+        pickle.dump(main_data_dict, f)
 
     return 'Success'
