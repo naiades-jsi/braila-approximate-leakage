@@ -64,7 +64,7 @@ Use rync since it is faster and more robust to errors.
 > rsync -avzr <username>@<server_adress>:/scratch-shared/NAIADES/ijs_simulations_v1/ \simulation & disown
 
 To reroute the output to a file and put the process in the background execution:
-> rsync -avzr stanonik@snellius.surf.nl:/scratch-shared/NAIADES/ijs_simulations_v1/ \simulations_one_leak_4_25_2022 > logs_25_4.txt 2>&1 &
+> rsync -avzr < username >@snellius.surf.nl:/scratch-shared/NAIADES/ijs_simulations_v1/ \simulations_one_leak_4_25_2022 > logs_25_4.txt 2>&1 &
 
 ### Scp
 Fastest method should be to use rsync, but if the server doesn't have it installed, we can use scp.
