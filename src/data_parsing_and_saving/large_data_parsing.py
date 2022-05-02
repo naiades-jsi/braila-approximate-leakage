@@ -78,6 +78,9 @@ def prepare_df_from_file(file_name, sensor_names_arr, column_names_arr):
     except FileNotFoundError as e:
         print(f"File not found, for file '{file_name}': {e}")
 
+    except EOFError as e:
+        print(f"Error when reading the file, for file '{file_name}': {e}")
+
     return file_df
 
 
