@@ -86,4 +86,5 @@ if __name__ == "__main__":
                         datefmt="%Y-%m-%d %H:%M:%S"
                         )
     main_multiple_sensors_new_topic("./data/trained_models/gmm_trained_model_30_03_2022.pkl")
+    # TODO finish PCA reduction and find out how leakage amount actually effects simulated data
 

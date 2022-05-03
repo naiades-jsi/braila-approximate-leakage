@@ -61,11 +61,10 @@ def prepare_df_from_file(file_name, sensor_names_arr, column_names_arr):
             # if we want to get seconds: * 3600, -1 because it has hours from 1...24, array is 0...23
             # get timestamp when leak would be most noticeable
             timestamp_of_leak = int(file_dict["TM_l"][df_index][0]) * 3600
-
-            # filter data to only keep the columns relevant to us
             temp_df = temp_df[sensor_names_arr]
-            # filter to only get one column
+            # filter to only get one row
             prepared_df = temp_df.loc[timestamp_of_leak].to_frame().T
+
             node_name_and_leak_tup = [i.strip() for i in prepared_df.columns.name.split(",")]
             prepared_df.at[timestamp_of_leak, column_names_arr[0]] = node_name_and_leak_tup[0]
             prepared_df.at[timestamp_of_leak, column_names_arr[1]] = node_name_and_leak_tup[1]

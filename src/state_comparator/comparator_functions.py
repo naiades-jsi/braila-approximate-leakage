@@ -196,13 +196,16 @@ def prepare_input_kafka_1d_array(timestamp, kafka_array):
 
     # Correct order for model (7 sensors): Sensor1, Sensor2, Sensor3,	Sensor4, J-Apollo, J-RN2, J-RN1
     # J-GA is discarded since it is broken and is always zero
+    # sensor J-RN2 (flow318505H498) is also broken serving incorrect data
+    # TODO replace value with sensor_to_values_dict[("flow318505H498", "J-RN2")], when sensor fixed current value
+    #  chosen from EPANET to be neutral and not impact the prediction accuracy
     ordered_array_val_sensor = [
         [sensor_to_values_dict[("pressure5770", "Sensor1")], ("pressure5770", "Sensor1")],
         [sensor_to_values_dict[("pressure5773", "Sensor2")], ("pressure5773", "Sensor2")],
         [sensor_to_values_dict[("pressure5771", "Sensor3")], ("pressure5771", "Sensor3")],
         [sensor_to_values_dict[("pressure5772", "Sensor4")], ("pressure5772", "Sensor4")],
         [sensor_to_values_dict[("flow211206H360", "J-Apollo")], ("flow211206H360", "J-Apollo")],
-        [sensor_to_values_dict[("flow318505H498", "J-RN2")], ("flow318505H498", "J-RN2")],
+        [17.10, ("flow318505H498", "J-RN2")],
         [sensor_to_values_dict[("flow211306H360", "J-RN1")], ("flow211306H360", "J-RN1")]
      ]
 
