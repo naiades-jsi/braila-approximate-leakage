@@ -176,7 +176,7 @@ def prepare_input_kafka_1d_array(timestamp, kafka_array):
         8. pressure5773
     It is important because these values will be passed to the model which can produce the wrong result if the order
     is not correct.
-    :return: tuple of the input array sorted in the correct order and timestamp.
+    :return: Tuple of a 2D array with only one row which is sorted in the correct order and timestamp.
     """
     if len(kafka_array) != 8:
         raise Exception("The kafka array should have 8 values !")
@@ -220,7 +220,7 @@ def prepare_input_kafka_1d_array(timestamp, kafka_array):
     if len(missing_val_info_arr) > 0:
         raise NaNSensorsException(missing_val_info_arr, epoch_seconds)
 
-    return ordered_value_arr, epoch_seconds
+    return [ordered_value_arr], epoch_seconds
 
 
 def create_df_from_real_values(measurements_arr, epoch_timestamp, sensor_names):
