@@ -47,6 +47,8 @@ def main_multiple_sensors_new_topic(path_to_model_pkl):
             dt_time = datetime.fromtimestamp(epoch_sec)
             diverged_str = f"Most diverged node is: {diverged_node}. For values at datetime: {dt_time}"
             logging.info(diverged_str)
+            visualize_node_groups(diverged_node, groups_dict, config.EPANET_NETWORK_FILE, config.LEAK_AMOUNT,
+                                  filename="./grafana-files/braila_network.html")
 
             output_json = prepare_output_json_meta_data(
                 timestamp=current_timestamp,
@@ -56,10 +58,7 @@ def main_multiple_sensors_new_topic(path_to_model_pkl):
                 method="gmm+jenks_natural_breaks",
                 epanet_file=config.EPANET_NETWORK_FILE_V2
             )
-
             future = producer.send(config.OUTPUT_TOPIC, output_json)
-            visualize_node_groups(diverged_node, groups_dict, config.EPANET_NETWORK_FILE, config.LEAK_AMOUNT,
-                                  filename="./grafana-files/braila_network.html")
 
             log_msg = f"Alert !! Deviation reached over threshold -Sensor: {diverged_node} -Time: {dt_time}"
             logging.info(log_msg)
