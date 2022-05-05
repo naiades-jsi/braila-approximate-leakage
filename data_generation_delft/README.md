@@ -73,4 +73,11 @@ Fastest method should be to use rsync, but if the server doesn't have it install
 Where the first path is the path on the linux server from which we are copying from and the second is the 
 path on the windows machine where we want to copy to.
 
+## Correct parameters to python
+
+One leak:
+Parameters: 111 /scratch-local/stanonik.809301 /scratch-shared/NAIADES/ijs_simulations_v1/Braila Braila_V2022.inp Braila
+Two leaks:
+Parameters: 1 /scratch-local/stanonik.809504 /scratch-shared/NAIADES/ijs_simulations_v1/Braila Braila_V2022.inp Braila
+
 
