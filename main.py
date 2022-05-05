@@ -77,7 +77,7 @@ def service_main():
 
                 future = producer.send(config.OUTPUT_TOPIC, output_json)
                 visualize_node_groups(diverged_node, groups_dict, config.EPANET_NETWORK_FILE, config.LEAK_AMOUNT,
-                                      filename="../grafana-files/braila_network.html")
+                                      filename="./grafana-files/braila_network.html")
 
                 log_msg = "Alert !! Deviation reached over threshold -Sensor: {} -Time: {}" \
                     .format(diverged_node, dt_time)
