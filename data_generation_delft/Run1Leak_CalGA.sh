@@ -1,14 +1,14 @@
 #!/bin/bash
+#SBATCH -N 1 --ntasks=100
+#SBATCH --time 1:00:00
+#SBATCH --mem=16G
+#SBATCH --array=110-220
 #SBATCH --job-name=NAIADES_JOB_ZAN_33
-#SBATCH -N 4 --ntasks=25
-#SBATCH --time  3:00:00
 #SBATCH --output=outCalGa/NAIDES_%A_%a.out
 #SBATCH --error=outCalGa/NAIADES_%A_%a.err
 #SBATCH --partition thin
-#SBATCH --mem=4G
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=stanonik
-#SBATCH --array=110-220
 
 module load 2021
 module load Python/3.9.5-GCCcore-10.3.0
