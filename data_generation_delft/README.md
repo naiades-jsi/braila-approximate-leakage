@@ -12,11 +12,12 @@ Command in script where it is used:
 Command in script where it is used (sixt of these folders need to be created):
 > SBATCH --output=outBraila and SBATCH --error=outGA
  
-> mkdir outBraila outCalAll outCalGa
-> mkdir outTwoLeakBraila outTwoLeakCalAll outTwoLeakCalGa
+` mkdir outBraila outCalAll outCalGa`   
+`mkdir outTwoLeakBraila outTwoLeakCalAll outTwoLeakCalGa`
 
 3. Create a folder on root "/scratch-shared/NAIADES/<folder_name>"
 > mkdir /scratch-shared/NAIADES/ijs_simulations_v1 or any other folder name but code has to be changed then
+`mkdir Braila CalAll CalGA`
 4. -ntask should never be lower than 25
 
 
