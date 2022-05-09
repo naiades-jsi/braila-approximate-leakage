@@ -7,76 +7,75 @@ import pandas as pd
 import wntr
 
 
+# # saving current epanet file to a temporary .pkl file
+# no_leak_file_name = "no_leak_network.pkl"
+# with open(no_leak_file_name, "wb") as f:
+#     pickle.dump(water_network_model, f)
+
+# # saving the results of the simulation to a temporary .pkl file
+# sim_res_file_name = "simulation_results.pkl"
+# with open(sim_res_file_name, "wb") as f:
+#     pickle.dump(simulation_results, f)
+SECONDS_IN_HOUR = 3600
+NUMBER_OF_DAYS = 1
+
+
 def one_leak_node_file_generation(epanet_file_name):
-    # TODO, replace prints with logging
+    # TODO replace prints with logging
+    # TODO add multithreading
     print(f"Epanet file name: {epanet_file_name}")
+    demand_model_method = "PDD"
+
     water_network_model = wntr.network.WaterNetworkModel(epanet_file_name)
+    simulation_results = run_simulation(water_network_model)
+
     base_demands_arr, base_demands_mean, node_names_arr = get_node_base_demands_and_names(water_network_model)
 
-    # saving current epanet file to a temporary .pkl file
-    no_leak_file_name = "no_leak_network.pkl"
-    with open(no_leak_file_name, "wb") as f:
-        pickle.dump(water_network_model, f)
+    # Prepare general water network model for the leak simulation
+    water_network_model.options.time.duration = NUMBER_OF_DAYS * 24 * SECONDS_IN_HOUR  # Time of simulation
+    water_network_model.options.hydraulic.demand_model = demand_model_method
 
-    simulation_results = run_simulation(water_network_model)
-    # saving the results of the simulation to a temporary .pkl file
-    sim_res_file_name = "simulation_results.pkl"
-    with open(sim_res_file_name, "wb") as f:
-        pickle.dump(simulation_results, f)
-
-    # TODO new function for the code below
-    # RunCycle2_v2(Run=RunId, Threshold=0.5, DirPath=DirInput, Lnz=Lnz, ModName=Mod)
-    # def RunCycle_v2(Run=1, Threshold=0.5, DirPath='test', Lnz='', ModName='NotSent'):
+    # Fix these parameters
     Run = 1
     # 1 m³/s = 1000 L/s
     # L/s = m³/s * 1000
-    # TODO refactor this to variable parameters
     minimum_leak = Run / 10
     maximum_leak = (Run + 1) / 10
-
     leak_flow_threshold = 0.5
-    temp_epanet_file_prefix = f"temp_{epanet_file_name}"
-    ModName = 'NotSent'
-    demand_model_method = "PDD"
-    number_of_days = 1
-    seconds_in_hour = 3600
+
+    start_time = time.time()
+    run_one_leak_per_node_simulation(run_id=Run,
+                                     wn_model=water_network_model,
+                                     node_names_arr=node_names_arr,
+                                     base_sim_results=simulation_results,
+                                     minimum_leak=minimum_leak,
+                                     maximum_leak=maximum_leak,
+                                     leak_flow_threshold=leak_flow_threshold,
+                                     output_file_name="testing.pkl")
+    print(f"Ended execution in {time.time() - start_time} seconds")
+
+
+def run_one_leak_per_node_simulation(run_id, wn_model, node_names_arr, base_sim_results, minimum_leak, maximum_leak,
+                                     leak_flow_threshold, output_file_name, include_extra_info=False):
+    round_leak_to = 4
     start_time = time.time()
 
-    with open(no_leak_file_name, 'rb') as f:
-        water_network_model_f = pickle.load(f)
+    # copy original data so it will not be modified
+    water_network_model_f = copy.deepcopy(wn_model)
+    org_simulation_results = copy.deepcopy(base_sim_results)
 
-    with open(sim_res_file_name, 'rb') as f:
-        org_simulation_results = pickle.load(f)
-
-    water_network_model_f.options.time.duration = number_of_days * 24 * seconds_in_hour  # Time of simulation
-    water_network_model_f.options.hydraulic.demand_model = demand_model_method
-
-    base_leak_instance = copy.deepcopy(water_network_model_f)
     steps_in_a_day = int(water_network_model_f.options.time.duration / water_network_model_f.options.time.hydraulic_timestep)
+    last_hour_seconds = steps_in_a_day * SECONDS_IN_HOUR
 
     # df of pressures, with timestamps as index and node names as columns
-    base_pressures_df = org_simulation_results.node["pressure"].loc[1:steps_in_a_day * seconds_in_hour, water_network_model_f.junction_name_list]
-    base_pressures_df = base_pressures_df[node_names_arr]
+    base_pressures_df = org_simulation_results.node["pressure"].loc[1:last_hour_seconds, node_names_arr]
 
-    leak_pressure_matrix = []
-    leak_matrix = []
-    divergence_matrix = []
-    main_data_dict = {}
-    # Used only in some cases
-    time_of_leak_identification_arr = []
-    water_loss_matrix_arr = []
-
-    # Leak_Nodes = node_names_arr
-    # Sensor_Nodes = node_names_arr
     print(f"Number of nodes {len(node_names_arr)}")
-
     print(f"leaks {minimum_leak}, {maximum_leak}")
     # added rounding to prevent floating point errors
     leak_amounts_arr = [round(i, 3) for i in np.arange(minimum_leak, maximum_leak, 0.001)]
 
-    to_row = steps_in_a_day * 3600
     len_leak_amounts_arr = len(leak_amounts_arr)
-    round_leak_to = 4
     # TODO optimize run time
     for curr_node_name in node_names_arr[:2]:
         start2 = time.time()
@@ -87,71 +86,87 @@ def one_leak_node_file_generation(epanet_file_name):
             # TODO take care of the units m3/s -> liters/s etc., is it ok now?
             # Converting from LPS to m3/s
             lps_leak = round(curr_leak_flow / 1000, 6)
-            curr_leak_flow_arr = [lps_leak] * (24 * number_of_days + 1)
-            water_network_model_f = copy.deepcopy(base_leak_instance)
+            curr_leak_flow_arr = [lps_leak] * (24 * NUMBER_OF_DAYS + 1)
+            temp_water_network_model = copy.deepcopy(water_network_model_f)
 
             # adding leak to existing model
-            water_network_model_f.add_pattern(name="New", pattern=curr_leak_flow_arr)  # Add New Patter To the model
-            water_network_model_f.get_node(curr_node_name).add_demand(base=1, pattern_name="New")  # Add leakflow
+            temp_water_network_model.add_pattern(name="New", pattern=curr_leak_flow_arr)  # Add New Patter To the model
+            temp_water_network_model.get_node(curr_node_name).add_demand(base=1, pattern_name="New")  # Add leakflow
 
-            sim_results_with_leak = run_simulation(water_network_model_f).node["pressure"].loc[1:to_row, node_names_arr]
+            sim_results_with_leak = run_simulation(temp_water_network_model).node["pressure"].loc[1:last_hour_seconds, node_names_arr]
             # renaming axis to match node that has the current leak
             sim_results_with_leak = sim_results_with_leak.rename_axis(curr_axis_name, axis=1)
 
-            temp_divergence_df = base_pressures_df.sub(sim_results_with_leak[node_names_arr], fill_value=0)\
+            divergence_df = base_pressures_df.sub(sim_results_with_leak[node_names_arr], fill_value=0) \
                 .abs().rename_axis(curr_axis_name, axis=1)
 
-            # TODO remove this
             used_leak_flows_df = pd.DataFrame([k * 1000 for k in curr_leak_flow_arr[1:]], columns=["LeakFlow"],
-                                              index=list(range(seconds_in_hour, to_row + 3600, 3600)))\
+                                              index=list(range(SECONDS_IN_HOUR, last_hour_seconds + 3600, 3600))) \
                 .rename_axis(curr_axis_name, axis=1)
+            # TODO remove this
             # used_leak_flows_df = pd.DataFrame([curr_leak_flow], columns=["LeakFlow"]).rename_axis(curr_axis_name, axis=1)
 
-            # This determines which nodes are over the threshold for leak and what is their commutative leak flow
-            tmp_leak_identified_time_arr = []  # time when the leak was identified
-            tmp_water_loss_arr = []  # Water loss arr (L/s), how much water is wasted
-            for node_name_i in node_names_arr:
-                comm_leak_flow = 0
-                leak_detected_hour = 0
-                for hour_in_day in range(1 * seconds_in_hour, 25 * seconds_in_hour, seconds_in_hour):
-                    comm_leak_flow += used_leak_flows_df["LeakFlow"][hour_in_day] * 3600
-                    if temp_divergence_df.loc[hour_in_day, node_name_i] > leak_flow_threshold:
-                        leak_detected_hour = hour_in_day
-                        break
-                tmp_leak_identified_time_arr.append(leak_detected_hour)
-                tmp_water_loss_arr.append(round(comm_leak_flow, round_leak_to))
+            # prepare dictionary for saving, TODO restructure?
+            main_data_dict = {
+                "LPM": sim_results_with_leak,
+                "DM": divergence_df,
+                "LM": used_leak_flows_df,
+                "Meta": {"Leakmin": minimum_leak,
+                         "Leakmax": maximum_leak,
+                         "Run": run_id,
+                         "Run Time": time.time() - start_time
+                         }
+            }
+            if include_extra_info:
+                leak_i_time_arr, water_loss_arr = \
+                    get_leak_time_identification_and_water_loss_from_df(divergence_df, used_leak_flows_df,
+                                                                        leak_flow_threshold)
+                main_data_dict["TM_l"] = leak_i_time_arr
+                main_data_dict["WLM"] = water_loss_arr
 
-            # extra data
-            print(f"hour {tmp_leak_identified_time_arr}, \nleak flow {tmp_water_loss_arr}\n")
-            time_of_leak_identification_arr.append(tmp_leak_identified_time_arr)
-            water_loss_matrix_arr.append(tmp_water_loss_arr)
-
-            # saving to dictionary -> TODO refactor to directly append to file to save memory
-            leak_pressure_matrix.append(sim_results_with_leak)
-            divergence_matrix.append(temp_divergence_df)
-            leak_matrix.append(used_leak_flows_df)
-
-            # print(f"Index = {index}/{len_leak_amounts_arr} and value {curr_leak_flow}, LeakNode={curr_node_name}, actual_l_: {curr_leak_flow_arr[0]}, {curr_axis_name}")
+            # saving to file
+            append_dict_to_file(main_data_dict, out_f_name=output_file_name)
+            print(f"Index = {index}/{len_leak_amounts_arr} and value {curr_leak_flow}, LeakNode={curr_node_name}, "
+                  f"actual_l_: {curr_leak_flow_arr[0]}, {curr_axis_name}")
         print("____**____")
         print(f"All leaks nodes {curr_node_name} Time= {time.time() - start2}")
 
-    main_data_dict["LPM"] = leak_pressure_matrix
-    main_data_dict["DM"] = divergence_matrix
-    main_data_dict["LM"] = leak_matrix
-    main_data_dict["Meta"] = {"Leakmin": minimum_leak, "Leakmax": maximum_leak, "Run": Run, "Run Time": time.time() - start_time}
-    main_data_dict["TM_l"] = time_of_leak_identification_arr
-    main_data_dict["WLM"] = water_loss_matrix_arr
 
-    print(f"Finish Time 1= {time.time() - start_time}")
+def append_dict_to_file(main_data_dict, out_f_name):
+    # TODO try different data formats, parquet etc
+    if not out_f_name.endswith(".pkl"):
+        raise Exception("Output file must be a .pkl file")
+    with open(out_f_name, "ab") as file:
+        pickle.dump(main_data_dict, file)
 
 
-    start_3 = time.time()
-    # # Better way to save the data
-    # out_f_name = f"/scratch-shared/NAIADES/ijs_simulations_v1/{ModName}/1Leak_{str(Run)}_{ModName}_{str(minimum_leak)}.pkl"
-    # with open(out_f_name, 'wb') as end_file:
-    #     pickle.dump(main_data_dict, end_file)
-    #
-    # return "success"
+def get_leak_time_identification_and_water_loss_from_df(divergence_df, leak_flows_df, leak_flow_threshold):
+    """
+    TODO
+
+    # This determines which nodes are over the threshold for leak and what is their commutative leak flow
+    :param divergence_df:
+    :param leak_flows_df:
+    :param leak_flow_threshold:
+    :return:
+    """
+    leak_identified_time_arr = []  # time when the leak was identified
+    water_loss_arr = []  # Water loss arr (L/s), how much water is wasted
+    seconds_in_hour = 3600
+
+    for node_name_i in divergence_df.columns:
+        comm_leak_flow = 0
+        leak_detected_hour = 0
+        for hour_in_day in range(seconds_in_hour, 25 * seconds_in_hour, seconds_in_hour):
+            comm_leak_flow += leak_flows_df["LeakFlow"][hour_in_day] * 3600
+
+            if divergence_df.loc[hour_in_day, node_name_i] > leak_flow_threshold:
+                leak_detected_hour = hour_in_day
+                break
+        leak_identified_time_arr.append(leak_detected_hour)
+        water_loss_arr.append(round(comm_leak_flow, 4))
+
+    return leak_identified_time_arr, water_loss_arr
 
 
 def run_simulation(wntr_network_instance, file_prefix="temp_"):
@@ -204,4 +219,3 @@ def get_node_base_demands_and_names(epanet_network, junction_name_arr=None):
 
 if __name__ == "__main__":
     one_leak_node_file_generation("../../data/epanet_networks/Braila_V2022_2_2.inp")
-
