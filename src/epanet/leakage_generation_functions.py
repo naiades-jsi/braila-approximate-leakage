@@ -7,24 +7,19 @@ import pandas as pd
 import wntr
 
 
-# # saving current epanet file to a temporary .pkl file
-# no_leak_file_name = "no_leak_network.pkl"
-# with open(no_leak_file_name, "wb") as f:
-#     pickle.dump(water_network_model, f)
-
-# # saving the results of the simulation to a temporary .pkl file
-# sim_res_file_name = "simulation_results.pkl"
-# with open(sim_res_file_name, "wb") as f:
-#     pickle.dump(simulation_results, f)
 SECONDS_IN_HOUR = 3600
 NUMBER_OF_DAYS = 1
 
 
-def one_leak_node_file_generation(epanet_file_name):
+def one_leak_node_file_generation(epanet_file_name, min_leak=0.5, max_leak=3.0):
     # TODO replace prints with logging
     # TODO add multithreading
+    # TODO add documentation to all functions
     print(f"Epanet file name: {epanet_file_name}")
     demand_model_method = "PDD"
+    leak_flow_step = 0.01
+    leak_flow_threshold = 0.5
+    start_time = time.time()
 
     water_network_model = wntr.network.WaterNetworkModel(epanet_file_name)
     simulation_results = run_simulation(water_network_model)
@@ -35,23 +30,23 @@ def one_leak_node_file_generation(epanet_file_name):
     water_network_model.options.time.duration = NUMBER_OF_DAYS * 24 * SECONDS_IN_HOUR  # Time of simulation
     water_network_model.options.hydraulic.demand_model = demand_model_method
 
-    # Fix these parameters
-    Run = 1
-    # 1 m³/s = 1000 L/s
-    # L/s = m³/s * 1000
-    minimum_leak = Run / 10
-    maximum_leak = (Run + 1) / 10
-    leak_flow_threshold = 0.5
+    # Run = 1 # 1 m³/s = 1000 L/s,  L/s = m³/s * 1000
+    min_max_leak_arr = [round(i, 3) for i in np.arange(min_leak, max_leak + leak_flow_step, leak_flow_step)]
 
-    start_time = time.time()
-    run_one_leak_per_node_simulation(run_id=Run,
-                                     wn_model=water_network_model,
-                                     node_names_arr=node_names_arr,
-                                     base_sim_results=simulation_results,
-                                     minimum_leak=minimum_leak,
-                                     maximum_leak=maximum_leak,
-                                     leak_flow_threshold=leak_flow_threshold,
-                                     output_file_name="testing.pkl")
+    for index, curr_leak in enumerate(min_max_leak_arr[:-1]):
+        minimum_leak = min_max_leak_arr[index]
+        maximum_leak = min_max_leak_arr[index + 1]
+
+        print(f"Current leak: {minimum_leak} - {maximum_leak}")
+        # TODO testing, + optimization, leak steps should be generate at only one place
+        run_one_leak_per_node_simulation(run_id=1,
+                                         wn_model=water_network_model,
+                                         node_names_arr=node_names_arr,
+                                         base_sim_results=simulation_results,
+                                         minimum_leak=minimum_leak,
+                                         maximum_leak=maximum_leak,
+                                         leak_flow_threshold=leak_flow_threshold,
+                                         output_file_name="testing.pkl")
     print(f"Ended execution in {time.time() - start_time} seconds")
 
 
@@ -127,7 +122,7 @@ def run_one_leak_per_node_simulation(run_id, wn_model, node_names_arr, base_sim_
             # saving to file
             append_dict_to_file(main_data_dict, out_f_name=output_file_name)
             print(f"Index = {index}/{len_leak_amounts_arr} and value {curr_leak_flow}, LeakNode={curr_node_name}, "
-                  f"actual_l_: {curr_leak_flow_arr[0]}, {curr_axis_name}")
+                  f"{curr_axis_name}")
         print("____**____")
         print(f"All leaks nodes {curr_node_name} Time= {time.time() - start2}")
 
