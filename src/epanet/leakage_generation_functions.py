@@ -1,20 +1,138 @@
 import copy
 import pickle
 import time
+from multiprocessing import Process
 
 import numpy as np
 import pandas as pd
 import wntr
 
-
 SECONDS_IN_HOUR = 3600
 NUMBER_OF_DAYS = 1
+# TODO add multi thread logging, add normal logging
 
 
-def one_leak_node_file_generation(epanet_file_name, min_leak=0.5, max_leak=3.0):
-    # TODO replace prints with logging
-    # TODO add multithreading
-    # TODO add documentation to all functions
+def generate_leaks_arrays(number_of_threads, min_leak, max_leak, leak_flow_step):
+    """
+    TODO add description
+    """
+    if leak_flow_step < 0.00001:
+        raise Exception(f"Chosen leak flow step {leak_flow_step} is too small! Please change it a value bigger than "
+                        f"0.00001")
+    if min_leak >= max_leak:
+        raise Exception(f"Min leak {min_leak} can't be bigger or equal to max leak {max_leak}!")
+    if number_of_threads < 1:
+        raise Exception(f"Number of threads {number_of_threads} must be bigger or equal to 1!")
+    if not isinstance(number_of_threads, int):
+        raise Exception(f"Number of threads {number_of_threads} must be an integer! "
+                        f"Current type is {type(number_of_threads)}!")
+
+    leak_thread_arr = []
+    min_max_leak_arr = [round(i, 3) for i in np.arange(min_leak, max_leak + leak_flow_step / 2, leak_flow_step)]
+    # For handling a special case, where there is no parallelization
+    if number_of_threads == 1:
+        print(f"Leak array: {min_max_leak_arr}")
+        return [min_max_leak_arr]     # TODO document this special case
+    else:
+        # number of leaks placed on each node, last thread can get a different number
+        leaks_per_thread = len(min_max_leak_arr) // number_of_threads
+
+        # for could be without ifs, but it's more this way readable
+        for i_thread in range(number_of_threads):
+            if i_thread == number_of_threads - 1:
+                # last thread gets the rest of the leaks, usually more than others
+                tmp_leak_arr = min_max_leak_arr[i_thread * leaks_per_thread:]
+            else:
+                tmp_leak_arr = min_max_leak_arr[i_thread * leaks_per_thread: (i_thread + 1) * leaks_per_thread]
+
+            leak_thread_arr.append(tmp_leak_arr)
+
+        print(f"Leak array: {leak_thread_arr}")
+        return leak_thread_arr
+
+
+def parallel_data_generation(threads_number, epanet_file_name, min_leak=0.5, max_leak=0.7,
+                             leak_flow_step=0.01):
+    """
+    TODO add description
+    :param threads_number:
+    :param epanet_file_name:
+    :param min_leak:
+    :param max_leak:
+    :param leak_flow_step:
+    :return:
+    """
+    process_array = []
+    demand_model_method = "PDD"
+    leak_thread_arr = generate_leaks_arrays(threads_number, min_leak, max_leak, leak_flow_step)
+
+    # Prepare variables for parallel execution
+    water_network_model = wntr.network.WaterNetworkModel(epanet_file_name)
+    # these two lines must be run directly after loading the model, no modifications to it!
+    simulation_results = run_simulation(water_network_model)
+    base_demands_arr, base_demands_mean, node_names_arr = get_node_base_demands_and_names(water_network_model)
+
+    # Prepare general water network model for the leak simulation
+    water_network_model.options.time.duration = NUMBER_OF_DAYS * 24 * SECONDS_IN_HOUR  # Time of simulation
+    water_network_model.options.hydraulic.demand_model = demand_model_method
+
+    for thread_num, thread_arr in enumerate(leak_thread_arr):
+        tmp_process = Process(target=multi_thread_one_leak_node_file_generation,
+                              args=[thread_num + 1,
+                                    thread_arr,
+                                    water_network_model,
+                                    node_names_arr,
+                                    simulation_results])
+        process_array.append(tmp_process)
+    print(f"Starting parallel execution ! {process_array}")
+
+    for process in process_array:
+        process.start()
+
+    for process in process_array:
+        process.join()
+
+
+def multi_thread_one_leak_node_file_generation(thread_num, min_max_leak_arr, water_network_model, node_names_arr, simulation_results):
+    """
+    TODO add description
+    :param thread_num:
+    :param min_max_leak_arr:
+    :param water_network_model:
+    :param node_names_arr:
+    :param simulation_results:
+    :return:
+    """
+    leak_flow_threshold = 0.5
+    start_time = time.time()
+    # TODO add documentation, testing
+    # TODO each call of this function should write to a different file, if file already exists throw an exception
+    print("")
+    for index, curr_leak in enumerate(min_max_leak_arr[:-1]):
+        minimum_leak = min_max_leak_arr[index]
+        maximum_leak = min_max_leak_arr[index + 1]
+
+        print(f"Current leak: {minimum_leak} - {maximum_leak}")
+        # run_one_leak_per_node_simulation(run_id=thread_num,
+        #                                  wn_model=water_network_model,
+        #                                  node_names_arr=node_names_arr,
+        #                                  base_sim_results=simulation_results,
+        #                                  minimum_leak=minimum_leak,
+        #                                  maximum_leak=maximum_leak,
+        #                                  leak_flow_threshold=leak_flow_threshold,
+        #                                  output_file_name="testing.pkl")
+    print(f"Ended execution on thread |{thread_num}| in {time.time() - start_time} seconds")
+
+
+def single_thread_one_leak_node_file_generation(epanet_file_name, min_leak, max_leak, leak_flow_step):
+    """
+    TODO add description
+    :param epanet_file_name:
+    :param min_leak:
+    :param max_leak:
+    :param leak_flow_step:
+    :return:
+    """
     print(f"Epanet file name: {epanet_file_name}")
     demand_model_method = "PDD"
     leak_flow_step = 0.01
@@ -31,7 +149,7 @@ def one_leak_node_file_generation(epanet_file_name, min_leak=0.5, max_leak=3.0):
     water_network_model.options.hydraulic.demand_model = demand_model_method
 
     # Run = 1 # 1 m³/s = 1000 L/s,  L/s = m³/s * 1000
-    min_max_leak_arr = [round(i, 3) for i in np.arange(min_leak, max_leak + leak_flow_step, leak_flow_step)]
+    min_max_leak_arr = generate_leaks_arrays(1, min_leak, max_leak, leak_flow_step)[0]
 
     for index, curr_leak in enumerate(min_max_leak_arr[:-1]):
         minimum_leak = min_max_leak_arr[index]
@@ -59,7 +177,8 @@ def run_one_leak_per_node_simulation(run_id, wn_model, node_names_arr, base_sim_
     water_network_model_f = copy.deepcopy(wn_model)
     org_simulation_results = copy.deepcopy(base_sim_results)
 
-    steps_in_a_day = int(water_network_model_f.options.time.duration / water_network_model_f.options.time.hydraulic_timestep)
+    steps_in_a_day = int(
+        water_network_model_f.options.time.duration / water_network_model_f.options.time.hydraulic_timestep)
     last_hour_seconds = steps_in_a_day * SECONDS_IN_HOUR
 
     # df of pressures, with timestamps as index and node names as columns
@@ -88,7 +207,8 @@ def run_one_leak_per_node_simulation(run_id, wn_model, node_names_arr, base_sim_
             temp_water_network_model.add_pattern(name="New", pattern=curr_leak_flow_arr)  # Add New Patter To the model
             temp_water_network_model.get_node(curr_node_name).add_demand(base=1, pattern_name="New")  # Add leakflow
 
-            sim_results_with_leak = run_simulation(temp_water_network_model).node["pressure"].loc[1:last_hour_seconds, node_names_arr]
+            sim_results_with_leak = run_simulation(temp_water_network_model).node["pressure"].loc[1:last_hour_seconds,
+                                    node_names_arr]
             # renaming axis to match node that has the current leak
             sim_results_with_leak = sim_results_with_leak.rename_axis(curr_axis_name, axis=1)
 
@@ -121,7 +241,7 @@ def run_one_leak_per_node_simulation(run_id, wn_model, node_names_arr, base_sim_
 
             # saving to file
             append_dict_to_file(main_data_dict, out_f_name=output_file_name)
-            print(f"Index = {index}/{len_leak_amounts_arr} and value {curr_leak_flow}, LeakNode={curr_node_name}, "
+            print(f"Index = {index + 1}/{len_leak_amounts_arr} and value {curr_leak_flow}, LeakNode={curr_node_name}, "
                   f"{curr_axis_name}")
         print("____**____")
         print(f"All leaks nodes {curr_node_name} Time= {time.time() - start2}")
@@ -213,4 +333,8 @@ def get_node_base_demands_and_names(epanet_network, junction_name_arr=None):
 
 
 if __name__ == "__main__":
-    one_leak_node_file_generation("../../data/epanet_networks/Braila_V2022_2_2.inp")
+    # single_thread_one_leak_node_file_generation(epanet_file_name="../../data/epanet_networks/Braila_V2022_2_2.inp",
+    #                                             min_leak=0.5,
+    #                                             max_leak=0.8,
+    #                                             leak_flow_step=0.001)
+    parallel_data_generation(6, "../../data/epanet_networks/Braila_V2022_2_2.inp")
