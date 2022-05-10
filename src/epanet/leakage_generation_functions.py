@@ -12,45 +12,6 @@ NUMBER_OF_DAYS = 1
 # TODO add multi thread logging, add normal logging
 
 
-def generate_leaks_arrays(number_of_threads, min_leak, max_leak, leak_flow_step):
-    """
-    TODO add description
-    """
-    if leak_flow_step < 0.00001:
-        raise Exception(f"Chosen leak flow step {leak_flow_step} is too small! Please change it a value bigger than "
-                        f"0.00001")
-    if min_leak >= max_leak:
-        raise Exception(f"Min leak {min_leak} can't be bigger or equal to max leak {max_leak}!")
-    if number_of_threads < 1:
-        raise Exception(f"Number of threads {number_of_threads} must be bigger or equal to 1!")
-    if not isinstance(number_of_threads, int):
-        raise Exception(f"Number of threads {number_of_threads} must be an integer! "
-                        f"Current type is {type(number_of_threads)}!")
-
-    leak_thread_arr = []
-    min_max_leak_arr = [round(i, 3) for i in np.arange(min_leak, max_leak + leak_flow_step / 2, leak_flow_step)]
-    # For handling a special case, where there is no parallelization
-    if number_of_threads == 1:
-        print(f"Leak array: {min_max_leak_arr}")
-        return [min_max_leak_arr]     # TODO document this special case
-    else:
-        # number of leaks placed on each node, last thread can get a different number
-        leaks_per_thread = len(min_max_leak_arr) // number_of_threads
-
-        # for could be without ifs, but it's more this way readable
-        for i_thread in range(number_of_threads):
-            if i_thread == number_of_threads - 1:
-                # last thread gets the rest of the leaks, usually more than others
-                tmp_leak_arr = min_max_leak_arr[i_thread * leaks_per_thread:]
-            else:
-                tmp_leak_arr = min_max_leak_arr[i_thread * leaks_per_thread: (i_thread + 1) * leaks_per_thread]
-
-            leak_thread_arr.append(tmp_leak_arr)
-
-        print(f"Leak array: {leak_thread_arr}")
-        return leak_thread_arr
-
-
 def parallel_data_generation(threads_number, epanet_file_name, min_leak=0.5, max_leak=0.7,
                              leak_flow_step=0.01):
     """
@@ -245,6 +206,45 @@ def run_one_leak_per_node_simulation(run_id, wn_model, node_names_arr, base_sim_
                   f"{curr_axis_name}")
         print("____**____")
         print(f"All leaks nodes {curr_node_name} Time= {time.time() - start2}")
+
+
+def generate_leaks_arrays(number_of_threads, min_leak, max_leak, leak_flow_step):
+    """
+    TODO add description
+    """
+    if leak_flow_step < 0.00001:
+        raise Exception(f"Chosen leak flow step {leak_flow_step} is too small! Please change it a value bigger than "
+                        f"0.00001")
+    if min_leak >= max_leak:
+        raise Exception(f"Min leak {min_leak} can't be bigger or equal to max leak {max_leak}!")
+    if number_of_threads < 1:
+        raise Exception(f"Number of threads {number_of_threads} must be bigger or equal to 1!")
+    if not isinstance(number_of_threads, int):
+        raise Exception(f"Number of threads {number_of_threads} must be an integer! "
+                        f"Current type is {type(number_of_threads)}!")
+
+    leak_thread_arr = []
+    min_max_leak_arr = [round(i, 3) for i in np.arange(min_leak, max_leak + leak_flow_step / 2, leak_flow_step)]
+    # For handling a special case, where there is no parallelization
+    if number_of_threads == 1:
+        print(f"Leak array: {min_max_leak_arr}")
+        return [min_max_leak_arr]     # TODO document this special case
+    else:
+        # number of leaks placed on each node, last thread can get a different number
+        leaks_per_thread = len(min_max_leak_arr) // number_of_threads
+
+        # for could be without ifs, but it's more this way readable
+        for i_thread in range(number_of_threads):
+            if i_thread == number_of_threads - 1:
+                # last thread gets the rest of the leaks, usually more than others
+                tmp_leak_arr = min_max_leak_arr[i_thread * leaks_per_thread:]
+            else:
+                tmp_leak_arr = min_max_leak_arr[i_thread * leaks_per_thread: (i_thread + 1) * leaks_per_thread]
+
+            leak_thread_arr.append(tmp_leak_arr)
+
+        print(f"Leak array: {leak_thread_arr}")
+        return leak_thread_arr
 
 
 def append_dict_to_file(main_data_dict, out_f_name):
