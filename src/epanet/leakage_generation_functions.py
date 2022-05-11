@@ -1,6 +1,7 @@
 import copy
 import logging
 import multiprocessing
+import os
 import pickle
 import time
 from multiprocessing import Process
@@ -12,7 +13,6 @@ import wntr
 
 SECONDS_IN_HOUR = 3600
 NUMBER_OF_DAYS = 1
-# TODO add multi thread logging, add normal logging
 # TODO when all finished -> refactor code to more maintainable structure (probably class), and use functions from
 #  EPANETUtils
 
@@ -82,13 +82,14 @@ def multi_thread_one_leak_node_file_generation(thread_num, min_max_leak_arr, wat
     logger_inst.info(f"Started leak simulation on thread {thread_num}")
     print(f"Started leak simulation on thread {thread_num}", flush=True)
     # TODO add documentation, testing
-    # TODO each call of this function should write to a different file, if file already exists throw an exception
 
     for index, curr_leak in enumerate(min_max_leak_arr[:-1]):
         minimum_leak = min_max_leak_arr[index]
         maximum_leak = min_max_leak_arr[index + 1]
 
         output_file_name = f"{output_dir}/1_leak_{minimum_leak:03}_{maximum_leak:03}_t_{thread_num}.pkl"
+        if os.path.isfile(output_file_name):
+            raise FileExistsError(f"Unexpected error, file {output_file_name} already exists!")
 
         logger_inst.info(f"Writing to file: {output_file_name}. On thread {thread_num} with leak {minimum_leak}-{maximum_leak}")
         logging.info(f"Executing thread {thread_num} with leak {minimum_leak} - {maximum_leak}")
@@ -229,7 +230,17 @@ def run_one_leak_per_node_simulation(run_id, wn_model, node_names_arr, base_sim_
 
 def generate_leaks_arrays(number_of_threads, min_leak, max_leak, leak_flow_step):
     """
-    TODO add description
+    Function generates leak range depending on min, max and step variables. It then almost equally splits the load between
+    threads.
+
+    :param number_of_threads: Int. Number of threads to use and which are available.
+    :param min_leak: Float. Minimum leak flow in L/s.
+    :param max_leak: Float. Maximum leak flow in L/s.
+    :param leak_flow_step: Float. Step size for leak flow in L/s.
+    :return: 2D array. First dimension tells which thread should use which leak flow and the second dimension contains
+    leak values that should be used by that thread.
+    IMPORTANT: This function can be used for single threaded use also in which the function also returns a 2D array, but
+    with just one dimension.
     """
     if leak_flow_step < 0.00001:
         raise Exception(f"Chosen leak flow step {leak_flow_step} is too small! Please change it a value bigger than "
@@ -241,14 +252,10 @@ def generate_leaks_arrays(number_of_threads, min_leak, max_leak, leak_flow_step)
     if not isinstance(number_of_threads, int):
         raise Exception(f"Number of threads {number_of_threads} must be an integer! "
                         f"Current type is {type(number_of_threads)}!")
-
     leak_thread_arr = []
     min_max_leak_arr = [round(i, 3) for i in np.arange(min_leak, max_leak + leak_flow_step / 2, leak_flow_step)]
-    # For handling a special case, where there is no parallelization
-    if number_of_threads == 1:
-        print(f"Leak array: {min_max_leak_arr}")
-        return [min_max_leak_arr]     # TODO document this special case
-    else:
+
+    if number_of_threads != 1:
         # number of leaks placed on each node, last thread can get a different number
         leaks_per_thread = len(min_max_leak_arr) // number_of_threads
 
@@ -264,10 +271,31 @@ def generate_leaks_arrays(number_of_threads, min_leak, max_leak, leak_flow_step)
 
         print(f"Leak array: {leak_thread_arr}")
         return leak_thread_arr
+    else:
+        # For single thread use
+        print(f"Leak array: {min_max_leak_arr}")
+        return [min_max_leak_arr]
 
 
 def append_dict_to_file(main_data_dict, out_f_name):
-    # TODO try different data formats, parquet etc
+    """
+    Function appends a dictionary to a file.
+    # TODO add option of saving to more memory friendly formats parquet etc
+
+    :param main_data_dict: Dictionary. Dictionary which we want to append to the file.
+        In general it should be of the following format or similar format:
+        main_data_dict = {
+        "LPM": sim_results_with_leak,
+        "DM": divergence_df,
+        "LM": used_leak_flows_df,
+        "Meta": {"Leakmin": minimum_leak,
+                 "Leakmax": maximum_leak,
+                 "Run": run_id,
+                 "Run Time": time.time() - start_time
+                 }
+        }
+    :param out_f_name: String. Name of the file to which we want to append to.
+    """
     if not out_f_name.endswith(".pkl"):
         raise Exception("Output file must be a .pkl file")
     with open(out_f_name, "ab") as file:
@@ -276,13 +304,18 @@ def append_dict_to_file(main_data_dict, out_f_name):
 
 def get_leak_time_identification_and_water_loss_from_df(divergence_df, leak_flows_df, leak_flow_threshold):
     """
-    TODO
+    Function generates two arrays which contain information about the first time that the leakage on a node went
+    over the specified threshold.
+     TODO if a node doesn't have a leak bigger than the specified threshold, it will not be included which leads to
+       inconsistency, this should be solved before this function is properly used.
 
-    # This determines which nodes are over the threshold for leak and what is their commutative leak flow
-    :param divergence_df:
-    :param leak_flows_df:
-    :param leak_flow_threshold:
-    :return:
+    :param divergence_df: Dataframe. Contains the difference in change of flow on the nodes in the network.
+    :param leak_flows_df: Dataframe. Contains information about how much leakage was placed on the network
+    at every timestamp.
+    :param leak_flow_threshold: Float. The threshold after which the leakage is considered to be happening. In liters
+    per second.
+    :return: Tuple of two arrays. First array contains the times of the first leak on the node, second array contains
+    commutative leakage in the network over the whole simulation time.
     """
     leak_identified_time_arr = []  # time when the leak was identified
     water_loss_arr = []  # Water loss arr (L/s), how much water is wasted
@@ -353,9 +386,9 @@ def get_node_base_demands_and_names(epanet_network, junction_name_arr=None):
 
 def create_logger(log_file_name):
     """
-    TODO add documentation
-    :param log_file_name:
-    :return:
+    Creates an instance of a logger. Used for multithreading so that each logger object can write to the same file.
+
+    :param log_file_name: String. Path to the log file to which you want to write.
     """
     logger = multiprocessing.get_logger()
     logger.setLevel(logging.INFO)
