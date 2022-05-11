@@ -1,5 +1,6 @@
 import copy
 import logging
+import math
 import multiprocessing
 import os
 import pickle
@@ -16,6 +17,7 @@ class EpanetLeakGenerator:
     NUMBER_OF_DAYS = 1
     DEMAND_MODEL = "PDD"
     TEMPORARY_EPA_FILES_PREFIX = "tmp_file"
+    LEAKS_PER_FILE_INTERVAL = 0.2
 
     def __init__(self, epanet_file_name, number_of_threads, min_leak, max_leak, leak_flow_step, leak_flow_threshold,
                  output_dir, log_file):
@@ -59,16 +61,18 @@ class EpanetLeakGenerator:
         self.water_network_model.options.time.duration = self.NUMBER_OF_DAYS * 24 * self.SECONDS_IN_HOUR
         self.water_network_model.options.hydraulic.demand_model = self.DEMAND_MODEL
 
-        self.main_logger.info("Initialization finished!")
+        self.main_logger.info("Initialization completed successfully!")
 
     def multi_thread_data_generation(self):
         """
         TODO
         :return:
         """
-        self.main_logger.info("Started preparing multi thread processes!")
         process_array = []
+        self.main_logger.info("Started preparing multi thread processes!")
+
         leak_thread_arr = self.generate_leaks_arrays()
+        self.main_logger.info(f"Leak distribution per thread: {leak_thread_arr}")
 
         for thread_num, thread_arr in enumerate(leak_thread_arr):
             tmp_process = Process(target=self.single_thread_data_generation,
@@ -108,15 +112,16 @@ class EpanetLeakGenerator:
 
             logger_inst.info(
                 f"Writing to file: {output_file_name}. On thread {thread_num} with leak {minimum_leak}-{maximum_leak}")
-            logging.info(f"Executing thread {thread_num} with leak {minimum_leak} - {maximum_leak}")
+            logger_inst.info(f"Executing thread {thread_num} with leak {minimum_leak} - {maximum_leak}")
             self.run_one_leak_per_node_simulation(run_id=thread_num,
                                                   minimum_leak=minimum_leak,
                                                   maximum_leak=maximum_leak,
+                                                  logger_objc=logger_inst,
                                                   output_file_name=output_file_name)
 
         logger_inst.info(f"Ended execution on thread |{thread_num}| in {time.time() - start_time} seconds")
 
-    def run_one_leak_per_node_simulation(self, run_id, minimum_leak, maximum_leak, output_file_name,
+    def run_one_leak_per_node_simulation(self, run_id, minimum_leak, maximum_leak, logger_objc, output_file_name,
                                          include_extra_info=False):
         round_leak_to = 4
         start_time = time.time()
@@ -132,14 +137,13 @@ class EpanetLeakGenerator:
         # df of pressures, with timestamps as index and node names as columns
         base_pressures_df = org_simulation_results.node["pressure"].loc[1:last_hour_seconds, self.node_names_arr]
 
-        print(f"Number of nodes {len(self.node_names_arr)}")
-        print(f"leaks {minimum_leak}, {maximum_leak}")
-        # added rounding to prevent floating point errors
-        leak_amounts_arr = [round(i, 3) for i in np.arange(minimum_leak, maximum_leak, 0.001)]
+        # creates leaks in given interval, added rounding to prevent floating point errors
+        leak_amounts_arr = [round(i, 3) for i in np.arange(minimum_leak, maximum_leak, self.leak_flow_step)]
+        print(f"T:{run_id} - Executing simulation for {len(leak_amounts_arr)} leaks between: {minimum_leak}, {maximum_leak}")
+        logger_objc.info(f"T:{run_id} - Executing simulation for {len(leak_amounts_arr)} leaks between: "
+                         f"{minimum_leak}, {maximum_leak}")
 
-        len_leak_amounts_arr = len(leak_amounts_arr)
-        # TODO optimize run time, remove [:2]
-        for curr_node_name in self.node_names_arr[:2]:
+        for curr_node_name in self.node_names_arr:
             start2 = time.time()
 
             for index, curr_leak_flow in enumerate(leak_amounts_arr):
@@ -165,12 +169,11 @@ class EpanetLeakGenerator:
                 divergence_df = base_pressures_df.sub(sim_results_with_leak[self.node_names_arr], fill_value=0) \
                     .abs().rename_axis(curr_axis_name, axis=1)
 
+                # TODO convert in more efficient data structure, no duplicated values etc.
                 used_leak_flows_df = pd.DataFrame([k * 1000 for k in curr_leak_flow_arr[1:]], columns=["LeakFlow"],
                                                   index=list(
                                                       range(self.SECONDS_IN_HOUR, last_hour_seconds + 3600, 3600))) \
                     .rename_axis(curr_axis_name, axis=1)
-                # TODO remove this
-                # used_leak_flows_df = pd.DataFrame([curr_leak_flow], columns=["LeakFlow"]).rename_axis(curr_axis_name, axis=1)
 
                 # prepare dictionary for saving, TODO restructure?
                 main_data_dict = {
@@ -191,14 +194,17 @@ class EpanetLeakGenerator:
 
                 # saving to file
                 self.append_dict_to_file(main_data_dict, out_f_name=output_file_name)
-                # print(f"Index = {index + 1}/{len_leak_amounts_arr} and value {curr_leak_flow}, LeakNode={curr_node_name}, "
-                #       f"{curr_axis_name}")
-            print("____**____")
-            print(f"All leaks nodes {curr_node_name} Time= {time.time() - start2}")
+                # print(f"Index = {index + 1}/{len_leak_amounts_arr} and value {curr_leak_flow},
+                # LeakNode={curr_node_name}, {curr_axis_name}")
+            print("\n------")
+            print(f"T:{run_id} - All leaks nodes {curr_node_name} Time= {time.time() - start2}")
+            logger_objc.info(f"T:{run_id} - Executed simulation for node: {curr_node_name}, "
+                             f"Time= {time.time() - start2}")
 
     @staticmethod
     def input_arguments_check(epanet_file_name, number_of_threads, min_leak, max_leak, leak_flow_step,
                               leak_flow_threshold, output_dir, log_file):
+        # TODO more checks
         # leak flow
         if leak_flow_step < 0.00001:
             raise Exception(
@@ -219,15 +225,17 @@ class EpanetLeakGenerator:
         """
         Function generates leak range depending on min, max and step variables. It then almost equally splits the load between
         threads.
-
+        TODO update documentatiom step is fixed since this step concerns file sizes, the actual step size implemented in the means function
         :return: 2D array. First dimension tells which thread should use which leak flow and the second dimension contains
         leak values that should be used by that thread.
         IMPORTANT: This function can be used for single threaded use also in which the function also returns a 2D array, but
         with just one dimension.
         """
+        # TODO cover edge cases, to equally distribute the load between threads -> Possible solution, step that ensures
+        #  that each thread gets at least one leakage?
         leak_thread_arr = []
-        min_max_leak_arr = [round(i, 3) for i in np.arange(self.min_leak, self.max_leak + self.leak_flow_step / 2,
-                                                           self.leak_flow_step)]
+        num_of_steps = math.floor((self.max_leak - self.min_leak) / self.LEAKS_PER_FILE_INTERVAL)
+        min_max_leak_arr = [round(i, 3) for i in np.linspace(self.min_leak, self.max_leak, num_of_steps, endpoint=True)]
 
         if self.number_of_threads != 1:
             # number of leaks placed on each node, last thread can get a different number
@@ -239,15 +247,12 @@ class EpanetLeakGenerator:
                     # last thread gets the rest of the leaks, usually more than others
                     tmp_leak_arr = min_max_leak_arr[i_thread * leaks_per_thread:]
                 else:
-                    tmp_leak_arr = min_max_leak_arr[i_thread * leaks_per_thread: (i_thread + 1) * leaks_per_thread]
+                    tmp_leak_arr = min_max_leak_arr[i_thread * leaks_per_thread: ((i_thread + 1) * leaks_per_thread) + 1]
 
                 leak_thread_arr.append(tmp_leak_arr)
-
-            print(f"Leak array: {leak_thread_arr}")
+            print(f"Leak thread array: {leak_thread_arr}")
             return leak_thread_arr
         else:
-            # For single thread use
-            print(f"Leak array: {min_max_leak_arr}")
             return [min_max_leak_arr]
 
     def get_leak_time_identification_and_water_loss_from_df(self, divergence_df, leak_flows_df):
