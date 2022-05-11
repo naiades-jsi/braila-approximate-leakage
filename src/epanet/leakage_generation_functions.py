@@ -1,7 +1,10 @@
 import copy
+import logging
+import multiprocessing
 import pickle
 import time
 from multiprocessing import Process
+from random import random
 
 import numpy as np
 import pandas as pd
@@ -10,14 +13,18 @@ import wntr
 SECONDS_IN_HOUR = 3600
 NUMBER_OF_DAYS = 1
 # TODO add multi thread logging, add normal logging
+# TODO when all finished -> refactor code to more maintainable structure (probably class), and use functions from
+#  EPANETUtils
 
 
-def parallel_data_generation(threads_number, epanet_file_name, min_leak=0.5, max_leak=0.7,
+def parallel_data_generation(threads_number, epanet_file_name, output_dir, log_file_name, min_leak=0.5, max_leak=0.7,
                              leak_flow_step=0.01):
     """
     TODO add description
     :param threads_number:
     :param epanet_file_name:
+    :param output_dir:
+    :param log_file_name:
     :param min_leak:
     :param max_leak:
     :param leak_flow_step:
@@ -43,7 +50,9 @@ def parallel_data_generation(threads_number, epanet_file_name, min_leak=0.5, max
                                     thread_arr,
                                     water_network_model,
                                     node_names_arr,
-                                    simulation_results])
+                                    simulation_results,
+                                    log_file_name,
+                                    output_dir])
         process_array.append(tmp_process)
     print(f"Starting parallel execution ! {process_array}")
 
@@ -54,7 +63,8 @@ def parallel_data_generation(threads_number, epanet_file_name, min_leak=0.5, max
         process.join()
 
 
-def multi_thread_one_leak_node_file_generation(thread_num, min_max_leak_arr, water_network_model, node_names_arr, simulation_results):
+def multi_thread_one_leak_node_file_generation(thread_num, min_max_leak_arr, water_network_model, node_names_arr,
+                                               simulation_results, log_file_name, output_dir):
     """
     TODO add description
     :param thread_num:
@@ -62,27 +72,36 @@ def multi_thread_one_leak_node_file_generation(thread_num, min_max_leak_arr, wat
     :param water_network_model:
     :param node_names_arr:
     :param simulation_results:
+    :param log_file_name:
     :return:
     """
-    leak_flow_threshold = 0.5
     start_time = time.time()
+    leak_flow_threshold = 0.5
+    time.sleep(random() * 10 + 2)
+    logger_inst = create_logger(log_file_name)
+    logger_inst.info(f"Started leak simulation on thread {thread_num}")
+    print(f"Started leak simulation on thread {thread_num}", flush=True)
     # TODO add documentation, testing
     # TODO each call of this function should write to a different file, if file already exists throw an exception
-    print("")
+
     for index, curr_leak in enumerate(min_max_leak_arr[:-1]):
         minimum_leak = min_max_leak_arr[index]
         maximum_leak = min_max_leak_arr[index + 1]
 
-        print(f"Current leak: {minimum_leak} - {maximum_leak}")
-        # run_one_leak_per_node_simulation(run_id=thread_num,
-        #                                  wn_model=water_network_model,
-        #                                  node_names_arr=node_names_arr,
-        #                                  base_sim_results=simulation_results,
-        #                                  minimum_leak=minimum_leak,
-        #                                  maximum_leak=maximum_leak,
-        #                                  leak_flow_threshold=leak_flow_threshold,
-        #                                  output_file_name="testing.pkl")
-    print(f"Ended execution on thread |{thread_num}| in {time.time() - start_time} seconds")
+        output_file_name = f"{output_dir}/1_leak_{minimum_leak:03}_{maximum_leak:03}_t_{thread_num}.pkl"
+
+        logger_inst.info(f"Writing to file: {output_file_name}. On thread {thread_num} with leak {minimum_leak}-{maximum_leak}")
+        logging.info(f"Executing thread {thread_num} with leak {minimum_leak} - {maximum_leak}")
+        run_one_leak_per_node_simulation(run_id=thread_num,
+                                         wn_model=water_network_model,
+                                         node_names_arr=node_names_arr,
+                                         base_sim_results=simulation_results,
+                                         minimum_leak=minimum_leak,
+                                         maximum_leak=maximum_leak,
+                                         leak_flow_threshold=leak_flow_threshold,
+                                         output_file_name=output_file_name)
+    # print(f"Ended execution on thread |{thread_num}| in {time.time() - start_time} seconds")
+    logger_inst.info(f"Ended execution on thread |{thread_num}| in {time.time() - start_time} seconds")
 
 
 def single_thread_one_leak_node_file_generation(epanet_file_name, min_leak, max_leak, leak_flow_step):
@@ -168,7 +187,7 @@ def run_one_leak_per_node_simulation(run_id, wn_model, node_names_arr, base_sim_
             temp_water_network_model.add_pattern(name="New", pattern=curr_leak_flow_arr)  # Add New Patter To the model
             temp_water_network_model.get_node(curr_node_name).add_demand(base=1, pattern_name="New")  # Add leakflow
 
-            sim_results_with_leak = run_simulation(temp_water_network_model).node["pressure"].loc[1:last_hour_seconds,
+            sim_results_with_leak = run_simulation(temp_water_network_model, file_prefix=f"temp_{run_id}").node["pressure"].loc[1:last_hour_seconds,
                                     node_names_arr]
             # renaming axis to match node that has the current leak
             sim_results_with_leak = sim_results_with_leak.rename_axis(curr_axis_name, axis=1)
@@ -202,8 +221,8 @@ def run_one_leak_per_node_simulation(run_id, wn_model, node_names_arr, base_sim_
 
             # saving to file
             append_dict_to_file(main_data_dict, out_f_name=output_file_name)
-            print(f"Index = {index + 1}/{len_leak_amounts_arr} and value {curr_leak_flow}, LeakNode={curr_node_name}, "
-                  f"{curr_axis_name}")
+            # print(f"Index = {index + 1}/{len_leak_amounts_arr} and value {curr_leak_flow}, LeakNode={curr_node_name}, "
+            #       f"{curr_axis_name}")
         print("____**____")
         print(f"All leaks nodes {curr_node_name} Time= {time.time() - start2}")
 
@@ -332,9 +351,36 @@ def get_node_base_demands_and_names(epanet_network, junction_name_arr=None):
     return base_demands_arr, base_demands_mean, node_names_arr
 
 
+def create_logger(log_file_name):
+    """
+    TODO add documentation
+    :param log_file_name:
+    :return:
+    """
+    logger = multiprocessing.get_logger()
+    logger.setLevel(logging.INFO)
+
+    log_string = "%(asctime)s [Thread ID: %(thread)-5d, Process: %(processName)-10s] %(levelname)-8s %(message)s"
+    formatter = logging.Formatter(log_string, datefmt="%Y-%m-%d %H:%M:%S")
+
+    handler = logging.FileHandler(log_file_name)
+    handler.setFormatter(formatter)
+
+    # this bit will make sure you won't have duplicated messages in the output
+    if not len(logger.handlers):
+        logger.addHandler(handler)
+    return logger
+
+
 if __name__ == "__main__":
     # single_thread_one_leak_node_file_generation(epanet_file_name="../../data/epanet_networks/Braila_V2022_2_2.inp",
     #                                             min_leak=0.5,
     #                                             max_leak=0.8,
     #                                             leak_flow_step=0.001)
-    parallel_data_generation(6, "../../data/epanet_networks/Braila_V2022_2_2.inp")
+    log_file = "output_files/data_generation.log"
+    logger_m = create_logger(log_file)
+    logger_m.info("Starting parallel execution !")
+    parallel_data_generation(4, "../../data/epanet_networks/Braila_V2022_2_2.inp",
+                             output_dir="output_files",
+                             log_file_name=log_file)
+    # TODO add removing of EPANET generated temporary files
