@@ -16,23 +16,23 @@ class EpanetLeakGenerator:
     SECONDS_IN_HOUR = 3600
     NUMBER_OF_DAYS = 1
     DEMAND_MODEL = "PDD"
-    LEAKS_PER_FILE_INTERVAL = 0.2
+    LEAK_PER_FILE_INTERVAL = 0.2
 
     def __init__(self, epanet_file_name, number_of_threads, min_leak, max_leak, leak_flow_step, leak_flow_threshold,
                  output_dir, log_file):
         """
+        Initializes the class, checks if the input arguments are valid, and creates the main objects which will be
+        needed for the simulation. It creates a logger, configures the water network model and sets base_demands_arr,
+        base_demands_mean, node_names_arr variables which are used as a base for the leak generation.
+
+        :param epanet_file_name: String. Name of the EPANET file to be used for the simulation.
         :param number_of_threads: Int. Number of threads to use and which are available.
         :param min_leak: Float. Minimum leak flow in L/s.
         :param max_leak: Float. Maximum leak flow in L/s.
         :param leak_flow_step: Float. Step size for leak flow in L/s.
-
-        :param epanet_file_name:
-        :param number_of_threads:
-        :param min_leak:
-        :param max_leak:
-        :param leak_flow_step:
-        :param output_dir:
-        :param log_file:
+        :param leak_flow_threshold: Float. Threshold for leak flow in L/s.
+        :param output_dir: String. Directory to save the results to.
+        :param log_file: String. Name of the file in which the logs should be written.
         """
         # check if parameters contain correct data
         self.input_arguments_check(epanet_file_name, number_of_threads, min_leak, max_leak, leak_flow_step,
@@ -50,15 +50,14 @@ class EpanetLeakGenerator:
         self.leak_flow_threshold = leak_flow_threshold
         self.output_dir = output_dir
         self.log_file = log_file
-        self.main_logger = self.create_logger(log_file)
 
+        self.main_logger = self.create_logger(log_file)
         # Prepare base model information
         self.water_network_model = wntr.network.WaterNetworkModel(self.epanet_file_name)
 
         # these two lines must be run directly after loading the model, no modifications to it!
         self.base_simulation_results = self.run_simulation(self.water_network_model, file_prefix="base_model")
-        self.base_demands_arr, self.base_demands_mean, self.node_names_arr = self \
-            .get_node_base_demands_and_names(self.water_network_model)
+        self.base_demands_arr, self.base_demands_mean, self.node_names_arr = self.get_node_base_demands_and_names()
 
         # Prepare general water network model for the leak simulation
         self.water_network_model.options.time.duration = self.NUMBER_OF_DAYS * 24 * self.SECONDS_IN_HOUR
@@ -113,11 +112,11 @@ class EpanetLeakGenerator:
             logger_inst.info(
                 f"Writing to file: {output_file_name}. On thread {thread_num} with leak {min_leak}-{max_leak}")
             logger_inst.info(f"Executing thread {thread_num} with leak {min_leak} - {max_leak}")
-            # self.run_one_leak_per_node_simulation(run_id=thread_num,
-            #                                       minimum_leak=min_leak,
-            #                                       maximum_leak=max_leak,
-            #                                       logger_objc=logger_inst,
-            #                                       output_file_name=output_file_name)
+            self.run_one_leak_per_node_simulation(run_id=thread_num,
+                                                  minimum_leak=min_leak,
+                                                  maximum_leak=max_leak,
+                                                  logger_objc=logger_inst,
+                                                  output_file_name=output_file_name)
 
         logger_inst.info(f"Ended execution on thread |{thread_num}| in {time.time() - start_time} seconds")
 
@@ -201,25 +200,58 @@ class EpanetLeakGenerator:
             logger_objc.info(f"T:{run_id} - Executed simulation for node: {curr_node_name}, "
                              f"Time= {time.time() - start2}")
 
-    @staticmethod
-    def input_arguments_check(epanet_file_name, number_of_threads, min_leak, max_leak, leak_flow_step,
+    def input_arguments_check(self, epanet_file_name, number_of_threads, min_leak, max_leak, leak_flow_step,
                               leak_flow_threshold, output_dir, log_file):
-        # TODO more checks
-        # leak flow
-        if leak_flow_step < 0.00001:
-            raise Exception(
-                f"Chosen leak flow step {leak_flow_step} is too small! Please change it a value bigger than "
-                f"0.00001")
+        """
+        Checks if the input arguments are valid. All the ifs should be self explanatory.
 
-        # min and maximum leakages<
-        if min_leak >= max_leak:
-            raise Exception(f"Min leak {min_leak} can't be bigger or equal to max leak {max_leak}!")
+        :param epanet_file_name: String. Name of the EPANET file to be used for the simulation.
+        :param number_of_threads: Int. Number of threads to use and which are available.
+        :param min_leak: Float. Minimum leak flow in L/s.
+        :param max_leak: Float. Maximum leak flow in L/s.
+        :param leak_flow_step: Float. Step size for leak flow in L/s.
+        :param leak_flow_threshold: Float. Threshold for leak flow in L/s.
+        :param output_dir: String. Directory to save the results to.
+        :param log_file: String. Name of the file in which the logs should be written.
+        """
+        # epanet file name
+        if not epanet_file_name.endswith(".inp"):
+            raise ValueError("Epanet file name must end with .inp")
+
         # threads
         if number_of_threads < 1:
             raise Exception(f"Number of threads {number_of_threads} must be bigger or equal to 1!")
         if not isinstance(number_of_threads, int):
             raise Exception(f"Number of threads {number_of_threads} must be an integer! "
                             f"Current type is {type(number_of_threads)}!")
+
+        # min and maximum leakages
+        if min_leak >= max_leak:
+            raise Exception(f"Min leak {min_leak} can't be bigger or equal to max leak {max_leak}!")
+
+        # leak flow step
+        if leak_flow_step < 0.00001:
+            raise Exception(
+                f"Chosen leak flow step {leak_flow_step} is too small! Please change it a value bigger than "
+                f"0.00001")
+
+        # leak_flow_step can't be bigger than leak per file interval since it will cause problem with range generation
+        if leak_flow_step >= self.LEAK_PER_FILE_INTERVAL:
+            raise Exception(f"Chosen leak_flow_step is too big! Please change it a value smaller than "
+                            f"{self.LEAK_PER_FILE_INTERVAL}")
+
+        # leak flow threshold
+        if leak_flow_threshold > max_leak:
+            raise Exception(f"Chosen leak flow threshold {leak_flow_threshold} is bigger than max leak {max_leak}! It "
+                            f"is theoretically impossible to have a leakage bigger than the maximum simulated leak!")
+
+        # output file
+        if not os.path.isdir(output_dir):
+            raise Exception(f"Output directory {output_dir} doesn't exist! Please create it first!")
+
+        # log_file
+        if not log_file.endswith(".log"):
+            raise Exception(f"Log file name must end with .log! Your file name: {log_file}")
 
     def generate_leaks_arrays(self):
         """
@@ -235,7 +267,7 @@ class EpanetLeakGenerator:
         :return: 3D array. First dimension is meant as index for threads,the second dimension contains all [min, max]
         pairs of leaks and the third dimension contains the actual values.
         """
-        num_of_steps = math.floor((self.max_leak - self.min_leak) / self.LEAKS_PER_FILE_INTERVAL)
+        num_of_steps = math.floor((self.max_leak - self.min_leak) / self.LEAK_PER_FILE_INTERVAL)
 
         # generate values in interval
         base_leak_array = [round(i, 3) for i in np.linspace(self.min_leak, self.max_leak, num_of_steps, endpoint=True)]
@@ -285,7 +317,6 @@ class EpanetLeakGenerator:
 
     def run_simulation(self, wntr_network_instance, file_prefix):
         """
-        # TODO is it ok to be static?
         Runs the epanet simulation on the water model of the instance or the model that was passed to it.
 
         :return: Returns the wntr.sim.results.SimulationResults object. Important properties of the object are
@@ -297,29 +328,28 @@ class EpanetLeakGenerator:
 
         return simulation_results
 
-    @staticmethod
-    def get_node_base_demands_and_names(epanet_network, junction_name_arr=None):
+    def get_node_base_demands_and_names(self, junction_name_arr=None):
         """
-        Function loops through all the nodes in the network or through the list of junction names that was passed to it.
+        Method loops through all the nodes in the self.water_network_model or through the list of junction names
+        that was passed to it.
         It then generates a list of base demands for each node and a list of node names based on the junction names.
         Demands are given in m3/s.
 
-        :param epanet_network: wntr.network.WaterNetworkModel object. The network that we want to get the base demands for.
-        :param junction_name_arr: list of strings. The junction names that we want to get the base demands for.
+        :param junction_name_arr: List of strings. The junction names that we want to get the base demands for. If no
+        values is passed to it, it will set as all the junction names in the network.
         :return: (list of floats, a float, list of strings). The first element is the base demands for each node, second
         is the average base demand, and the third is the list of node names.
         """
-        epanet_net_instance = epanet_network
         base_demands_arr = []
         # node names could be directly copied from junction_name_arr, but due to including only nodes with base demands
         # higher than zero they are kept
         node_names_arr = []
 
         if junction_name_arr is None:
-            junction_name_arr = epanet_net_instance.junction_name_list
+            junction_name_arr = self.water_network_model.junction_name_list
 
         for junction_name in junction_name_arr:
-            node_instance = epanet_net_instance.get_node(junction_name)
+            node_instance = self.water_network_model.get_node(junction_name)
             if node_instance.base_demand > 0:
                 base_demands_arr.append(node_instance.base_demand)
                 node_names_arr.append(node_instance.name)
@@ -379,8 +409,9 @@ class EpanetLeakGenerator:
 
     def clear_temporary_epanet_files(self):
         """
-        TODO add description
-        :return:
+        Method clears all temporary files created by the epanet simulator. The files will be created in the directory
+        in which the program was executed. Method will delete files that end with ".inp", ".rpt", ".bin" and have the
+        file name prefixed same as the string in self.TEMPORARY_EPA_FILES_PREFIX variable.
         """
         self.main_logger.info(f"Removing temporary files ...")
         extensions_to_delete = (".inp", ".rpt", ".bin")
