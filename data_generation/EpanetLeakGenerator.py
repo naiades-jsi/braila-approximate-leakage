@@ -142,6 +142,7 @@ class EpanetLeakGenerator:
         logger_objc.info(f"T:{run_id} - Executing simulation for {len(leak_amounts_arr)} leaks between: "
                          f"{minimum_leak}, {maximum_leak}")
 
+        all_data_arr = []
         for curr_node_name in self.node_names_arr:
             start2 = time.time()
 
@@ -181,6 +182,7 @@ class EpanetLeakGenerator:
                     "LM": used_leak_flows_df,
                     "Meta": {"Leakmin": minimum_leak,
                              "Leakmax": maximum_leak,
+                             "Used_leak": curr_leak_flow,
                              "Run": run_id,
                              "Run Time": time.time() - start_time
                              }
@@ -191,14 +193,24 @@ class EpanetLeakGenerator:
                     main_data_dict["TM_l"] = leak_i_time_arr
                     main_data_dict["WLM"] = water_loss_arr
 
-                # saving to file
-                self.append_dict_to_file(main_data_dict, out_f_name=output_file_name)
+                # saving to file, TODO implement viable option for saving
+                # self.append_dict_to_pickle_file(main_data_dict, out_f_name=output_file_name)
+
+                # TODO this is really ugly thing to do (RAM will suffer, although execution should be faster),
+                #  but it works for now
+                all_data_arr.append(main_data_dict)
                 # print(f"Index = {index + 1}/{len_leak_amounts_arr} and value {curr_leak_flow},
                 # LeakNode={curr_node_name}, {curr_axis_name}")
             print("\n------")
             print(f"T:{run_id} - All leaks nodes {curr_node_name} Time= {time.time() - start2}")
             logger_objc.info(f"T:{run_id} - Executed simulation for node: {curr_node_name}, "
                              f"Time= {time.time() - start2}")
+
+        # saving to file, TODO implement better option for saving
+        if not output_file_name.endswith(".pkl"):
+            raise Exception("Output file must be a .pkl file")
+        with open(output_file_name, "wb") as file:
+            pickle.dump(all_data_arr, file)
 
     def input_arguments_check(self, epanet_file_name, number_of_threads, min_leak, max_leak, leak_flow_step,
                               leak_flow_threshold, output_dir, log_file):
@@ -362,8 +374,9 @@ class EpanetLeakGenerator:
         return base_demands_arr, base_demands_mean, node_names_arr
 
     @staticmethod
-    def append_dict_to_file(main_data_dict, out_f_name):
+    def append_dict_to_pickle_file(main_data_dict, out_f_name):
         """
+        # TODO doesn't work
         Function appends a dictionary to a file.
         # TODO add option of saving to more memory friendly formats parquet etc
 
@@ -385,6 +398,12 @@ class EpanetLeakGenerator:
             raise Exception("Output file must be a .pkl file")
         with open(out_f_name, "ab") as file:
             pickle.dump(main_data_dict, file)
+
+    @staticmethod
+    def append_dict_to_hdfs_store_file(main_data_dict, out_f_name):
+        """
+        # TODO implement for intermediate data storage
+        """
 
     @staticmethod
     def create_logger(log_file_name):
