@@ -6,7 +6,7 @@ if __name__ == "__main__":
     leak_generator_instance = EpanetLeakGenerator(epanet_file_name="./../data/epanet_networks/Braila_V2022_2_2.inp",
                                                   number_of_threads=4,
                                                   min_leak=0.5,
-                                                  max_leak=22.0,
+                                                  max_leak=2.0,
                                                   leak_flow_step=0.01,
                                                   leak_flow_threshold=0.5,
                                                   output_dir=output_dir,

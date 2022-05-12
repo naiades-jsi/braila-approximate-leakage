@@ -17,6 +17,7 @@ class EpanetLeakGenerator:
     NUMBER_OF_DAYS = 1
     DEMAND_MODEL = "PDD"
     LEAK_PER_FILE_INTERVAL = 0.2
+    LEAK_DECIMAL_PLACES = 4
 
     def __init__(self, epanet_file_name, number_of_threads, min_leak, max_leak, leak_flow_step, leak_flow_threshold,
                  output_dir, log_file):
@@ -122,7 +123,6 @@ class EpanetLeakGenerator:
 
     def run_one_leak_per_node_simulation(self, run_id, minimum_leak, maximum_leak, logger_objc, output_file_name,
                                          include_extra_info=False):
-        round_leak_to = 4
         start_time = time.time()
 
         # copy original data so it will not be modified
@@ -147,7 +147,7 @@ class EpanetLeakGenerator:
             start2 = time.time()
 
             for index, curr_leak_flow in enumerate(leak_amounts_arr):
-                curr_axis_name = f"Node_{curr_node_name}, {str(round(curr_leak_flow, round_leak_to))}LPS"
+                curr_axis_name = f"Node_{curr_node_name}, {str(round(curr_leak_flow, self.LEAK_DECIMAL_PLACES))}LPS"
 
                 # TODO take care of the units m3/s -> liters/s etc., is it ok now?
                 # Converting from LPS to m3/s
@@ -177,9 +177,9 @@ class EpanetLeakGenerator:
 
                 # prepare dictionary for saving, TODO restructure?
                 main_data_dict = {
-                    "LPM": sim_results_with_leak,
-                    "DM": divergence_df,
-                    "LM": used_leak_flows_df,
+                    "LPM": sim_results_with_leak.round(self.LEAK_DECIMAL_PLACES),
+                    "DM": divergence_df.round(self.LEAK_DECIMAL_PLACES),
+                    "LM": used_leak_flows_df.round(self.LEAK_DECIMAL_PLACES),
                     "Meta": {"Leakmin": minimum_leak,
                              "Leakmax": maximum_leak,
                              "Used_leak": curr_leak_flow,
