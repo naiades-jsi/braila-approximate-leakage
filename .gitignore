@@ -6,6 +6,7 @@
 
 # Delf data
 data/divergence_matrix/*.pickle
+*.pkl
 
 # EPANET produced files
 *.bin

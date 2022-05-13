@@ -279,7 +279,7 @@ class EpanetLeakGenerator:
         :return: 3D array. First dimension is meant as index for threads,the second dimension contains all [min, max]
         pairs of leaks and the third dimension contains the actual values.
         """
-        num_of_steps = math.floor((self.max_leak - self.min_leak) / self.LEAK_PER_FILE_INTERVAL)
+        num_of_steps = round((self.max_leak - self.min_leak) / self.LEAK_PER_FILE_INTERVAL) + 1
 
         # generate values in interval
         base_leak_array = [round(i, 3) for i in np.linspace(self.min_leak, self.max_leak, num_of_steps, endpoint=True)]
