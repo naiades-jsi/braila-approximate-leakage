@@ -1,6 +1,6 @@
 import copy
 import logging
-import math
+
 import multiprocessing
 import os
 import pickle
@@ -164,16 +164,16 @@ class EpanetLeakGenerator:
                     self.run_simulation(temp_water_network_model, file_prefix=f"temp_{run_id}").node[
                         "pressure"].loc[1:last_hour_seconds, self.node_names_arr]
                 # renaming axis to match node that has the current leak
-                sim_results_with_leak = sim_results_with_leak.rename_axis(curr_axis_name, axis=1)
+                sim_results_with_leak = sim_results_with_leak.rename_axis(curr_axis_name, axis=1).astype("float64")
 
                 divergence_df = base_pressures_df.sub(sim_results_with_leak[self.node_names_arr], fill_value=0) \
-                    .abs().rename_axis(curr_axis_name, axis=1)
+                    .abs().rename_axis(curr_axis_name, axis=1).astype("float64")
 
                 # TODO convert in more efficient data structure, no duplicated values etc.
                 used_leak_flows_df = pd.DataFrame([k * 1000 for k in curr_leak_flow_arr[1:]], columns=["LeakFlow"],
                                                   index=list(
                                                       range(self.SECONDS_IN_HOUR, last_hour_seconds + 3600, 3600))) \
-                    .rename_axis(curr_axis_name, axis=1)
+                    .rename_axis(curr_axis_name, axis=1).astype("float64")
 
                 # prepare dictionary for saving, TODO restructure?
                 main_data_dict = {
