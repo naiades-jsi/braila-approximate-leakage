@@ -8,15 +8,16 @@ from src.epanet.EPANETUtils import EPANETUtils
 def pretty_print(node_arr):
     string_to_print = ""
 
-    for index, node in enumerate(node_arr):
+    for _, node in enumerate(node_arr):
         stripped_node = node.replace(", 16.0LPS", "")
         string_to_print += "  " + stripped_node + ",\n"
 
     return string_to_print
 
 
-def visualize_node_groups(critical_node_name, node_groups_dict, epanet_file_path, leak_amount, node_size=8, link_width=1,
-                          figsize=[950, 950], round_ndigits=2, add_to_node_popup=None, filename='plotly_network.html',
+def visualize_node_groups(critical_node_name, node_groups_dict, epanet_file_path, leak_amount, node_size=8,
+                          link_width=1, figsize=[950, 950], round_ndigits=2, add_to_node_popup=None,
+                          filename='plotly_network.html',
                           auto_open=False):
     water_network_model = EPANETUtils(epanet_file_path, "PDD").get_original_water_network_model()
     network_graph = water_network_model.get_graph()    # Graph

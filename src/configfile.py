@@ -1,3 +1,8 @@
+"""
+This file stores the configuration variables used in many files and is meant as a central
+location for all configuration variables.
+"""
+
 # Minimum count of values that need to be present to process data
 MINIMUM_PRESENT_VALUES_THRESHOLD = 14
 
