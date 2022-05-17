@@ -62,10 +62,10 @@ KAFKA_NODES_ORDER_FALSE_USE_FOR_PARSING_ONLY = ["nan_sensor", "Jonctiune-3974",
                                                 "SenzorComunarzi-NatVech", "SenzorComunarzi-castanului",
                                                 "SenzorChisinau-Titulescu", "SenzorCernauti-Sebesului"]
 
-
 # order for the new approach, order in array is important!!
 KAFKA_NODES_ORDER_LATEST = ["J-Apollo", "J-RN1", "J-RN2", "Sensor1", "Sensor3", "Sensor4", "Sensor2"]
-KAFKA_NODES_ORDER_LATEST_WRONG = ["nan_sensor", "J-Apollo", "J-RN1", "J-RN2", "Sensor1", "Sensor3", "Sensor4", "Sensor2"]
+KAFKA_NODES_ORDER_LATEST_WRONG = ["nan_sensor", "J-Apollo", "J-RN1", "J-RN2", "Sensor1", "Sensor3", "Sensor4",
+                                  "Sensor2"]
 
 # KAFKA related
 HOST_AND_PORT = "194.249.231.11:9092"
@@ -75,6 +75,16 @@ TOPIC = "features_braila_leakage_detection"
 
 TOPIC_V3 = "features_braila_leakage_detection_updated"
 OUTPUT_TOPIC = "braila_leakage_groups"
+
+ANOMALY_META_SIGNAL_TOPICS = ["anomalies_braila_flow211106H360_meta_signal",
+                              "anomalies_braila_flow211206H360_meta_signal",
+                              "anomalies_braila_flow211306H360_meta_signal",
+                              "anomalies_braila_flow318505H498_meta_signal",
+                              "anomalies_braila_pressure5770_meta_signal",
+                              "anomalies_braila_pressure5771_meta_signal",
+                              "anomalies_braila_pressure5772_meta_signal",
+                              "anomalies_braila_pressure5773_meta_signal"]
+ANOMALY_META_SIGNAL_THRESHOLD = 0.1
 
 # Service output json keys
 OUTPUT_JSON_TIME_KEY = "timestamp"
