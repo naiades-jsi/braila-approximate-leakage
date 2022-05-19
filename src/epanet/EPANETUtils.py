@@ -1,5 +1,7 @@
 import copy
 import json
+import logging
+
 import networkx as nx
 import wntr
 import pandas as pd
@@ -493,7 +495,8 @@ class EPANETUtils:
 
         for sensor_name in nan_sensors:
             if sensor_name not in networkx_graph.nodes:
-                raise Exception("Sensor name {} is not in the network!".format(sensor_name))
+                # raise Exception("Sensor name {} is not in the network!".format(sensor_name))
+                logging.warning("Sensor name {} is not in the network!".format(sensor_name))
 
             x, y = networkx_graph.nodes[sensor_name]["pos"]
             lat, lon = transformer.transform(y, x)

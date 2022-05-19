@@ -11,6 +11,7 @@ from json import dumps, loads
 import logging
 
 # TODO: fix paths in all of the files
+# TODO: integrate pylint into code checking
 
 
 def main(date):

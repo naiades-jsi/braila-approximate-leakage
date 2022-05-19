@@ -13,7 +13,7 @@ from src.state_comparator.NaNSensorsException import NaNSensorsException
 from src.state_comparator.comparator_functions import prepare_input_kafka_1d_array
 
 
-def main_multiple_sensors_new_topic(path_to_model_pkl):
+def main_multiple_sensors_new_topic(path_to_model_pkl, epanet_file):
     """
     Function to run the main program which is subscribed to the kafka topic (config.TOPIC_V3) and predicts the nodes
     which are the mostly likely responsible for the leak.
@@ -36,7 +36,7 @@ def main_multiple_sensors_new_topic(path_to_model_pkl):
 
     for latest_msg in consumer:
         try:
-            output_json = analyse_leakage_topic_and_generate_output(latest_msg.value, gmm_model)
+            output_json = analyse_leakage_topic_and_generate_output(latest_msg.value, gmm_model, epanet_file)
 
             future = producer.send(config.OUTPUT_TOPIC, output_json)
             logging.info(f"Sent json msg to topic {config.OUTPUT_TOPIC}!")
@@ -47,7 +47,7 @@ def main_multiple_sensors_new_topic(path_to_model_pkl):
 
         except NaNSensorsException as e:
             logging.info("Sensor input data missing: " + str(e))
-            error_output = generate_error_response_json(e.epoch_timestamp, e.sensor_list, config.EPANET_NETWORK_FILE_V2)
+            error_output = generate_error_response_json(e.epoch_timestamp, e.sensor_list, epanet_file)
 
             producer.send(config.OUTPUT_TOPIC, error_output)
 
@@ -55,9 +55,10 @@ def main_multiple_sensors_new_topic(path_to_model_pkl):
             logging.info("Consumer error: " + str(e))
 
 
-def analyse_leakage_topic_and_generate_output(topic_msg_value, gmm_model):
+def analyse_leakage_topic_and_generate_output(topic_msg_value, gmm_model, epanet_file):
     """
     TODO add documentation
+    :param epanet_file:
     :param topic_msg_value:
     :param gmm_model:
     :return:
@@ -74,7 +75,7 @@ def analyse_leakage_topic_and_generate_output(topic_msg_value, gmm_model):
     dt_time = datetime.fromtimestamp(epoch_sec)
     diverged_str = f"Most diverged node is: {diverged_node}. For values at datetime: {dt_time}"
     logging.info(diverged_str)
-    visualize_node_groups(diverged_node, groups_dict, config.EPANET_NETWORK_FILE, config.LEAK_AMOUNT,
+    visualize_node_groups(diverged_node, groups_dict, epanet_file, config.LEAK_AMOUNT,
                           filename="./grafana-files/braila_network.html")
 
     output_json = prepare_output_json_meta_data(
@@ -157,5 +158,6 @@ if __name__ == "__main__":
                         format="%(asctime)s %(levelname)-8s %(message)s",
                         datefmt="%Y-%m-%d %H:%M:%S"
                         )
-    main_multiple_sensors_new_topic("./data/trained_models/gmm_trained_model_30_03_2022.pkl")
+    main_multiple_sensors_new_topic("./data/trained_models/gmm_trained_model_30_03_2022.pkl",
+                                    config.EPANET_NETWORK_FILE_V2)
     # TODO finish PCA reduction and find out how leakage amount actually effects simulated data
