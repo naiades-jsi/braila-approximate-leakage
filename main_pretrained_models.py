@@ -19,6 +19,7 @@ def main_multiple_sensors_new_topic(path_to_model_pkl, epanet_file):
     which are the mostly likely responsible for the leak.
 
     :param path_to_model_pkl: String. Path to the pickle file containing the trained machine learning model.
+    :param epanet_file: String. Path to the epanet file.
     """
     logging.info("Started the application v3!")
 
@@ -55,6 +56,76 @@ def main_multiple_sensors_new_topic(path_to_model_pkl, epanet_file):
             logging.info("Consumer error: " + str(e))
 
 
+def main_multiple_sensors_new_topic_new_version(path_to_model_pkl, epanet_file):
+    """
+    Function to combine the functionality of this service, with the already existing service which finds
+    anomalies on the input signal. If this meta signal reaches over threshold specified in
+    config.ANOMALY_META_SIGNAL_THRESHOLD the service analyses the most recent data on the leakage topic and
+    sends an output to the output topic.
+
+    :param path_to_model_pkl: String. Path to the pickle file containing the trained machine learning model.
+    :param epanet_file: String. Path to the epanet file.
+    """
+    logging.info("Started the application v3!")
+    meta_signal_consumer = KafkaConsumer(bootstrap_servers=config.HOST_AND_PORT, auto_offset_reset="earliest",
+                                         value_deserializer=lambda v: loads(v.decode("utf-8")))
+    meta_signal_consumer.subscribe(topics=config.ANOMALY_META_SIGNAL_TOPICS)
+    logging.info("Consumer 1: Subscribed to topics: " + config.ANOMALY_META_SIGNAL_TOPICS)
+
+    leakages_consumer = KafkaConsumer(bootstrap_servers=config.HOST_AND_PORT, auto_offset_reset="earliest",
+                                      value_deserializer=lambda v: loads(v.decode("utf-8")))
+    leakages_consumer.subscribe(config.TOPIC_V3)
+    logging.info("Consumer 2: Subscribed to topic: " + config.TOPIC_V3)
+
+    producer = KafkaProducer(bootstrap_servers=config.HOST_AND_PORT,
+                             value_serializer=lambda v: dumps(v).encode("utf-8"))
+
+    with open(path_to_model_pkl, "rb") as model_file:
+        gmm_model = pickle.load(model_file)
+
+    for latest_msg in meta_signal_consumer:
+        try:
+            msg_topic = latest_msg.topic
+            meta_signal_timestamp = latest_msg.value["timestamp"]
+            meta_signal_date = datetime.fromtimestamp(meta_signal_timestamp)
+            meta_signal_value = latest_msg.value["status_code"]
+
+            if meta_signal_value >= config.ANOMALY_META_SIGNAL_THRESHOLD:
+                logging.info(f"Meta signal on topic '{msg_topic}' at time '{meta_signal_date}' is over threshold, "
+                             f"with value '{meta_signal_value}'")
+
+                latest_sensor_values = None
+                latest_timestamp = 0
+                for sensor_values_msg in leakages_consumer:
+                    if sensor_values_msg["timestamp"] > latest_timestamp:
+                        latest_sensor_values = sensor_values_msg
+                        latest_timestamp = sensor_values_msg["timestamp"]
+
+                try:
+                    # TODO make sure to retrieve the latest message
+                    output_json = analyse_leakage_topic_and_generate_output(latest_msg.value, gmm_model, epanet_file)
+
+                    future = producer.send(config.OUTPUT_TOPIC, output_json)
+                    logging.info(f"Sent json msg to topic {config.OUTPUT_TOPIC}!")
+                    try:
+                        record_metadata = future.get(timeout=10)
+                    except Exception as e:
+                        logging.info("Producer error: " + str(e))
+
+                except NaNSensorsException as e:
+                    logging.info("Sensor input data missing: " + str(e))
+                    error_output = generate_error_response_json(e.epoch_timestamp, e.sensor_list,
+                                                                config.EPANET_NETWORK_FILE_V2)
+                    producer.send(config.OUTPUT_TOPIC, error_output)
+            else:
+                logging.info(f"Meta signal on topic '{msg_topic}' at time '{meta_signal_date}' is below threshold, "
+                             f"with value '{meta_signal_value}'")
+
+        except Exception as e:
+            # TODO make error handling more specific
+            logging.info("Consumer error: " + str(e))
+
+
 def analyse_leakage_topic_and_generate_output(topic_msg_value, gmm_model, epanet_file):
     """
     TODO add documentation
@@ -88,68 +159,6 @@ def analyse_leakage_topic_and_generate_output(topic_msg_value, gmm_model, epanet
     )
 
     return output_json
-
-
-def main_multiple_sensors_new_topic_new_version(path_to_model_pkl):
-    """
-    Function to combine the functionality of this service, with the already existing service which finds
-    anomalies on the input signal. If this meta signal reaches over threshold specified in
-    config.ANOMALY_META_SIGNAL_THRESHOLD the service analyses the most recent data on the leakage topic and
-    sends an output to the output topic.
-
-    :param path_to_model_pkl: String. Path to the pickle file containing the trained machine learning model.
-    """
-    logging.info("Started the application v3!")
-    meta_signal_consumer = KafkaConsumer(bootstrap_servers=config.HOST_AND_PORT, auto_offset_reset="earliest",
-                                         value_deserializer=lambda v: loads(v.decode("utf-8")))
-    meta_signal_consumer.subscribe(topics=config.ANOMALY_META_SIGNAL_TOPICS)
-    logging.info("Consumer 1: Subscribed to topics: " + config.ANOMALY_META_SIGNAL_TOPICS)
-
-    leakages_consumer = KafkaConsumer(bootstrap_servers=config.HOST_AND_PORT, auto_offset_reset="earliest",
-                                      value_deserializer=lambda v: loads(v.decode("utf-8")))
-    leakages_consumer.subscribe(config.TOPIC_V3)
-    logging.info("Consumer 2: Subscribed to topic: " + config.TOPIC_V3)
-
-    producer = KafkaProducer(bootstrap_servers=config.HOST_AND_PORT,
-                             value_serializer=lambda v: dumps(v).encode("utf-8"))
-
-    with open(path_to_model_pkl, "rb") as model_file:
-        gmm_model = pickle.load(model_file)
-
-    for latest_msg in meta_signal_consumer:
-        try:
-            msg_topic = latest_msg.topic
-            meta_signal_timestamp = latest_msg.value["timestamp"]
-            meta_signal_date = datetime.fromtimestamp(meta_signal_timestamp)
-            meta_signal_value = latest_msg.value["status_code"]
-
-            if meta_signal_value >= config.ANOMALY_META_SIGNAL_THRESHOLD:
-                logging.info(f"Meta signal on topic '{msg_topic}' at time '{meta_signal_date}' is over threshold, "
-                             f"with value '{meta_signal_value}'")
-
-                try:
-                    # TODO make sure to retrieve the latest message
-                    output_json = analyse_leakage_topic_and_generate_output(latest_msg.value, gmm_model)
-
-                    future = producer.send(config.OUTPUT_TOPIC, output_json)
-                    logging.info(f"Sent json msg to topic {config.OUTPUT_TOPIC}!")
-                    try:
-                        record_metadata = future.get(timeout=10)
-                    except Exception as e:
-                        logging.info("Producer error: " + str(e))
-
-                except NaNSensorsException as e:
-                    logging.info("Sensor input data missing: " + str(e))
-                    error_output = generate_error_response_json(e.epoch_timestamp, e.sensor_list,
-                                                                config.EPANET_NETWORK_FILE_V2)
-                    producer.send(config.OUTPUT_TOPIC, error_output)
-            else:
-                logging.info(f"Meta signal on topic '{msg_topic}' at time '{meta_signal_date}' is below threshold, "
-                             f"with value '{meta_signal_value}'")
-
-        except Exception as e:
-            # TODO make error handling more specific
-            logging.info("Consumer error: " + str(e))
 
 
 if __name__ == "__main__":
