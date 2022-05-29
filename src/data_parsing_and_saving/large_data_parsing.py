@@ -175,13 +175,19 @@ def read_dfs_and_generate_feature_vectors(data_dir, clustering_method):
     print("\n\nExecution finished")
 
 
-def condense_pickle_files_to_relevant_data(data_dir, output_file_name):
+def condense_pickle_files_to_relevant_data(data_dir, output_file_name, ijs_data_format=True):
     """
     Function reads all pickle files in a directory and condenses them into a single file which contains only
     the information we need as specified in the sensor_names_arr, extra_columns_arr variables.
 
     :param data_dir: String. The directory where the files are located.
     :param output_file_name: String. The name of the output file.
+    :param ijs_data_format: Boolean. If True, the files will be parsed in the:
+     IJS data format which is
+        [dict("LPM": pd.DataFrame, "TM_l": pd.DataFrame, ...), dict("LPM": pd.DataFrame, "TM_l": pd.DataFrame, ...),
+        ...]
+    else it will be parsed as a dictionary of arrays:
+        {"LPM": [pd.DataFrame, ...] "TM_l": [pd.DataFrame, ...] ...}
     """
     # get file names
     file_names_arr = find_file_names_in_dir(data_dir)
@@ -194,10 +200,13 @@ def condense_pickle_files_to_relevant_data(data_dir, output_file_name):
     else:
         raise Exception(f"Output file '{output_file_name}' already exists!")
 
+    # set the correct function for processing the data either DELFT or IJS
+    process_data_func = prepare_df_from_file_ijs_data if ijs_data_format else prepare_df_from_file
+
     for file_index, file_name in enumerate(file_names_arr):
         print(f"Preparing file  {file_index + 1}/{len(file_names_arr)} - '{file_name}',")
 
-        file_df = prepare_df_from_file(file_name, sensor_names_arr, extra_columns_arr)
+        file_df = process_data_func(file_name, sensor_names_arr, extra_columns_arr)
         batch_df = pd.concat([batch_df, file_df], ignore_index=True)
 
         # perform batch (online) learning
