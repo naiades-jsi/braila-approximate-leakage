@@ -1,7 +1,6 @@
-from src.output_json_functions import generate_error_response_json, prepare_output_json_meta_data
+from kafka.output_json_functions import generate_error_response_json, prepare_output_json_meta_data
 from src.divergence_matrix.DivergenceMatrixProcessor import DivergenceMatrixProcessor
 from src.epanet.EPANETUtils import EPANETUtils
-from src.epanet.NetworkVisualisation import plot_interactive_network, interactive_visualization
 from src.state_comparator.comparator_functions import *
 from src.helper_functions import visualize_node_groups
 import src.configfile as config

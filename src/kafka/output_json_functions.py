@@ -5,6 +5,33 @@ from datetime import datetime
 from src.state_comparator.comparator_functions import convert_timestamp_to_epoch_seconds
 
 
+def generate_output_json(epoch_seconds, groups_dict, diverged_node, epanet_file):
+    """
+    Method generates and returns the output JSON for our service. Mainly it serves as a wrapper for the
+    prepare_output_json_meta_data function, because here it can explicitly be seen if any values are hardcoded due to
+    testing.
+
+    :param epoch_seconds: Timestamp, in epoch seconds from when the data was collected.
+    :param diverged_node: String. Name of the sensor which is the most probable to have caused the leak.
+    :param groups_dict: Dictionary, with keys from 0...n which represent the group number and values which are lists of
+    nodes in that group.
+    :param epanet_file: String, name of the EPANET file which was used to find the meta data about the sensors in the
+    groups.
+    :return: Dictionary - JSON. Containing all the data to find the leak. Example of the output can be seen in the
+    README.md
+    """
+    output_json = prepare_output_json_meta_data(
+        timestamp=epoch_seconds,
+        sensor_with_leak=diverged_node,
+        sensor_deviation=0.0,  # Information not available, when using gmm method
+        groups_dict=groups_dict,
+        method="gmm+jenks_natural_breaks",
+        epanet_file=epanet_file
+    )
+
+    return output_json
+
+
 def prepare_output_json_meta_data(timestamp, sensor_with_leak, sensor_deviation, groups_dict, method, epanet_file):
     """
     Function prepares the dictionary (JSON) which will be outputted by the application to the output kafka topic.

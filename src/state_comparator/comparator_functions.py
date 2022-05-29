@@ -157,12 +157,12 @@ def analyse_kafka_topic_and_check_for_missing_values(timestamp, kafka_array, sen
     return actual_values_df
 
 
-def prepare_input_kafka_1d_array(timestamp, kafka_array):
+def prepare_input_kafka_1d_array(epoch_seconds, kafka_array):
     """
     Updated function to process new kafka topic currently named "features_braila_leakage_detection_updated". Function
     check for errors in the data and returns correctly sorted array if the data is correct.
 
-    :param timestamp: Timestamp. Of the kafka message, either in milliseconds or seconds.
+    :param epoch_seconds: Epoch timestamp in seconds. Used for calculating adding meta information to the Exception.
     :param kafka_array: Array. The input array which should contain 8 floats which represent the pressure values
     of the sensors.
     The order of sensor values in the kafka array is:
@@ -176,12 +176,11 @@ def prepare_input_kafka_1d_array(timestamp, kafka_array):
         8. pressure5773
     It is important because these values will be passed to the model which can produce the wrong result if the order
     is not correct.
-    :return: Tuple of a 2D array with only one row which is sorted in the correct order and timestamp.
+    :return: 2D array. Contains only one row which is sorted in the correct order.
     """
     if len(kafka_array) != 8:
         raise Exception("The kafka array should have 8 values !")
 
-    epoch_seconds = convert_timestamp_to_epoch_seconds(timestamp)
     # Map array values from kafka topic to correct sensors
     sensor_to_values_dict = {
         ("flow211106H360", "J-GA"): kafka_array[0],
@@ -220,7 +219,7 @@ def prepare_input_kafka_1d_array(timestamp, kafka_array):
     if len(missing_val_info_arr) > 0:
         raise NaNSensorsException(missing_val_info_arr, epoch_seconds)
 
-    return [ordered_value_arr], epoch_seconds
+    return [ordered_value_arr]
 
 
 def create_df_from_real_values(measurements_arr, epoch_timestamp, sensor_names):
