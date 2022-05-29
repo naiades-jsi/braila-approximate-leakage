@@ -106,10 +106,10 @@ def prepare_df_from_file_ijs_data(file_name, sensor_names_arr, column_names_arr)
 
         # take just the "LPM"-key or the leakage matrix of each dataframe
         for df_index, temp_dict in enumerate(file_dict):
-            # We take the first value since others are the same, original value is in hours,
-            # if we want to get seconds: * 3600, -1 because it has hours from 1...24, array is 0...23
-            # get timestamp when leak would be most noticeable
-            timestamp_of_leak = int(temp_dict["TM_l"][0]) * 3600
+            # TODO this is assigned the hour 10, since the analysis revealed that the leak is most noticeable then,
+            #  this should still be changed IF the data will contain the appropriate "TM_l" column which it doesn't
+            #  currently
+            timestamp_of_leak = 36000
             temp_df = temp_dict["LPM"][sensor_names_arr]
             # filter to only get one row
             prepared_df = temp_df.loc[timestamp_of_leak].to_frame().T
