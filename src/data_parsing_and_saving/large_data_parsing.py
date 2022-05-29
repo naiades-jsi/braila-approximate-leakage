@@ -215,6 +215,7 @@ def condense_pickle_files_to_relevant_data(data_dir, output_file_name, ijs_data_
             # save/append the dataframe to file and release memory
             batch_df.to_csv(output_file_name, mode='a', header=False, index=False)
             batch_df = pd.DataFrame(columns=sensor_names_arr + extra_columns_arr)
+            print(f"Saved Dataframe to file! Estimated dataframe size {current_df_size} MB, should be almost 0MB!")
         else:
             print(f"Current estimated dataframe size {current_df_size} MB")
 
