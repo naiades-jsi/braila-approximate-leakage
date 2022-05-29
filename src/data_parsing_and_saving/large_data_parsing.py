@@ -83,6 +83,55 @@ def prepare_df_from_file(file_name, sensor_names_arr, column_names_arr):
     return file_df
 
 
+def prepare_df_from_file_ijs_data(file_name, sensor_names_arr, column_names_arr):
+    """
+    Function loads a data frame from a file extract only the relevant information at the timestamp of leak detection.
+    It only keep the columns which are provided in the sensor_names_arr and adds meta data in the column_names_arr.
+
+    The main difference between this function and the prepare_df_from_file function is that this function process data
+    in the format which was used on IJS-s (our side) to generate the data.
+
+    :param file_name: String. The name of the file to be loaded.
+    :param sensor_names_arr: List of strings. The sensor names to be kept.
+    :param column_names_arr: List of strings. The column names to be added.
+    :return: Dataframe. The dataframe which contains all the extracted information.
+    """
+    keep_f_name_in_df = False
+    if len(column_names_arr) == 3 and column_names_arr[2] == "origin_file":
+        keep_f_name_in_df = True
+
+    file_df = pd.DataFrame(columns=column_names_arr)
+    try:
+        file_dict = pd.read_pickle(file_name)
+
+        # take just the "LPM"-key or the leakage matrix of each dataframe
+        for df_index, temp_dict in enumerate(file_dict):
+            # We take the first value since others are the same, original value is in hours,
+            # if we want to get seconds: * 3600, -1 because it has hours from 1...24, array is 0...23
+            # get timestamp when leak would be most noticeable
+            timestamp_of_leak = int(temp_dict["TM_l"][0]) * 3600
+            temp_df = temp_dict["LPM"][sensor_names_arr]
+            # filter to only get one row
+            prepared_df = temp_df.loc[timestamp_of_leak].to_frame().T
+
+            node_name_and_leak_tup = [i.strip() for i in prepared_df.columns.name.split(",")]
+            prepared_df.at[timestamp_of_leak, column_names_arr[0]] = node_name_and_leak_tup[0]
+            prepared_df.at[timestamp_of_leak, column_names_arr[1]] = node_name_and_leak_tup[1]
+
+            if keep_f_name_in_df:
+                prepared_df.at[timestamp_of_leak, column_names_arr[2]] = file_name.split("\\")[-1]
+
+            file_df = pd.concat([file_df, prepared_df], ignore_index=True)
+
+    except FileNotFoundError as e:
+        print(f"File not found, for file '{file_name}': {e}")
+
+    except EOFError as e:
+        print(f"Error when reading the file, for file '{file_name}': {e}")
+
+    return file_df
+
+
 def read_dfs_and_generate_feature_vectors(data_dir, clustering_method):
     """
     Function calls the function find_file_names_in_dir to find all files in a directory which it needs for processing.
