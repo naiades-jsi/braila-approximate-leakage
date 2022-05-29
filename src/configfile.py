@@ -84,7 +84,8 @@ ANOMALY_META_SIGNAL_TOPICS = ["anomalies_braila_flow211106H360_meta_signal",
                               "anomalies_braila_pressure5771_meta_signal",
                               "anomalies_braila_pressure5772_meta_signal",
                               "anomalies_braila_pressure5773_meta_signal"]
-ANOMALY_META_SIGNAL_THRESHOLD = 0.1
+# Authors of the topic suggest a threshold of 0.1!
+ANOMALY_META_SIGNAL_THRESHOLD = 0.01
 
 # Service output json keys
 OUTPUT_JSON_TIME_KEY = "timestamp"
