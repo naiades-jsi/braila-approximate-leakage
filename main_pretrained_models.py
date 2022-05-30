@@ -87,7 +87,12 @@ if __name__ == "__main__":
                         format="%(asctime)s %(levelname)-8s %(message)s",
                         datefmt="%Y-%m-%d %H:%M:%S"
                         )
-    main_multiple_sensors_new_topic("./data/trained_models/gmm_trained_model_30_03_2022.pkl",
-                                    config.EPANET_NETWORK_FILE_V2)
-    # main_multiple_sensors_new_topic_new_version("./data/trained_models/gmm_trained_model_30_03_2022.pkl",
-    #                                             config.EPANET_NETWORK_FILE_V2)
+    # Rerouting kafka logging to separate file
+    kafka_logger = logging.getLogger("kafka")
+    kafka_logger.setLevel(logging.WARNING)
+    kafka_logger.addHandler(logging.FileHandler(config.LOG_FILE_KAFKA))
+
+    # main_multiple_sensors_new_topic("./data/trained_models/gmm_trained_model_30_03_2022.pkl",
+    #                                 config.EPANET_NETWORK_FILE_V2)
+    main_multiple_sensors_new_topic_new_version("./data/trained_models/gmm_trained_model_30_03_2022.pkl",
+                                                config.EPANET_NETWORK_FILE_V2)

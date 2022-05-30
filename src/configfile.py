@@ -27,8 +27,10 @@ EPANET_NETWORK_FILE_V2 = EPANET_NETWORKS + "Braila_V2022_2_2.inp"
 # EPANET_NETWORK_FILE = EPANET_NETWORKS + "RaduNegru23July2021_2.2.inp"
 DIVERGENCE_MATRIX_FILE = DIVERGENCE_DATA_DIR + "Divergence_M.pickle"
 
-LOG_FILE = "logs/service-log.log"
-LOG_FILE_PRETRAINED = "logs/service-log-pretrained.log"
+LOG_DIR = "logs"
+LOG_FILE = f"{LOG_DIR}/service-log.log"
+LOG_FILE_PRETRAINED = f"{LOG_DIR}/service-log-pretrained.log"
+LOG_FILE_KAFKA = f"{LOG_DIR}/kafka-log.log"
 
 # Sensor and pump file names arrays
 SENSOR_FILES = ["braila_pressure5770.csv", "braila_pressure5771.csv", "braila_pressure5772.csv",
