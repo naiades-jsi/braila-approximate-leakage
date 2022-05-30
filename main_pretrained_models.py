@@ -89,10 +89,14 @@ if __name__ == "__main__":
                         )
     # Rerouting kafka logging to separate file
     kafka_logger = logging.getLogger("kafka")
+    # TODO it doesn't actually reroute the logging to a file, it just changed the logging level and duplicates the out
     kafka_logger.setLevel(logging.WARNING)
     kafka_logger.addHandler(logging.FileHandler(config.LOG_FILE_KAFKA))
 
-    # main_multiple_sensors_new_topic("./data/trained_models/gmm_trained_model_30_03_2022.pkl",
-    #                                 config.EPANET_NETWORK_FILE_V2)
-    main_multiple_sensors_new_topic_new_version("./data/trained_models/gmm_trained_model_30_03_2022.pkl",
-                                                config.EPANET_NETWORK_FILE_V2)
+    # Old service, works as a standalone and outputs to topic on every message
+    main_multiple_sensors_new_topic("./data/trained_models/gmm_trained_model_30_03_2022.pkl",
+                                    config.EPANET_NETWORK_FILE_V2)
+
+    # New service, only triggers when meta signal is above threshold -> less resource consumption
+    # main_multiple_sensors_new_topic_new_version("./data/trained_models/gmm_trained_model_30_03_2022.pkl",
+    #                                             config.EPANET_NETWORK_FILE_V2)
