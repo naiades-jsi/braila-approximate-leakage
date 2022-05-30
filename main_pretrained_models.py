@@ -6,10 +6,11 @@ from kafka import KafkaConsumer, KafkaProducer
 import logging
 
 import src.configfile as config
-from kafka.preprocessing_functions import process_kafka_msg_and_output_to_topic, \
+from src.kafka.preprocessing_functions import process_kafka_msg_and_output_to_topic, \
     find_msg_with_most_recent_timestamp
 from src.state_comparator.comparator_functions import convert_timestamp_to_epoch_seconds
-# TODO finish PCA reduction and find out how leakage amount actually effects simulated data
+# TODO - finish PCA reduction and find out how leakage amount actually effects simulated data
+# TODO - test the new service on Atena
 
 
 def main_multiple_sensors_new_topic(path_to_model_pkl, epanet_file):
@@ -91,8 +92,8 @@ def main_multiple_sensors_new_topic_new_version(path_to_model_pkl, epanet_file):
                 logging.info(f"Meta signal on topic '{msg_topic}' at time '{meta_signal_date}' is below threshold, "
                              f"with value '{meta_signal_value}'")
 
-        except Exception as e:
-            logging.info("Meta signal Consumer error: " + str(e))
+        # except Exception as e:
+        #     logging.info("Meta signal Consumer error: " + str(e))
 
 
 if __name__ == "__main__":

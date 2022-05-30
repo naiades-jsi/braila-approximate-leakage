@@ -2,11 +2,11 @@ import logging
 from datetime import datetime
 
 import src.configfile as config
-from helper_functions import visualize_node_groups
-from kafka.output_json_functions import generate_error_response_json, generate_output_json
-from multicovariate_models.gmm_functions import predict_groups_gmm
-from state_comparator.NaNSensorsException import NaNSensorsException
-from state_comparator.comparator_functions import convert_timestamp_to_epoch_seconds, prepare_input_kafka_1d_array
+from src.helper_functions import visualize_node_groups
+from src.kafka.output_json_functions import generate_error_response_json, generate_output_json
+from src.multicovariate_models.gmm_functions import predict_groups_gmm
+from src.state_comparator.NaNSensorsException import NaNSensorsException
+from src.state_comparator.comparator_functions import convert_timestamp_to_epoch_seconds, prepare_input_kafka_1d_array
 
 
 def process_kafka_msg_and_output_to_topic(producer, kafka_msg, ml_model, epanet_file):
@@ -50,9 +50,9 @@ def process_kafka_msg_and_output_to_topic(producer, kafka_msg, ml_model, epanet_
 
         producer.send(config.OUTPUT_TOPIC, error_output)
 
-    except Exception as e:
-        # TODO improve exception handling -> more logging and less general exceptions catching
-        logging.info("Consumer error: " + str(e))
+    # except Exception as e:
+    #     # TODO improve exception handling -> more logging and less general exceptions catching
+    #     logging.info("Consumer error: " + str(e))
 
 
 def find_msg_with_most_recent_timestamp(leakage_detection_consumer, meta_signal_timestamp):
