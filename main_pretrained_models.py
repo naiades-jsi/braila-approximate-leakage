@@ -56,25 +56,13 @@ def main_multiple_sensors_new_topic_new_version(path_to_model_pkl, epanet_file):
     meta_signal_consumer.subscribe(topics=config.ANOMALY_META_SIGNAL_TOPICS)
     logging.info(f"Consumer 1: Subscribed to topics: {str(config.ANOMALY_META_SIGNAL_TOPICS)}")
 
-    # auto_offset_reset="latest"
-    leakages_consumer = KafkaConsumer(bootstrap_servers=config.HOST_AND_PORT,
-                                      auto_offset_reset="earliest",
-                                      enable_auto_commit=True,
-                                      group_id="braila_approx_leakage_sensor_group",
-                                      auto_commit_interval_ms=2000,
-                                      consumer_timeout_ms=5000,
-                                      value_deserializer=lambda v: loads(v.decode("utf-8"))
-                                      )
-    leakages_consumer.subscribe(config.TOPIC_V3)
-    logging.info("Consumer 2: Subscribed to topic: " + config.TOPIC_V3)
-
     producer = KafkaProducer(bootstrap_servers=config.HOST_AND_PORT,
                              value_serializer=lambda v: dumps(v).encode("utf-8"))
 
     with open(path_to_model_pkl, "rb") as model_file:
         gmm_model = pickle.load(model_file)
 
-    # TODO add SPECIFIC exception handling !
+    # TODO add SPECIFIC exception handling ! 1. runtime error with specific msg!
     for latest_msg in meta_signal_consumer:
         msg_topic = latest_msg.topic
         meta_signal_timestamp = convert_timestamp_to_epoch_seconds(latest_msg.value["timestamp"])
@@ -85,7 +73,7 @@ def main_multiple_sensors_new_topic_new_version(path_to_model_pkl, epanet_file):
             logging.info(f"Meta signal on topic '{msg_topic}' at time '{meta_signal_date}' is over threshold, "
                          f"with value '{meta_signal_value}'")
 
-            closest_timestamp_msg = find_msg_with_most_recent_timestamp(leakages_consumer, meta_signal_timestamp)
+            closest_timestamp_msg = find_msg_with_most_recent_timestamp(meta_signal_timestamp)
             process_kafka_msg_and_output_to_topic(producer=producer, kafka_msg=closest_timestamp_msg,
                                                   ml_model=gmm_model, epanet_file=epanet_file)
         else:

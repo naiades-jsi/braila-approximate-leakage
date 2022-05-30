@@ -1,5 +1,8 @@
 import logging
 from datetime import datetime
+from json import loads
+
+from kafka.consumer.group import KafkaConsumer
 
 import src.configfile as config
 from src.helper_functions import visualize_node_groups
@@ -53,30 +56,44 @@ def process_kafka_msg_and_output_to_topic(producer, kafka_msg, ml_model, epanet_
     # TODO improve exception handling -> more logging and less general exceptions catching
 
 
-def find_msg_with_most_recent_timestamp(leakage_detection_consumer, meta_signal_timestamp):
+def find_msg_with_most_recent_timestamp(meta_signal_timestamp, leakage_detection_consumer=None):
     """
-    Function loops through the messages on consumer and find the message closest to the meta signal timestamp.
+    Function loops through the messages on consumer (if given, else it creates its own) and finds the message
+    closest (in terms of time) to the meta signal timestamp.
 
     CAUTION!: The kafka consumer should have the "consumer_timeout_ms" parameter set to a value greater then 0. Else
-    this function can result in an infinite loop! # TODO: each time build a new consumer here to ensure this?
+    this function can result in an infinite loop!
 
-    :param leakage_detection_consumer: Kafka consumer object. Will be used to loop through the messages.
     :param meta_signal_timestamp: Epoch seconds timestamp. Of the meta signal from another topic.
-    :return: Kafka message object. The message closest to the meta signal timestamp, but not after it.
+    :param leakage_detection_consumer: Kafka consumer object, Optional. Will be used to loop through the messages.
+    :return: Kafka message object. The message closest (in terms of time) to the meta signal timestamp.
     """
     t_key = "timestamp"
-    closest_timestamp_msg = None
+    if leakage_detection_consumer is None:
+        # Build a new consumer, from scratch, option: auto_offset_reset="latest"
+        leakage_detection_consumer = KafkaConsumer(bootstrap_servers=config.HOST_AND_PORT,
+                                                   auto_offset_reset="earliest",
+                                                   consumer_timeout_ms=2000,
+                                                   value_deserializer=lambda v: loads(v.decode("utf-8"))
+                                                   )
+        leakage_detection_consumer.subscribe(config.TOPIC_V3)
+        logging.info("Consumer 2: Subscribed to topic: " + config.TOPIC_V3)
 
+    closest_time_msg = None
     for sensor_values_msg in leakage_detection_consumer:
         curr_timestamp = convert_timestamp_to_epoch_seconds(sensor_values_msg.value[t_key])
+        t_diff = abs(curr_timestamp - meta_signal_timestamp)
 
-        # The timestamp shouldn't be after the meta signal timestamp.
-        if curr_timestamp <= meta_signal_timestamp:
-            if closest_timestamp_msg is None or curr_timestamp >= closest_timestamp_msg.value[t_key]:
-                sensor_values_msg.value[t_key] = curr_timestamp
-                closest_timestamp_msg = sensor_values_msg
+        # The message closest to the meta sig. timestamp is taken, even if it is after it
+        if closest_time_msg is None or t_diff < abs(closest_time_msg.value[t_key] - meta_signal_timestamp):
+            sensor_values_msg.value[t_key] = curr_timestamp
+            closest_time_msg = sensor_values_msg
 
-    return closest_timestamp_msg
+    if closest_time_msg is None:
+        raise RuntimeError(f"No message found on topic {config.TOPIC_V3}, when meta signal timestamp was "
+                           f"{meta_signal_timestamp}!")
+
+    return closest_time_msg
 
 
 def analyse_topic_and_find_leakage_groups(topic_msg_value, ml_model):
