@@ -50,9 +50,7 @@ def process_kafka_msg_and_output_to_topic(producer, kafka_msg, ml_model, epanet_
 
         producer.send(config.OUTPUT_TOPIC, error_output)
 
-    # except Exception as e:
-    #     # TODO improve exception handling -> more logging and less general exceptions catching
-    #     logging.info("Consumer error: " + str(e))
+    # TODO improve exception handling -> more logging and less general exceptions catching
 
 
 def find_msg_with_most_recent_timestamp(leakage_detection_consumer, meta_signal_timestamp):

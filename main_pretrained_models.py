@@ -74,26 +74,23 @@ def main_multiple_sensors_new_topic_new_version(path_to_model_pkl, epanet_file):
     with open(path_to_model_pkl, "rb") as model_file:
         gmm_model = pickle.load(model_file)
 
+    # TODO add SPECIFIC exception handling !
     for latest_msg in meta_signal_consumer:
-        try:
-            msg_topic = latest_msg.topic
-            meta_signal_timestamp = convert_timestamp_to_epoch_seconds(latest_msg.value["timestamp"])
-            meta_signal_date = datetime.fromtimestamp(meta_signal_timestamp)
-            meta_signal_value = latest_msg.value["status_code"]
+        msg_topic = latest_msg.topic
+        meta_signal_timestamp = convert_timestamp_to_epoch_seconds(latest_msg.value["timestamp"])
+        meta_signal_date = datetime.fromtimestamp(meta_signal_timestamp)
+        meta_signal_value = latest_msg.value["status_code"]
 
-            if meta_signal_value >= config.ANOMALY_META_SIGNAL_THRESHOLD:
-                logging.info(f"Meta signal on topic '{msg_topic}' at time '{meta_signal_date}' is over threshold, "
-                             f"with value '{meta_signal_value}'")
+        if meta_signal_value >= config.ANOMALY_META_SIGNAL_THRESHOLD:
+            logging.info(f"Meta signal on topic '{msg_topic}' at time '{meta_signal_date}' is over threshold, "
+                         f"with value '{meta_signal_value}'")
 
-                closest_timestamp_msg = find_msg_with_most_recent_timestamp(leakages_consumer, meta_signal_timestamp)
-                process_kafka_msg_and_output_to_topic(producer=producer, kafka_msg=closest_timestamp_msg,
-                                                      ml_model=gmm_model, epanet_file=epanet_file)
-            else:
-                logging.info(f"Meta signal on topic '{msg_topic}' at time '{meta_signal_date}' is below threshold, "
-                             f"with value '{meta_signal_value}'")
-
-        # except Exception as e:
-        #     logging.info("Meta signal Consumer error: " + str(e))
+            closest_timestamp_msg = find_msg_with_most_recent_timestamp(leakages_consumer, meta_signal_timestamp)
+            process_kafka_msg_and_output_to_topic(producer=producer, kafka_msg=closest_timestamp_msg,
+                                                  ml_model=gmm_model, epanet_file=epanet_file)
+        else:
+            logging.info(f"Meta signal on topic '{msg_topic}' at time '{meta_signal_date}' is below threshold, "
+                         f"with value '{meta_signal_value}'")
 
 
 if __name__ == "__main__":
