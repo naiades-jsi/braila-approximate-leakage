@@ -4,7 +4,7 @@ from datetime import datetime
 
 import numpy as np
 import pandas as pd
-from sklearn.metrics import precision_recall_fscore_support, accuracy_score
+from sklearn.metrics import precision_recall_fscore_support, accuracy_score, recall_score, precision_score
 from sklearn.mixture import GaussianMixture
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
@@ -68,7 +68,7 @@ class GroupsModel:
                             f"Got {type(prepared_data_df)} instead!")
 
         # Check if prepared_data_df has all required columns
-        if set(prepared_data_df.columns).issubset(set(self.SENSOR_COLS + [self.NODE_COL])):
+        if not set(self.SENSOR_COLS + [self.NODE_COL]).issubset(set(prepared_data_df.columns)):
             raise Exception(f"Prepared data does not have expected columns! It should contain the "
                             f"following columns: {self.SENSOR_COLS + [self.NODE_COL]}, but it has only these: "
                             f"{list(prepared_data_df.columns)}")
@@ -170,14 +170,18 @@ class GroupsModel:
         return self.model.predict_proba(x_data)
 
     def evaluate_model_on_node_basis(self):
-        y_pred_arr = []
+        y_pred_arr = np.array([])
+
         for x_row in self.x_test:
-            y_pred_arr.append(self.predict_node(x_row))
+            y_pred_arr = np.append(y_pred_arr, self.predict_node([x_row]))
+
+        print(self.y_test, y_pred_arr)
 
         accuracy = accuracy_score(y_true=self.y_test, y_pred=y_pred_arr)
+        recall = recall_score(y_true=self.y_test, y_pred=y_pred_arr, average="macro")
+        precision = precision_score(y_true=self.y_test, y_pred=y_pred_arr, average="macro")
         print(f"Accuracy: {accuracy}")
-        precision, recall, fscore, support = precision_recall_fscore_support(y_true=self.y_test, y_pred=y_pred_arr)
-        print(f"Precision: {precision}, recall: {recall}, fscore: {fscore}, support: {support}")
+        print(f"Precision: {precision}, recall: {recall}")
 
     def evaluate_model_on_group_basis(self):
         y_pred_arr = []
