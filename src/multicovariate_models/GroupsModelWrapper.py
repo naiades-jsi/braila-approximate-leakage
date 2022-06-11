@@ -18,7 +18,7 @@ class GroupsModelWrapper:
     """
     SUPPORTED_MODELS = ["GMM", "SVM"]
 
-    def __init__(self, x_train, y_train, x_test, y_test, node_to_enc_node_dict, model_type):
+    def __init__(self, x_train, x_test, y_train, y_test, node_to_enc_node_dict, model_type):
         """
         Initializes the GroupsModel class, which is meant to train and evaluate the model before it is saved and
         used in our service. Class attributes are set here based on the input parameters, node_to_enc_node_dict contains
@@ -39,7 +39,7 @@ class GroupsModelWrapper:
         self.x_test = x_test
         self.y_train = y_train
         self.y_test = y_test
-        self.node_to_enc_node_dict = node_to_enc_node_dict[4]
+        self.node_to_enc_node_dict = node_to_enc_node_dict
         self.node_count = len(self.node_to_enc_node_dict.keys())
 
         # Set model
@@ -95,12 +95,10 @@ class GroupsModelWrapper:
         for x_row in self.x_test:
             y_pred_arr = np.append(y_pred_arr, self.predict_node([x_row]))
 
-        print(self.y_test, y_pred_arr)
-
         accuracy = accuracy_score(y_true=self.y_test, y_pred=y_pred_arr)
         recall = recall_score(y_true=self.y_test, y_pred=y_pred_arr, average="macro")
         precision = precision_score(y_true=self.y_test, y_pred=y_pred_arr, average="macro")
-        print(f"Accuracy: {accuracy}")
+        print(f"\nAccuracy: {accuracy}")
         print(f"Precision: {precision}, recall: {recall}")
 
     def evaluate_model_on_group_basis(self):

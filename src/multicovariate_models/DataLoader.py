@@ -11,7 +11,7 @@ class DataLoader:
     LEAK_A_COL = "leak_amount"
     LEAK_A_F_COL = "leak_amount_f"
 
-    TRAIN_SIZE = 0.7
+    TRAIN_SIZE = 0.9
 
     def __init__(self, data_df):
         """
@@ -42,13 +42,14 @@ class DataLoader:
                             f"following columns: {self.SENSOR_COLS + [self.NODE_COL]}, but it has only these: "
                             f"{list(df.columns)}")
 
-    def prepare_training_and_test_data(self, mode):
+    def prepare_training_and_test_data(self, mode, subsample_size=None):
         """
         Method prepares the data for training and testing. First it encodes the node names with LabelEncoder, then it
         splits the data into training and testing data, and finally it splits the data into x_train, x_test,
         y_train, y_test numpy arrays depending on the columns specified in global class attributes.
 
         :param mode: String. The mode of the data split, can be either "RANDOM" or "SEQUENTIAL".
+        :param subsample_size: Float. The size of the subsample to be used for sequential subsampling.
         :return: Tuple of five elements. The tuple contains the following:
             - x_train: Numpy array. The training data.
             - x_test: Numpy array. The testing data.
@@ -56,13 +57,16 @@ class DataLoader:
             - y_test: Numpy array. The testing labels.
             - node_to_enc_node_dict: Dictionary. The mapping between node names and encoded node names.
         """
+        if mode == "SEQUENTIAL-SUBSAMPLING" and subsample_size is None:
+            raise Exception("If mode is 'SEQUENTIAL-SUBSAMPLING', subsample_size must be specified!")
+
         train_df, test_df = None, None
         if mode == "RANDOM":
             # Splitting data into train and test dataframes by index
             train_df, test_df = self.data_split_by_enc_node(self.data_df)
         elif mode == "SEQUENTIAL-SUBSAMPLING":
             # Splitting data into train and test dataframes by sequential subsampling
-            train_df, test_df = self.subset_df_data(self.data_df, frac_of_data_to_subsample=0.1)
+            train_df, test_df = self.subset_df_data(self.data_df, frac_of_data_to_subsample=subsample_size)
         else:
             raise Exception(f"Unsupported mode: {mode}")
 
@@ -128,7 +132,7 @@ class DataLoader:
 
         # Get only rows with specified leak amounts
         train_df = df[df[self.LEAK_A_F_COL].isin(training_l_arr)]
-        test_df = df[df[self.LEAK_A_F_COL].isin(training_l_arr)]
+        test_df = df[df[self.LEAK_A_F_COL].isin(test_l_arr)]
 
         # We don't need to sample for each node, since the sampling is already done on leak basis, and every node has
         # the same amount of leaks/rows
@@ -153,5 +157,5 @@ class DataLoader:
     def get_random_data_split_by_node(self):
         return self.prepare_training_and_test_data(mode="RANDOM")
 
-    def get_sequential_subsample_data_split_by_leaks(self):
-        return self.prepare_training_and_test_data(mode="SEQUENTIAL-SUBSAMPLING")
+    def get_sequential_subsample_data_split_by_leaks(self, subsample_size=0.01):
+        return self.prepare_training_and_test_data(mode="SEQUENTIAL-SUBSAMPLING", subsample_size=subsample_size)
