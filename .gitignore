@@ -26,3 +26,4 @@ __pycache__/
 # Pickle files
 data/trained_models/*.pkl
 data/trained_models/*.pickle
+!data/trained_models/gmm_trained_model_30_03_2022.pkl
