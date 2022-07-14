@@ -27,7 +27,7 @@ EPANET_NETWORK_FILE_V2 = EPANET_NETWORKS + "Braila_V2022_2_2.inp"
 # EPANET_NETWORK_FILE = EPANET_NETWORKS + "RaduNegru23July2021_2.2.inp"
 DIVERGENCE_MATRIX_FILE = DIVERGENCE_DATA_DIR + "Divergence_M.pickle"
 
-LOG_DIR = "logs"
+LOG_DIR = "./logs"
 LOG_FILE = f"{LOG_DIR}/service-log.log"
 LOG_FILE_PRETRAINED = f"{LOG_DIR}/service-log-pretrained.log"
 LOG_FILE_KAFKA = f"{LOG_DIR}/kafka-log.log"
@@ -70,7 +70,7 @@ KAFKA_NODES_ORDER_LATEST_WRONG = ["nan_sensor", "J-Apollo", "J-RN1", "J-RN2", "S
                                   "Sensor2"]
 
 # KAFKA related
-HOST_AND_PORT = "194.249.231.11:9092"
+HOST_AND_PORT = "localhost:9092"
 
 # Topic used in version 1 and 2, left in for backwards compatibility
 TOPIC = "features_braila_leakage_detection"
