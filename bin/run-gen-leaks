@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd ..
+python main_data_gen.py

@@ -23,20 +23,38 @@ def main_multiple_sensors_new_topic(path_to_model_pkl, epanet_file):
     """
     logging.info("Started the application v3!")
 
+    # connect_url = config.HOST_AND_PORT
+    connect_url = 'atena.ijs.si:9092'
+    client_id = 'approximate-leakage'
+
+    logging.info(f"connecting to {connect_url}")
+
     # if you want to read msgs from start use: auto_offset_reset="earliest".
     # group_id="braila_sensor_group" makes sure msgs are committed
-    consumer = KafkaConsumer(bootstrap_servers=config.HOST_AND_PORT, auto_offset_reset="earliest",
-                             value_deserializer=lambda v: loads(v.decode("utf-8")))
-    producer = KafkaProducer(bootstrap_servers=config.HOST_AND_PORT,
-                             value_serializer=lambda v: dumps(v).encode("utf-8"))
+    consumer = KafkaConsumer(bootstrap_servers=[connect_url], auto_offset_reset="earliest",
+                             value_deserializer=lambda v: loads(v.decode("utf-8")),
+                             client_id=client_id)
+    producer = KafkaProducer(bootstrap_servers=[connect_url],
+                             value_serializer=lambda v: dumps(v).encode("utf-8"),
+                             client_id=client_id)
     consumer.subscribe(config.TOPIC_V3)
     logging.info("Subscribed to topic: " + config.TOPIC_V3)
 
     with open(path_to_model_pkl, "rb") as model_file:
-        gmm_model = pickle.load(model_file)
+        model = pickle.load(model_file)
+    
+    logging.info('model loaded')
 
     for latest_msg in consumer:
-        process_kafka_msg_and_output_to_topic(producer=producer, kafka_msg=latest_msg, ml_model=gmm_model,
+        try:
+            with open(os.path.join(config.LOG_DIR, 'messages.log'), 'a') as f_out:
+                f_out.write(json.dumps(values) + '\n')
+        except Exception as e:
+            # write to errors.log
+            with open(os.path.join(config.LOG_DIR, 'errors.log'), 'a') as f_out:
+                f_out.write(e.message + '\n')
+
+        process_kafka_msg_and_output_to_topic(producer=producer, kafka_msg=latest_msg, ml_model=model,
                                               epanet_file=epanet_file)
 
 
@@ -94,7 +112,7 @@ if __name__ == "__main__":
     kafka_logger.addHandler(logging.FileHandler(config.LOG_FILE_KAFKA))
 
     # Old service, works as a standalone and outputs to topic on every message
-    main_multiple_sensors_new_topic("./data/trained_models/gmm_trained_model_30_03_2022.pkl",
+    main_multiple_sensors_new_topic("./data/models/model-knn-v2.pkl",
                                     config.EPANET_NETWORK_FILE_V2)
 
     # New service, only triggers when meta signal is above threshold -> less resource consumption

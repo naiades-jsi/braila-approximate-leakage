@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd ..
+python main_pretrained_models.py

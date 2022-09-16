@@ -1,3 +1,5 @@
+import os
+
 """
 This file stores the configuration variables used in many files and is meant as a central
 location for all configuration variables.
@@ -20,12 +22,14 @@ DATA_DIRECTORY = "./data/"
 SENSOR_DIR = DATA_DIRECTORY + "sensor_data/"
 DIVERGENCE_DATA_DIR = DATA_DIRECTORY + "divergence_matrix/"
 EPANET_NETWORKS = DATA_DIRECTORY + "epanet_networks/"
+MODEL_DIR = os.path.join(DATA_DIRECTORY, 'models')
 
 # EPANET_NETWORK_FILE = EPANET_NETWORKS + "RaduNegru24May2021_2.2.inp"
 EPANET_NETWORK_FILE_V2 = EPANET_NETWORKS + "Braila_V2022_2_2.inp"
 
 # EPANET_NETWORK_FILE = EPANET_NETWORKS + "RaduNegru23July2021_2.2.inp"
 DIVERGENCE_MATRIX_FILE = DIVERGENCE_DATA_DIR + "Divergence_M.pickle"
+MODEL_FILE = os.path.join(MODEL_DIR, 'model-knn-v2.pkl')
 
 LOG_DIR = "logs"
 LOG_FILE = f"{LOG_DIR}/service-log.log"

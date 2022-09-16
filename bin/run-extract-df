@@ -1,0 +1,5 @@
+#!/bin/bash
+
+cd ..
+python extract_data_main.py
+

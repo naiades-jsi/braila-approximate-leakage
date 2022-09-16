@@ -2,6 +2,7 @@ import os
 
 import pandas as pd
 from sklearn.cluster import MiniBatchKMeans, Birch
+import pickle
 
 
 def find_file_names_in_dir(data_dir):
@@ -83,7 +84,7 @@ def prepare_df_from_file(file_name, sensor_names_arr, column_names_arr):
     return file_df
 
 
-def prepare_df_from_file_ijs_data(file_name, sensor_names_arr, column_names_arr):
+def prepare_df_from_file_ijs_data(file_name, sensor_names_arr, extra_column_names_arr):
     """
     Function loads a data frame from a file extract only the relevant information at the timestamp of leak detection.
     It only keep the columns which are provided in the sensor_names_arr and adds meta data in the column_names_arr.
@@ -93,35 +94,54 @@ def prepare_df_from_file_ijs_data(file_name, sensor_names_arr, column_names_arr)
 
     :param file_name: String. The name of the file to be loaded.
     :param sensor_names_arr: List of strings. The sensor names to be kept.
-    :param column_names_arr: List of strings. The column names to be added.
+    :param extra_column_names_arr: List of strings. The column names to be added.
     :return: Dataframe. The dataframe which contains all the extracted information.
     """
     keep_f_name_in_df = False
-    if len(column_names_arr) == 3 and column_names_arr[2] == "origin_file":
+    if len(extra_column_names_arr) == 3 and extra_column_names_arr[2] == "origin_file":
         keep_f_name_in_df = True
 
-    file_df = pd.DataFrame(columns=column_names_arr)
+    file_df = pd.DataFrame(columns=extra_column_names_arr)
     try:
-        file_dict = pd.read_pickle(file_name)
+        # file_dict = pd.read_pickle(file_name)
+        with open(file_name, 'rb') as f_in:
+            file_dict = pickle.load(f_in)
 
         # take just the "LPM"-key or the leakage matrix of each dataframe
-        for df_index, temp_dict in enumerate(file_dict):
-            # TODO this is assigned the hour 10, since the analysis revealed that the leak is most noticeable then,
-            #  this should still be changed IF the data will contain the appropriate "TM_l" column which it doesn't
-            #  currently
-            timestamp_of_leak = 36000
-            temp_df = temp_dict["LPM"][sensor_names_arr]
-            # filter to only get one row
-            prepared_df = temp_df.loc[timestamp_of_leak].to_frame().T
+        for leak_node_name, data_list in file_dict.items():
+            for temp_dict in data_list:
+                # TODO this is assigned the hour 10, since the analysis revealed that the leak is most noticeable then,
+                #  this should still be changed IF the data will contain the appropriate "TM_l" column which it doesn't
+                #  currently
+                timestamp_of_leak = 36000
+                pressure_df = temp_dict['LPM']
+                dpressure_df = temp_dict['DM']
 
-            node_name_and_leak_tup = [i.strip() for i in prepared_df.columns.name.split(",")]
-            prepared_df.at[timestamp_of_leak, column_names_arr[0]] = node_name_and_leak_tup[0]
-            prepared_df.at[timestamp_of_leak, column_names_arr[1]] = node_name_and_leak_tup[1]
+                sensor_pressure_df = pressure_df[sensor_names_arr]
+                sensor_dpressure_df = dpressure_df[sensor_names_arr]
 
-            if keep_f_name_in_df:
-                prepared_df.at[timestamp_of_leak, column_names_arr[2]] = file_name.split("\\")[-1]
+                # dpressure_sensor_names_arr = [sensor_name + '_dpressure' for sensor_name in sensor_names_arr]
+                # sensor_pressure_df[dpressure_sensor_names_arr] = sensor_pressure_df
 
-            file_df = pd.concat([file_df, prepared_df], ignore_index=True)
+                # dpressure_dict = {sensor_name + '_dpressure': dpressure_df[sensor_name] for sensor_name in sensor_names_arr}
+                # sensor_pressure_df = sensor_pressure_df.assign(dpressure_dict)
+
+                for sensor_name in sensor_names_arr:
+                    sensor_pressure_df = sensor_pressure_df.assign(**{sensor_name + '_dpressure': sensor_dpressure_df[sensor_name].values})
+
+
+                # filter to only get one row
+
+                prepared_df = sensor_pressure_df.loc[timestamp_of_leak].to_frame().T
+
+                node_name_and_leak_tup = [i.strip() for i in prepared_df.columns.name.split(",")]
+                prepared_df.at[timestamp_of_leak, extra_column_names_arr[0]] = node_name_and_leak_tup[0]
+                prepared_df.at[timestamp_of_leak, extra_column_names_arr[1]] = node_name_and_leak_tup[1]
+
+                if keep_f_name_in_df:
+                    prepared_df.at[timestamp_of_leak, extra_column_names_arr[2]] = file_name.split("\\")[-1]
+
+                file_df = pd.concat([file_df, prepared_df], ignore_index=True)
 
     except FileNotFoundError as e:
         print(f"File not found, for file '{file_name}': {e}")
@@ -195,13 +215,15 @@ def condense_pickle_files_to_relevant_data(data_dir, output_file_name, ijs_data_
     batch_df = pd.DataFrame(columns=sensor_names_arr + extra_columns_arr)
 
     # create file with headers
-    if not os.path.isfile(output_file_name):
-        batch_df.to_csv(output_file_name, header=True, index=False)
-    else:
+    # if not os.path.isfile(output_file_name):
+    #     batch_df.to_csv(output_file_name, header=True, index=False)
+    if os.path.isfile(output_file_name):
         raise Exception(f"Output file '{output_file_name}' already exists!")
 
     # set the correct function for processing the data either DELFT or IJS
     process_data_func = prepare_df_from_file_ijs_data if ijs_data_format else prepare_df_from_file
+
+    is_first_batch = True
 
     for file_index, file_name in enumerate(file_names_arr):
         print(f"Preparing file  {file_index + 1}/{len(file_names_arr)} - '{file_name}',")
@@ -213,13 +235,15 @@ def condense_pickle_files_to_relevant_data(data_dir, output_file_name, ijs_data_
         current_df_size = round(batch_df.memory_usage(index=True).sum() / 1000000, 2)
         if current_df_size >= 100.0:
             # save/append the dataframe to file and release memory
-            batch_df.to_csv(output_file_name, mode='a', header=False, index=False)
+            batch_df.to_csv(output_file_name, mode='a', header=is_first_batch, index=False)
             batch_df = pd.DataFrame(columns=sensor_names_arr + extra_columns_arr)
             print(f"Saved Dataframe to file! Estimated dataframe size {current_df_size} MB, should be almost 0MB!")
         else:
             print(f"Current estimated dataframe size {current_df_size} MB")
 
+        is_first_batch = False
+
     # Save the last batch which hasn't been saved yet
-    batch_df.to_csv(output_file_name, mode='a', header=False, index=False)
+    batch_df.to_csv(output_file_name, mode='a', header=is_first_batch, index=False)
     print("\n\nExecution finished")
 

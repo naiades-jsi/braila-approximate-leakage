@@ -1,4 +1,6 @@
-from kafka.output_json_functions import generate_error_response_json, prepare_output_json_meta_data
+import os
+
+from src.kafka.output_json_functions import generate_error_response_json, prepare_output_json_meta_data
 from src.divergence_matrix.DivergenceMatrixProcessor import DivergenceMatrixProcessor
 from src.epanet.EPANETUtils import EPANETUtils
 from src.state_comparator.comparator_functions import *
@@ -30,7 +32,7 @@ def main(date):
         print(node_groups_dict)
 
         # arr_of_nodes, df = instance.nodes_which_effect_the_sensors_most(16.0, diverged_node)
-        visualize_node_groups(diverged_node, node_groups_dict, config.EPANET_NETWORK_FILE,
+        visualize_node_groups(diverged_node, node_groups_dict, config.EPANET_NETWORK_FILE_V2,
                               config.LEAK_AMOUNT)
 
 
@@ -46,17 +48,19 @@ def service_main():
     consumer.subscribe(config.TOPIC)
     logging.info("Subscribed to topic: " + config.TOPIC)
 
-    instance = DivergenceMatrixProcessor(config.DIVERGENCE_MATRIX_FILE)
-    epanet_simulated_df = create_epanet_pressure_df(config.EPANET_NETWORK_FILE, selected_nodes=config.KAFKA_NODES_ORDER)
+    model = DivergenceMatrixProcessor(config.MODEL_FILE)
+    epanet_simulated_df = create_epanet_pressure_df(config.EPANET_NETWORK_FILE_V2, selected_nodes=config.KAFKA_NODES_ORDER)
 
     for msg in consumer:
         try:
             values = msg.value
             current_timestamp = values["timestamp"]
             feature_arr = values["ftr_vector"]
+
             diverged_node, deviation = analyse_kafka_topic_and_find_critical_sensor(current_timestamp, feature_arr,
                                                                                     epanet_simulated_df,
                                                                                     config.KAFKA_NODES_ORDER)
+            
             # extra logging
             dt_time = datetime.fromtimestamp(current_timestamp / 1000)
             diverged_str = "Most diverged node is: {}. Deviation is: {:.2f}. For values at datetime: {}" \
@@ -65,7 +69,7 @@ def service_main():
 
             if deviation > config.PRESSURE_DIFF_THRESHOLD:
                 method = "jenks_natural_breaks"
-                groups_dict = instance.get_affected_nodes_groups(config.LEAK_AMOUNT, diverged_node,
+                groups_dict = model.get_affected_nodes_groups(config.LEAK_AMOUNT, diverged_node,
                                                                  num_of_groups=4,
                                                                  method=method)
                 output_json = prepare_output_json_meta_data(timestamp=current_timestamp,

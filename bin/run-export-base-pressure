@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd ..
+python main_export_base_pressure.py

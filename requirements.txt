@@ -1,11 +1,12 @@
-networkx~=2.4
-wntr~=0.4.1
+networkx==2.4
+wntr==0.4.1
 pandas==1.4.1
 plotly==5.1.0
 numpy==1.20.3
-ipython~=7.16.1
+ipython==7.23.1
 matplotlib==3.5.1
-jenkspy~=0.1.4
-kafka-python~=1.4.7
+jenkspy==0.1.4
+kafka-python==2.0.1
 pyproj==3.3.0
 scikit-learn==1.0.2
+neo4j==4.4.5

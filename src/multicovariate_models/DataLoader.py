@@ -1,13 +1,18 @@
 import numpy as np
 import pandas as pd
+import scipy
+
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
+
+import src.analytics.linalg as linalg
 
 
 class DataLoader:
     ENC_NODE_COL = "encoded_node_with_leak"
     NODE_COL = "node_with_leak"
     SENSOR_COLS = ["Sensor1", "Sensor2", "Sensor3", "Sensor4", "J-Apollo", "J-RN2", "J-RN1"]
+    SENSOR_DPRESSURE_COLS = ["Sensor1_dpressure", "Sensor2_dpressure", "Sensor3_dpressure", "Sensor4_dpressure", "J-Apollo_dpressure", "J-RN2_dpressure", "J-RN1_dpressure"]
     LEAK_A_COL = "leak_amount"
     LEAK_A_F_COL = "leak_amount_f"
 
@@ -29,6 +34,12 @@ class DataLoader:
         self.data_df[self.ENC_NODE_COL] = self.label_enc.fit_transform(node_col_series)
         self.node_to_enc_node_dict = dict(zip(self.label_enc.classes_,
                                               self.label_enc.transform(self.label_enc.classes_)))
+
+    def encode_node_id(self, node_id):
+        return self.label_enc.transform(node_id)
+
+    def decode_node_label(self, node_label):
+        return self.label_enc.inverse_transform(node_label)
 
     def check_dataframe(self, df):
         # Check if prepared_data_df is a dataframe
@@ -153,6 +164,31 @@ class DataLoader:
         train_leaks = np.array(leak_arr)[train_l_indexes]
         test_leaks = np.setdiff1d(leak_arr[:inp_arr_len], train_leaks)
         return train_leaks, test_leaks
+
+    def preprocess_dpressure(self, pressure_df_mat):
+        """
+        Normalizes the rows so that they sum to 1. If the row is 0 it is left intact.
+        """
+        # n_rows = pressure_df_mat.shape[0]
+        # n_cols = pressure_df_mat.shape[1]
+
+        # # normalize the rows
+        # pressure_df_abs_mat = np.absolute(pressure_df_mat)
+        # pressure_diff_sum = pressure_df_abs_mat.sum(axis=1)
+
+        # nonzero_idxs = pressure_diff_sum >= 1e-5
+
+        # pressure_diff_sum_inv = np.reciprocal(pressure_diff_sum, where=nonzero_idxs)
+
+        # norm_mat = scipy.sparse.csr_matrix((pressure_diff_sum_inv, (range(n_rows), range(n_rows))), shape=(n_rows, n_rows))
+        # pressure_df_mat = norm_mat.dot(pressure_df_mat)
+
+        # return pressure_df_mat
+        return linalg.normalize_rows_l1(pressure_df_mat)
+
+    def preprocess_abs_pressure(self, pressure_mat):
+        return pressure_mat
+
 
     def get_random_data_split_by_node(self):
         return self.prepare_training_and_test_data(mode="RANDOM")

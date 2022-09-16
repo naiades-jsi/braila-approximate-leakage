@@ -1,0 +1,14 @@
+#!/bin/bash
+
+neo_base_dir='/home/lstopar/workspace/JSI/projects/naiades/data/neo4j'
+
+docker run \
+    --name naiades-neo \
+    -p7474:7474 -p7687:7687 \
+    -d \
+    -v $neo_base_dir/neo4j/data:/data \
+    -v $neo_base_dir/neo4j/logs:/logs \
+    -v $neo_base_dir/neo4j/import:/var/lib/neo4j/import \
+    -v $neo_base_dir/neo4j/plugins:/plugins \
+    --env NEO4J_AUTH=neo4j/test \
+    neo4j:latest

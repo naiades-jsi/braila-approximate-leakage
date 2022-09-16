@@ -66,6 +66,17 @@ class EpanetLeakGenerator:
 
         self.main_logger.info("Initialization completed successfully!")
 
+    def export_base_simulation(self, fpath):
+        water_network_model_f = copy.deepcopy(self.water_network_model)
+        org_simulation_results = copy.deepcopy(self.base_simulation_results)
+
+        last_hour_secs = self._get_last_hour_secs(water_network_model_f)
+        base_pressures_df = org_simulation_results.node["pressure"].loc[1:last_hour_secs, self.node_names_arr]
+
+        with open(fpath, 'w') as f_out:
+            base_pressures_df.to_csv(f_out)
+
+
     def multi_thread_data_generation(self):
         """
         TODO
@@ -107,8 +118,8 @@ class EpanetLeakGenerator:
 
         for min_leak, max_leak in min_max_leak_arr:
             output_file_name = f"{self.output_dir}/1_leak_{min_leak:.3f}-{max_leak:.3f}_t_{thread_num}.pkl"
-            if os.path.isfile(output_file_name):
-                raise FileExistsError(f"Unexpected error, file {output_file_name} already exists!")
+            # csv_output_fname = f"{self.output_dir}/1_leak_rng_{min_leak:.3f}-{max_leak:.3f}_t_{thread_num}.csv"
+            csv_output_fname = None
 
             logger_inst.info(
                 f"Writing to file: {output_file_name}. On thread {thread_num} with leak {min_leak}-{max_leak}")
@@ -117,21 +128,27 @@ class EpanetLeakGenerator:
                                                   minimum_leak=min_leak,
                                                   maximum_leak=max_leak,
                                                   logger_objc=logger_inst,
-                                                  output_file_name=output_file_name)
+                                                  output_file_name=output_file_name,
+                                                  csv_output_fname=csv_output_fname)
 
         logger_inst.info(f"Ended execution on thread |{thread_num}| in {time.time() - start_time} seconds")
 
-    def run_one_leak_per_node_simulation(self, run_id, minimum_leak, maximum_leak, logger_objc, output_file_name,
+    def run_one_leak_per_node_simulation(self, run_id, minimum_leak, maximum_leak, logger_objc, output_file_name=None, csv_output_fname=None,
                                          include_extra_info=False):
         start_time = time.time()
+
+        if output_file_name is not None and os.path.isfile(output_file_name):
+            raise FileExistsError(f"Unexpected error, file {output_file_name} already exists!")
+        if csv_output_fname is not None and os.path.isfile(csv_output_fname):
+            raise FileExistsError(f"Unexpected error, file {output_file_name} already exists!")
+        if not output_file_name.endswith(".pkl"):
+            raise Exception("Output file must be a .pkl file")
 
         # copy original data so it will not be modified
         water_network_model_f = copy.deepcopy(self.water_network_model)
         org_simulation_results = copy.deepcopy(self.base_simulation_results)
 
-        steps_in_a_day = int(
-            water_network_model_f.options.time.duration / water_network_model_f.options.time.hydraulic_timestep)
-        last_hour_seconds = steps_in_a_day * self.SECONDS_IN_HOUR
+        last_hour_seconds = self._get_last_hour_secs(water_network_model_f)
 
         # df of pressures, with timestamps as index and node names as columns
         base_pressures_df = org_simulation_results.node["pressure"].loc[1:last_hour_seconds, self.node_names_arr]
@@ -142,7 +159,9 @@ class EpanetLeakGenerator:
         logger_objc.info(f"T:{run_id} - Executing simulation for {len(leak_amounts_arr)} leaks between: "
                          f"{minimum_leak}, {maximum_leak}")
 
-        all_data_arr = []
+        writeN = 0
+
+        all_data_map = {}
         for curr_node_name in self.node_names_arr:
             start2 = time.time()
 
@@ -157,7 +176,7 @@ class EpanetLeakGenerator:
 
                 # adding leak to existing model
                 temp_water_network_model.add_pattern(name="New",
-                                                     pattern=curr_leak_flow_arr)  # Add New Patter To the model
+                                                     pattern=curr_leak_flow_arr)  # Add New Pattern To the model
                 temp_water_network_model.get_node(curr_node_name).add_demand(base=1, pattern_name="New")  # Add leakflow
 
                 sim_results_with_leak = \
@@ -175,17 +194,22 @@ class EpanetLeakGenerator:
                                                       range(self.SECONDS_IN_HOUR, last_hour_seconds + 3600, 3600))) \
                     .rename_axis(curr_axis_name, axis=1).astype("float64")
 
-                # prepare dictionary for saving, TODO restructure?
+                sim_results_with_leak = sim_results_with_leak.round(self.LEAK_DECIMAL_PLACES)
+                divergence_df = divergence_df.round(self.LEAK_DECIMAL_PLACES)
+                used_leak_flows_df = used_leak_flows_df.round(self.LEAK_DECIMAL_PLACES)
+
                 main_data_dict = {
-                    "LPM": sim_results_with_leak.round(self.LEAK_DECIMAL_PLACES),
-                    "DM": divergence_df.round(self.LEAK_DECIMAL_PLACES),
-                    "LM": used_leak_flows_df.round(self.LEAK_DECIMAL_PLACES),
+                    "LPM": sim_results_with_leak,
+                    "DM": divergence_df,
+                    "LM": used_leak_flows_df,
                     "Meta": {"Leakmin": minimum_leak,
                              "Leakmax": maximum_leak,
                              "Used_leak": curr_leak_flow,
                              "Run": run_id,
-                             "Run Time": time.time() - start_time
-                             }
+                             "Run Time": time.time() - start_time,
+                             'leakNode': curr_node_name
+                     },
+                    'network': temp_water_network_model
                 }
                 if include_extra_info:
                     leak_i_time_arr, water_loss_arr = \
@@ -196,9 +220,23 @@ class EpanetLeakGenerator:
                 # saving to file, TODO implement viable option for saving
                 # self.append_dict_to_pickle_file(main_data_dict, out_f_name=output_file_name)
 
+                # write the output to a CSV file
+                if csv_output_fname is not None:
+                    output_df = divergence_df.copy()
+                    output_df['leak_amount'] = curr_leak_flow
+                    output_df['node_with_leak'] = curr_node_name
+
+                    if writeN == 0:
+                        output_df.to_csv(csv_output_fname, mode='a', index=False, header=True)
+                    else:
+                        output_df.to_csv(csv_output_fname, mode='a', index=False, header=False)
+                    writeN += 1
+
                 # TODO this is really ugly thing to do (RAM will suffer, although execution should be faster),
                 #  but it works for now
-                all_data_arr.append(main_data_dict)
+                if not curr_node_name in all_data_map:
+                    all_data_map[curr_node_name] = []
+                all_data_map[curr_node_name].append(main_data_dict)
                 # print(f"Index = {index + 1}/{len_leak_amounts_arr} and value {curr_leak_flow},
                 # LeakNode={curr_node_name}, {curr_axis_name}")
             print("\n------")
@@ -207,10 +245,9 @@ class EpanetLeakGenerator:
                              f"Time= {time.time() - start2}")
 
         # saving to file, TODO implement better option for saving
-        if not output_file_name.endswith(".pkl"):
-            raise Exception("Output file must be a .pkl file")
-        with open(output_file_name, "wb") as file:
-            pickle.dump(all_data_arr, file)
+        if output_file_name is not None:
+            with open(output_file_name, "wb") as file:
+                pickle.dump(all_data_map, file)
 
     def input_arguments_check(self, epanet_file_name, number_of_threads, min_leak, max_leak, leak_flow_step,
                               leak_flow_threshold, output_dir, log_file):
@@ -367,6 +404,7 @@ class EpanetLeakGenerator:
                 node_names_arr.append(node_instance.name)
             else:
                 base_demands_arr.append(0)
+                node_names_arr.append(node_instance.name)
 
         base_demands_arr = np.array(base_demands_arr)
         base_demands_mean = base_demands_arr.mean()
@@ -440,4 +478,10 @@ class EpanetLeakGenerator:
                 self.main_logger.info(f"Removing temporary file: {file}")
                 os.remove(file)
 
+
+    def _get_last_hour_secs(self, water_network_model_f):
+        steps_in_a_day = int(
+            water_network_model_f.options.time.duration / water_network_model_f.options.time.hydraulic_timestep)
+        last_hour_seconds = steps_in_a_day * self.SECONDS_IN_HOUR
+        return last_hour_seconds
 
