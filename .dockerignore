@@ -1,0 +1,9 @@
+/docs/
+/notebooks/
+/docker/
+/tests/
+/logs/
+/grafana-files/
+/data_generation/
+/data_generation_delft/
+/data/dataframes/

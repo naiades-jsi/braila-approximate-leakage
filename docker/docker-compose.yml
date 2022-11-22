@@ -1,0 +1,9 @@
+version: "3.3"
+
+services:
+  braila_leakage_approximate_ircai:
+    image: e3ailab/braila_leakage_approximate_ircai
+    network_mode: "host"
+    build: 
+      context: ../
+      dockerfile: ./docker/Dockerfile

@@ -15,8 +15,15 @@ def pretty_print(node_arr):
     return string_to_print
 
 
-def visualize_node_groups(critical_node_name, node_groups_dict, epanet_file_path, leak_amount, node_size=8,
-                          link_width=1, figsize=[950, 950], round_ndigits=2, add_to_node_popup=None,
+def visualize_node_groups(critical_node_name,
+                          node_groups_dict,
+                          epanet_file_path,
+                          leak_amount,
+                          node_size=8,
+                          link_width=1,
+                          figsize=[950, 950],
+                          round_ndigits=2,
+                          add_to_node_popup=None,
                           filename='plotly_network.html',
                           auto_open=False):
     water_network_model = EPANETUtils(epanet_file_path, "PDD").get_original_water_network_model()

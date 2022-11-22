@@ -46,7 +46,7 @@ def get_cutoff_indexes_by_jenks_natural_breaks(values_array, num_of_groups):
     cutoff_indexes = []
     cutoff_count = 0
     for index, value in enumerate(np.flip(values_array)):
-        if value == group_break_values[cutoff_count]:
+        if cutoff_count < len(group_break_values) and value == group_break_values[cutoff_count]:
             cutoff_indexes.append(index)
             cutoff_count += 1
     # Since the right range is not inclusive example: [0, 22)
@@ -57,7 +57,7 @@ def get_cutoff_indexes_by_jenks_natural_breaks(values_array, num_of_groups):
     return cutoff_indexes
 
 
-def generate_groups_dict(cutoff_indexes, series_node_value, map_dictionary):
+def generate_groups_dict(cutoff_indexes, sorted_prob_node_id_tup_vec, node_id_to_node_name_map):
     """
     TODO add documentation
     :param cutoff_indexes:
@@ -69,10 +69,26 @@ def generate_groups_dict(cutoff_indexes, series_node_value, map_dictionary):
     # TODO check, no need for replacing "Node_" everytime could be done statically in dict
     for index in range(0, len(cutoff_indexes) - 1):
         group_name = "{}".format(index)
-        current_group_val_int = series_node_value[cutoff_indexes[index]:cutoff_indexes[index + 1]]
+        curr_prob_node_id_tup_vec = sorted_prob_node_id_tup_vec[cutoff_indexes[index]:cutoff_indexes[index + 1]]
 
-        nodes_list = [map_dictionary[node_int] for value, node_int in current_group_val_int]
-        nodes_list = [node_name.replace("Node_", "") for node_name in nodes_list]
-        groups_dict[group_name] = nodes_list
+        node_name_vec = [node_id_to_node_name_map[node_id] for _, node_id in curr_prob_node_id_tup_vec]
+        node_name_vec = [node_name.replace("Node_", "") for node_name in node_name_vec]
+
+        groups_dict[group_name] = node_name_vec
+
+    return groups_dict
+
+
+def gen_groups_dict_from_data_loader(data_loader, cutoff_idxs, sorted_prob_node_id_tup_vec):
+    groups_dict = dict()
+    # TODO check, no need for replacing "Node_" everytime could be done statically in dict
+    for index in range(0, len(cutoff_idxs) - 1):
+        group_name = "{}".format(index)
+        curr_prob_node_id_tup_vec = sorted_prob_node_id_tup_vec[cutoff_idxs[index]:cutoff_idxs[index + 1]]
+
+        node_name_vec = [data_loader.decode_node_label([node_id])[0] for _, node_id in curr_prob_node_id_tup_vec]
+        node_name_vec = [node_name.replace("Node_", "") for node_name in node_name_vec]
+
+        groups_dict[group_name] = node_name_vec
 
     return groups_dict

@@ -158,68 +158,106 @@ def analyse_kafka_topic_and_check_for_missing_values(timestamp, kafka_array, sen
 
 
 def prepare_input_kafka_1d_array(epoch_seconds, kafka_array):
-    """
-    Updated function to process new kafka topic currently named "features_braila_leakage_detection_updated". Function
-    check for errors in the data and returns correctly sorted array if the data is correct.
+    # """
+    # Updated function to process new kafka topic currently named "features_braila_leakage_detection_updated". Function
+    # check for errors in the data and returns correctly sorted array if the data is correct.
 
-    :param epoch_seconds: Epoch timestamp in seconds. Used for calculating adding meta information to the Exception.
-    :param kafka_array: Array. The input array which should contain 8 floats which represent the pressure values
-    of the sensors.
-    The order of sensor values in the kafka array is:
-        1. flow211106H360 (which is zero all the time)
-        2. flow211206H360,
-        3. flow211306H360,
-        4. flow318505H498
-        5. pressure5770,
-        6. pressure5771,
-        7. pressure5772,
-        8. pressure5773
-    It is important because these values will be passed to the model which can produce the wrong result if the order
-    is not correct.
-    :return: 2D array. Contains only one row which is sorted in the correct order.
-    """
-    if len(kafka_array) != 8:
-        raise Exception("The kafka array should have 8 values !")
+    # :param epoch_seconds: Epoch timestamp in seconds. Used for calculating adding meta information to the Exception.
+    # :param kafka_array: Array. The input array which should contain 8 floats which represent the pressure values
+    # of the sensors.
+    # The order of sensor values in the kafka array is:
+    #     1. flow211106H360 (which is zero all the time)
+    #     2. flow211206H360,
+    #     3. flow211306H360,
+    #     4. flow318505H498
+    #     5. pressure5770,
+    #     6. pressure5771,
+    #     7. pressure5772,
+    #     8. pressure5773
+    # It is important because these values will be passed to the model which can produce the wrong result if the order
+    # is not correct.
+    # :return: 2D array. Contains only one row which is sorted in the correct order.
+    # """
+    # if len(kafka_array) != 8:
+    #     raise Exception("The kafka array should have 8 values !")
 
-    # Map array values from kafka topic to correct sensors
-    sensor_to_values_dict = {
-        ("flow211106H360", "J-GA"): kafka_array[0],
-        ("flow211206H360", "J-Apollo"): kafka_array[1],
-        ("flow211306H360", "J-RN1"): kafka_array[2],
-        ("flow318505H498", "J-RN2"): kafka_array[3],
-        ("pressure5770", "Sensor1"): kafka_array[4],
-        ("pressure5771", "Sensor3"): kafka_array[5],
-        ("pressure5772", "Sensor4"): kafka_array[6],
-        ("pressure5773", "Sensor2"): kafka_array[7]
-    }
+    # # Map array values from kafka topic to correct sensors
+    # sensor_to_values_dict = {
+    #     ("flow211106H360", "J-GA"): kafka_array[0],
+    #     ("flow211206H360", "J-Apollo"): kafka_array[1],
+    #     ("flow211306H360", "J-RN1"): kafka_array[2],
+    #     ("flow318505H498", "J-RN2"): kafka_array[3],
+    #     ("pressure5770", "Sensor1"): kafka_array[4],
+    #     ("pressure5771", "Sensor3"): kafka_array[5],
+    #     ("pressure5772", "Sensor4"): kafka_array[6],
+    #     ("pressure5773", "Sensor2"): kafka_array[7]
+    # }
 
-    # Correct order for model (7 sensors): Sensor1, Sensor2, Sensor3,	Sensor4, J-Apollo, J-RN2, J-RN1
-    # J-GA is discarded since it is broken and is always zero
-    # sensor J-RN2 (flow318505H498) is also broken serving incorrect data
-    # TODO replace value with sensor_to_values_dict[("flow318505H498", "J-RN2")], when sensor fixed current value
-    #  chosen from EPANET to be neutral and not impact the prediction accuracy
-    ordered_array_val_sensor = [
-        [sensor_to_values_dict[("pressure5770", "Sensor1")], ("pressure5770", "Sensor1")],
-        [sensor_to_values_dict[("pressure5773", "Sensor2")], ("pressure5773", "Sensor2")],
-        [sensor_to_values_dict[("pressure5771", "Sensor3")], ("pressure5771", "Sensor3")],
-        [sensor_to_values_dict[("pressure5772", "Sensor4")], ("pressure5772", "Sensor4")],
-        [sensor_to_values_dict[("flow211206H360", "J-Apollo")], ("flow211206H360", "J-Apollo")],
-        [17.10, ("flow318505H498", "J-RN2")],
-        [sensor_to_values_dict[("flow211306H360", "J-RN1")], ("flow211306H360", "J-RN1")]
-     ]
+    # # Correct order for model (7 sensors): Sensor1, Sensor2, Sensor3,	Sensor4, J-Apollo, J-RN2, J-RN1
+    # # J-GA is discarded since it is broken and is always zero
+    # # sensor J-RN2 (flow318505H498) is also broken serving incorrect data
+    # # TODO replace value with sensor_to_values_dict[("flow318505H498", "J-RN2")], when sensor fixed current value
+    # #  chosen from EPANET to be neutral and not impact the prediction accuracy
+    # ordered_array_val_sensor = [
+    #     [sensor_to_values_dict[("pressure5770", "Sensor1")], ("pressure5770", "Sensor1")],
+    #     [sensor_to_values_dict[("pressure5773", "Sensor2")], ("pressure5773", "Sensor2")],
+    #     [sensor_to_values_dict[("pressure5771", "Sensor3")], ("pressure5771", "Sensor3")],
+    #     [sensor_to_values_dict[("pressure5772", "Sensor4")], ("pressure5772", "Sensor4")],
+    #     [sensor_to_values_dict[("flow211206H360", "J-Apollo")], ("flow211206H360", "J-Apollo")],
+    #     [17.10, ("flow318505H498", "J-RN2")],
+    #     [sensor_to_values_dict[("flow211306H360", "J-RN1")], ("flow211306H360", "J-RN1")]
+    #  ]
 
-    # Check for missing values in input
-    missing_val_info_arr = []
-    ordered_value_arr = []
-    for value, name_tuple in ordered_array_val_sensor:
-        if value <= 0 or value == np.nan:
-            missing_val_info_arr.append((name_tuple[1], name_tuple[0], value))
-        ordered_value_arr.append(value)
+    # # Check for missing values in input
+    # missing_val_info_arr = []
+    # ordered_value_arr = []
+    # for value, name_tuple in ordered_array_val_sensor:
+    #     if value <= 0 or value == np.nan:
+    #         missing_val_info_arr.append((name_tuple[1], name_tuple[0], value))
+    #     ordered_value_arr.append(value)
 
-    if len(missing_val_info_arr) > 0:
-        raise NaNSensorsException(missing_val_info_arr, epoch_seconds)
+    # if len(missing_val_info_arr) > 0:
+    #     raise NaNSensorsException(missing_val_info_arr, epoch_seconds)
 
-    return [ordered_value_arr]
+    # return [ordered_value_arr]
+
+    # sensor_to_values_dict = {
+    #     ("flow211106H360", "J-GA"): kafka_array[0],
+    #     ("flow211206H360", "J-Apollo"): kafka_array[1],
+    #     ("flow211306H360", "J-RN1"): kafka_array[2],
+    #     ("flow318505H498", "J-RN2"): kafka_array[3],
+    #     ("pressure5770", "Sensor1"): kafka_array[4],
+    #     ("pressure5771", "Sensor3"): kafka_array[5],
+    #     ("pressure5772", "Sensor4"): kafka_array[6],
+    #     ("pressure5773", "Sensor2"): kafka_array[7]
+    # }
+    #     1. flow211106H360 (which is zero all the time)
+    #     2. flow211206H360,
+    #     3. flow211306H360,
+    #     4. flow318505H498
+    #     5. pressure5770,
+    #     6. pressure5771,
+    #     7. pressure5772,
+    #     8. pressure5773
+
+    # jga_val = kafka_array[0]  # this one is always 0
+    sensor1_val = kafka_array[1]
+    sensor2_val = kafka_array[2]
+    sensor3_val = kafka_array[3]
+    sensor4_val = kafka_array[4]
+    japollo_val = kafka_array[5]
+    jrn2_val = kafka_array[6]
+    jrn1_val = kafka_array[7]
+
+    return [
+        sensor1_val,
+        sensor2_val,
+        sensor3_val,
+        sensor4_val,
+        japollo_val,
+        jrn2_val,
+        jrn1_val
+    ]
 
 
 def create_df_from_real_values(measurements_arr, epoch_timestamp, sensor_names):
@@ -266,3 +304,6 @@ def convert_timestamp_to_epoch_seconds(timestamp):
         raise Exception(f"Timestamp '{timestamp}' is not in Unix milliseconds or seconds !")
 
     return int(epoch_seconds)
+
+def convert_timestamp_to_datetime(timestamp):
+    return datetime.fromtimestamp(timestamp)

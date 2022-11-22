@@ -77,3 +77,6 @@ def predict_groups_gmm(model, data_arr):
     # split into groups
     groups_indexes = get_cutoff_indexes_by_jenks_natural_breaks(values_only_arr, None)
     return generate_groups_dict(groups_indexes, sorted_val_index_arr, static_dict)
+
+def predict_knn(model, ftr_vec):
+    y_hat = model.predict_proba(ftr_vec)

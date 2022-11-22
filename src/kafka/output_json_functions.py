@@ -2,7 +2,7 @@ import src.configfile as config
 from src.epanet.EPANETUtils import EPANETUtils
 from datetime import datetime
 
-from src.state_comparator.comparator_functions import convert_timestamp_to_epoch_seconds
+from src.state_comparator.comparator_functions import convert_timestamp_to_epoch_seconds, convert_timestamp_to_datetime
 
 
 def generate_output_json(epoch_seconds, groups_dict, diverged_node, epanet_file):
@@ -25,7 +25,7 @@ def generate_output_json(epoch_seconds, groups_dict, diverged_node, epanet_file)
         sensor_with_leak=diverged_node,
         sensor_deviation=0.0,  # Information not available, when using gmm method
         groups_dict=groups_dict,
-        method="gmm+jenks_natural_breaks",
+        method="knn+jenks_natural_breaks",
         epanet_file=epanet_file
     )
 
@@ -56,9 +56,14 @@ def prepare_output_json_meta_data(timestamp, sensor_with_leak, sensor_deviation,
     # Convert to flat structure from group dictionary
     groups_arr = epanet_instance.generate_node_array_with_meta_data(groups_dict)
 
+    curr_datetime = get_current_datetime()
+    # convert `timestamp` which is milliseconds since 1970 to ISO
+    ts_as_datetime = convert_timestamp_to_datetime(timestamp)
+
+
     output_json = {
-        config.OUTPUT_JSON_TIME_KEY: convert_timestamp_to_epoch_seconds(timestamp),
-        config.OUTPUT_JSON_TIME_PROCESSED_KEY: get_current_timestamp(),
+        config.OUTPUT_JSON_TIME_KEY: format_datetime(ts_as_datetime),
+        config.OUTPUT_JSON_TIME_PROCESSED_KEY: format_datetime(curr_datetime),
         config.OUTPUT_JSON_STATUS_KEY: 200,
         config.OUTPUT_JSON_CRITICAL_SENSOR_KEY: sensor_with_leak,
         config.OUTPUT_JSON_DEVIATION_KEY: round(sensor_deviation, 4),
@@ -99,7 +104,13 @@ def generate_error_response_json(timestamp, nan_sensors_list, epanet_file):
 def get_epanet_file_name_version(epanet_file_name):
     return epanet_file_name.split("/")[-1].replace("_2.2.inp", "")
 
+def get_current_datetime():
+    return datetime.now()
+
+def format_datetime(dt):
+    return dt.isoformat(sep='T')
 
 def get_current_timestamp():
+    curr_datetime = get_current_datetime()
     # TODO make timestamp bullet proof, hardcode timezone
-    return int(datetime.now().timestamp())
+    return int(get_current_datetime().timestamp())

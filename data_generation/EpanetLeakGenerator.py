@@ -179,9 +179,8 @@ class EpanetLeakGenerator:
                                                      pattern=curr_leak_flow_arr)  # Add New Pattern To the model
                 temp_water_network_model.get_node(curr_node_name).add_demand(base=1, pattern_name="New")  # Add leakflow
 
-                sim_results_with_leak = \
-                    self.run_simulation(temp_water_network_model, file_prefix=f"temp_{run_id}").node[
-                        "pressure"].loc[1:last_hour_seconds, self.node_names_arr]
+                sim_results_raw = self.run_simulation(temp_water_network_model, file_prefix=f"temp_{run_id}")
+                sim_results_with_leak = sim_results_raw.node["pressure"].loc[1:last_hour_seconds, self.node_names_arr]
                 # renaming axis to match node that has the current leak
                 sim_results_with_leak = sim_results_with_leak.rename_axis(curr_axis_name, axis=1).astype("float64")
 

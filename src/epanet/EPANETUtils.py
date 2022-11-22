@@ -9,6 +9,109 @@ import src.configfile as config
 from pyproj import Transformer
 
 
+
+old2new_sensor_id_map = {
+  'Jonctiune-267': 'id-267',
+  'Jonctiune-1226': 'id-1224',
+  'Jonctiune-4742': 'id-1404',
+  'Jonctiune-1405': 'id-1405',
+  'Jonctiune-1406': 'id-1406',
+  'Jonctiune-1413': 'id-1413',
+  'Jonctiune-1414': 'id-1414',
+  'Jonctiune-1415': 'id-1415',
+  'Jonctiune-1419': 'id-1419',
+  'Jonctiune-1421': 'id-1420',
+  'Jonctiune-3961': 'id-1421',
+  'Jonctiune-J-20': 'id-1605',
+  'Jonctiune-3913': 'id-1606',
+  'Jonctiune-1610': 'id-1610',
+  'Jonctiune-2777': 'id-1616',
+  'Jonctiune-2743': 'id-1618',
+  'Jonctiune-1874': 'id-1623',
+  'Jonctiune-1628': 'id-1627',
+  'PT2': 'id-1628',
+  'PT1': 'id-1632',
+  'Jonctiune-1634': 'id-1634',
+  'Jonctiune-1635': 'id-1635',
+  'Jonctiune-1636': 'id-1636',
+  'Jonctiune-1637': 'id-1637',
+  'PT4': 'id-1638',
+  'J-1640': 'id-1640',
+  'Jonctiune-1641': 'id-1641',
+  'Jonctiune-2735': 'id-1642',
+  'Jonctiune-1642': 'id-1644',
+  'Jonctiune-J-15': 'id-1645',
+  'Jonctiune-2205': 'id-1646',
+  'Jonctiune-J-16': 'id-1649',
+  'Jonctiune-3446': 'id-1652',
+  'Jonctiune-1872': 'id-1872',
+  'Jonctiune-2180': 'id-1873',
+  'Jonctiune-1877': 'id-1874',
+  'Jonctiune-2968': 'id-1875',
+  'Sensor1': 'id-1876',
+  'Jonctiune-3972': 'id-1877',
+  'Jonctiune-1996': 'id-1996',
+  'Jonctiune-3967': 'id-2178',
+  'Jonctiune-2196': 'id-2179',
+  'Jonctiune-2182': 'id-2180',
+  'Jonctiune-12372': 'id-2182',
+  'Jonctiune-2197': 'id-2197',
+  'Sensor4': 'id-2198',
+  'Jonctiune-2200': 'id-2199',
+  'J-RN2': 'id-2200',
+  'Jonctiune-2201': 'id-2201',
+  'Jonctiune-2203': 'id-2203',
+  'Jonctiune-2204': 'id-2204',
+  'Jonctiune-2207': 'id-2207',
+  'Jonctiune-J-31': 'id-2357',
+  'Jonctiune-4595': 'id-2358',
+  'Jonctiune-2729': 'id-2729',
+  'Jonctiune-4619': 'id-2735',
+  'Jonctiune-3422': 'id-2748',
+  'Jonctiune-2753': 'id-2750',
+  'Jonctiune-2755': 'id-2755',
+  'Jonctiune-2774': 'id-2774',
+  'Jonctiune-2879': 'id-2879',
+  'J-Apollo': 'id-2967',
+  'Jonctiune-2186': 'id-2968',
+  'Jonctiune-J-26': 'id-3381',
+  'Jonctiune-2751': 'id-3383',
+  'Jonctiune-2756': 'id-3446',
+  'Jonctiune-3920': 'id-3448',
+  'Jonctiune-1638': 'id-3450',
+  'Jonctiune-4723': 'id-3458',
+  'Jonctiune-3067': 'id-3460',
+  'Jonctiune-2752': 'id-3461',
+  '255-A': 'id-3462',
+  'PT3': 'id-3463',
+  'Sensor3': 'id-3465',
+  'Jonctiune-3467': 'id-3466',
+  'Jonctiune-2750': 'id-3467',
+  'Jonctiune-3470': 'id-3470',
+  'Jonctiune-3471': 'id-3471',
+  'Jonctiune-2737': 'id-3503',
+  'Jonctiune-2736': 'id-3504',
+  'Jonctiune-3510': 'id-3510',
+  'Jonctiune-2194': 'id-3563',
+  'Jonctiune-3566': 'id-3565',
+  'Jonctiune-J-23': 'id-3566',
+  '258-A': 'id-3954',
+  'Jonctiune-2177': 'id-3972',
+  'Jonctiune-4602': 'id-4601',
+  'Jonctiune-2193': 'id-12055',
+  'Jonctiune-3425': 'id-12469',
+  'Jonctiune-3386': 'id-12470',
+  'J-RN1': 'id-12471',
+  'Jonctiune-2734': 'id-12477',
+  'Jonctiune-J-19': 'id-12478',
+  'Jonctiune-2187': 'id-12479',
+  'Jonctiune-2192': 'id-12480',
+  'Jonctiune-2776': 'id-12481',
+  '275-A': 'id-12482'
+}
+
+
+
 class EPANETUtils:
     """
     This class implements methods not yet available in EPANET/WNTR for use on the NAIADES project.
@@ -463,18 +566,24 @@ class EPANETUtils:
         networkx_graph = self.water_network_model.get_graph()
         groups_arr = []
 
+        print('GENERATING OUTPUT:')
+
         for group_num in groups_dict.keys():
             for node_name in groups_dict[group_num]:
                 if node_name not in networkx_graph.nodes:
                     # TODO better way to handle this, custom EPANET file everytime?
                     continue
-                    # raise Exception("Node name {} is not in the network!".format(node_name))
+                
+                # raise Exception("Node name {} is not in the network!".format(node_name))
                 # TODO add logic that if the node is not found its name will be still be included in the output
                 x, y = networkx_graph.nodes[node_name]["pos"]
                 lat, lon = transformer.transform(y, x)
 
+                # if node_name in old2new_sensor_id_map:
+                #     node_name = old2new_sensor_id_map[node_name]
+
                 current_node_json = {
-                    config.OUTPUT_JSON_NODE_NAME_KEY: node_name,
+                    config.OUTPUT_JSON_NODE_NAME_KEY: old2new_sensor_id_map[node_name] if node_name in old2new_sensor_id_map else node_name,
                     config.OUTPUT_JSON_NODE_LAT_KEY: lat,
                     config.OUTPUT_JSON_NODE_LONG_KEY: lon,
                     config.OUTPUT_JSON_NODE_GROUP_KEY: int(group_num)
